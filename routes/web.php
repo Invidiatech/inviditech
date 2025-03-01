@@ -27,10 +27,8 @@ Route::resource('portfolio', PortfolioController::class);
 
 // Services
 Route::resource('services', ServiceController::class);
-
 // Social Posts
 Route::resource('social-posts', SocialPostController::class);
-
 // Comments
 Route::post('articles/{article}/comment', [CommentController::class, 'store'])->name('articles.comment.store');
 
