@@ -90,4 +90,13 @@ class User extends Authenticatable
     {
         return $query->where('is_verified', true);
     }
+ 
+    public function isAdmin(): bool
+    {
+        // Option 1: If you have a 'role' column
+        return $this->role === 'admin';
+
+        // Option 2: If you have an 'is_admin' boolean column
+        // return $this->is_admin === true;
+    }
 }

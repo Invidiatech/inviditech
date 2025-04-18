@@ -19,6 +19,7 @@ class Article extends Model
         'content',
         'featured_image',
         'featured_image_alt',
+        'audio_path',
         'status',
         'is_premium',
         'is_featured',

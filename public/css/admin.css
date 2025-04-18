@@ -1,0 +1,249 @@
+/* public/css/admin.css */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+.sidebar {
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 1000;
+    background-color: #fff;
+    border-right: 1px solid #dee2e6;
+    transition: all 0.3s;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.sidebar.collapsed {
+    margin-left: -250px;
+}
+
+.content {
+    margin-left: 250px;
+    transition: all 0.3s;
+}
+
+.content.expanded {
+    margin-left: 0;
+}
+
+.sidebar-header {
+    padding: 15px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.sidebar-logo {
+    background-color: #4361ee;
+    color: white;
+    width: 35px;
+    height: 35px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.nav-link {
+    color: #6c757d;
+    padding: 12px 15px;
+    border-radius: 5px;
+    margin: 3px 0;
+    transition: all 0.2s;
+}
+
+.nav-link:hover {
+    background-color: #f8f9fa;
+    color: #4361ee;
+}
+
+.nav-link.active {
+    background-color: #eff1fe;
+    color: #4361ee;
+    font-weight: 500;
+}
+
+.sidebar-bottom {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 15px;
+    border-top: 1px solid #dee2e6;
+}
+
+.main-header {
+    background-color: #fff;
+    border-bottom: 1px solid #dee2e6;
+    padding: 12px 20px;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
+}
+
+.stat-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
+    border: 1px solid #dee2e6;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+.chart-container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
+    border: 1px solid #dee2e6;
+    padding: 20px;
+    height: 300px;
+}
+
+.profile-menu .dropdown-toggle::after {
+    display: none;
+}
+
+.profile-pic {
+    width: 35px;
+    height: 35px;
+    background-color: #e6effd;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #dc3545;
+}
+
+.notification-item {
+    padding: 10px 15px;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.notification-item.unread {
+    background-color: #f0f4ff;
+}
+
+.activity-item {
+    padding: 15px;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-avatar {
+    width: 35px;
+    height: 35px;
+    background-color: #e6effd;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4361ee;
+    font-weight: 500;
+    margin-right: 15px;
+}
+
+/* Charts styling */
+.bar-chart {
+    height: 200px;
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.chart-bar {
+    flex: 1;
+    background-color: #4361ee;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+.chart-label {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 12px;
+    color: #6c757d;
+}
+
+.donut-chart {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin: 20px auto;
+    position: relative;
+}
+
+.donut-hole {
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    background-color: white;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Form styling */
+.form-control:focus {
+    border-color: #4361ee;
+    box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+}
+
+.btn-primary {
+    background-color: #4361ee;
+    border-color: #4361ee;
+}
+
+.btn-primary:hover {
+    background-color: #3a56d4;
+    border-color: #3a56d4;
+}
+
+/* Additional utility classes */
+.bg-success-subtle {
+    background-color: rgba(25, 135, 84, 0.1);
+}
+
+.bg-danger-subtle {
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .sidebar {
+        margin-left: -250px;
+    }
+    
+    .sidebar.active {
+        margin-left: 0;
+    }
+    
+    .content {
+        margin-left: 0;
+    }
+    
+    .content.pushed {
+        margin-left: 250px;
+    }
+}

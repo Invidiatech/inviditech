@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,8 +14,6 @@ class Tag extends Model
         'name',
         'slug',
         'description',
-        'meta_title',
-        'meta_description',
     ];
 
     protected static function boot()
@@ -24,9 +23,6 @@ class Tag extends Model
         static::creating(function ($tag) {
             if (empty($tag->slug)) {
                 $tag->slug = Str::slug($tag->name);
-            }
-            if (empty($tag->meta_title)) {
-                $tag->meta_title = $tag->name;
             }
         });
     }

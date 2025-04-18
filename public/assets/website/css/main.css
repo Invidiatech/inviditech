@@ -1,0 +1,323 @@
+ :root {
+    --primary: #044168;
+    --secondary: #0069AA;
+    --accent: #00A9FF;
+    --text-primary: #2C3E50;
+    --border-color: #E5E9EF;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-primary);
+    overflow-x: hidden;
+}
+
+.bg-primary-custom {
+    background-color: var(--primary);
+}
+
+.bg-secondary-custom {
+    background-color: var(--secondary);
+}
+
+.bg-accent-custom {
+    background-color: var(--accent);
+}
+
+.text-primary-custom {
+    color: var(--primary) !important;
+}
+
+.text-secondary-custom {
+    color: var(--secondary) !important;
+}
+
+.text-accent-custom {
+    color: var(--accent) !important;
+}
+
+.btn-primary-custom {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.btn-primary-custom:hover {
+    background-color: var(--secondary);
+    border-color: var(--secondary);
+    color: white;
+}
+
+.btn-accent-custom {
+    background-color: var(--accent);
+    border-color: var(--accent);
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.btn-accent-custom:hover {
+    background-color: var(--secondary);
+    border-color: var(--secondary);
+}
+
+.navbar {
+    padding: 1rem 0;
+    transition: all 0.3s ease;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.nav-link {
+    font-weight: 500;
+    margin: 0 0.5rem;
+    position: relative;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    background-color: var(--accent);
+    bottom: 0;
+    left: 0;
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+.hero {
+    min-height: 85vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.1;
+    background-image: radial-gradient(var(--accent) 2px, transparent 2px);
+    background-size: 30px 30px;
+}
+
+.feature-card {
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    border-color: var(--accent);
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-bottom: 1.5rem;
+}
+
+.blog-card {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.blog-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.blog-img {
+    height: 200px;
+    width: 100%;
+    object-fit: cover;
+}
+
+.blog-tag {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 5px 15px;
+    border-radius: 20px;
+    background-color: var(--accent);
+    color: white;
+    font-size: 0.8rem;
+}
+
+.footer {
+    background-color: var(--primary);
+    color: white;
+    padding: 4rem 0 2rem;
+}
+
+.social-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    margin-right: 10px;
+    transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+    background-color: var(--accent);
+    transform: translateY(-5px);
+}
+
+.newsletter-input {
+    border-radius: 50px 0 0 50px !important;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    height: 50px;
+}
+
+.newsletter-btn {
+    border-radius: 0 50px 50px 0 !important;
+    background-color: var(--accent);
+    border: none;
+    height: 50px;
+    transition: all 0.3s ease;
+}
+
+.newsletter-btn:hover {
+    background-color: var(--secondary);
+}
+
+.stats-counter {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.stats-text {
+    font-size: 1rem;
+    color: var(--text-primary);
+}
+
+.client-logo {
+    max-width: 100%;
+    height: 60px;
+    object-fit: contain;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+    filter: grayscale(100%);
+}
+
+.client-logo:hover {
+    opacity: 1;
+    filter: grayscale(0%);
+}
+
+.cta-section {
+    background-color: var(--primary);
+    padding: 5rem 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-pattern {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0.05;
+    background-image: linear-gradient(135deg, var(--accent) 25%, transparent 25%), 
+                      linear-gradient(225deg, var(--accent) 25%, transparent 25%), 
+                      linear-gradient(45deg, var(--accent) 25%, transparent 25%), 
+                      linear-gradient(315deg, var(--accent) 25%, transparent 25%);
+    background-position: 10px 0, 10px 0, 0 0, 0 0;
+    background-size: 20px 20px;
+    background-repeat: repeat;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-delay-1 {
+    animation-delay: 0.2s;
+}
+
+.animate-delay-2 {
+    animation-delay: 0.4s;
+}
+
+.animate-delay-3 {
+    animation-delay: 0.6s;
+}
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 991.98px) {
+    .hero {
+        min-height: 60vh;
+        text-align: center;
+    }
+    
+    .hero-img {
+        margin-top: 2rem;
+        max-width: 80%;
+    }
+    
+    .stats-counter {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .navbar-collapse {
+        background-color: white;
+        padding: 1rem;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        margin-top: 1rem;
+    }
+    
+    .feature-card, .blog-card {
+        margin-bottom: 2rem;
+    }
+    
+    .footer {
+        text-align: center;
+    }
+    
+    .social-icons {
+        justify-content: center;
+        margin-bottom: 2rem;
+    }
+}

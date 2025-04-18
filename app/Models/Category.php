@@ -59,4 +59,16 @@ class Category extends Model
     {
         return $query->where('is_featured', true);
     }
+    public function getFullPathAttribute()
+    {
+        $path = $this->name;
+        $parent = $this->parent;
+
+        while ($parent) {
+            $path = $parent->name . ' > ' . $path;
+            $parent = $parent->parent;
+        }
+
+        return $path;
+    }
 }
