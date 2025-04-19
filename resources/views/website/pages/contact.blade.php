@@ -1,4 +1,3 @@
- 
 @extends('website.layouts.app')
 @section('title', 'Contact Us - InvidiaTech')
 @section('content')   
@@ -25,7 +24,7 @@
                             <i class="fas fa-map-marker-alt fa-lg"></i>
                         </div>
                         <h5>Our Location</h5>
-                        <p class="mb-0">1234 Tech Avenue<br>San Francisco, CA 94107<br>United States</p>
+                        <p class="mb-0">Blue Area<br>Islamabad<br>Pakistan</p>
                     </div>
                 </div>
                 <div class="col-md-4 animate animate-delay-1">
@@ -34,7 +33,7 @@
                             <i class="fas fa-envelope fa-lg"></i>
                         </div>
                         <h5>Email Us</h5>
-                        <p class="mb-2">General Inquiries:<br><a href="mailto:info@invidiatech.com" class="text-accent-custom">info@invidiatech.com</a></p>
+                        <p class="mb-2">General Inquiries:<br><a href="mailto:sardarnawaz122@gmail.com" class="text-accent-custom">sardarnawaz122@gmail.com</a></p>
                         <p class="mb-0">Support:<br><a href="mailto:support@invidiatech.com" class="text-accent-custom">support@invidiatech.com</a></p>
                     </div>
                 </div>
@@ -44,8 +43,8 @@
                             <i class="fas fa-phone-alt fa-lg"></i>
                         </div>
                         <h5>Call Us</h5>
-                        <p class="mb-2">Main Office:<br><a href="tel:+14155551234" class="text-accent-custom">+1 (415) 555-1234</a></p>
-                        <p class="mb-0">Customer Support:<br><a href="tel:+14155554321" class="text-accent-custom">+1 (415) 555-4321</a></p>
+                        <p class="mb-2">Main Office:<br><a href="tel:+03435281821" class="text-accent-custom">0343-5281821</a></p>
+                        <p class="mb-0">WhatsApp:<br><a href="tel:+03145184047" class="text-accent-custom">03145184047</a></p>
                     </div>
                 </div>
             </div>
@@ -64,11 +63,11 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="name" class="form-label">Your Name</label>
-                                    <input type="text" class="form-control custom-input" id="name" placeholder="John Doe">
+                                    <input type="text" class="form-control custom-input" id="name" placeholder="Muhammad Nawaz">
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="email" class="form-label">Your Email</label>
-                                    <input type="email" class="form-control custom-input" id="email" placeholder="john@example.com">
+                                    <input type="email" class="form-control custom-input" id="email" placeholder="nawaz@gmail.com">
                                 </div>
                             </div>
                             <div class="mb-3">
@@ -91,8 +90,9 @@
                 </div>
                 <div class="col-lg-6 animate animate-delay-1">
                     <div class="map-container mt-lg-0 mt-5">
-                        <!-- Insert a placeholder image for the map -->
-                        <img src="/api/placeholder/600/400" alt="Map Location" class="img-fluid w-100 h-100 object-fit-cover">
+                        <!-- Embedded Google Map of Islamabad Blue Area -->
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3318.1605847075694!2d73.08182017579657!3d33.72637217282968!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38dfbfd1da2e8d35%3A0x24ca3a4051fe961d!2sBlue%20Area%2C%20Islamabad%2C%20Islamabad%20Capital%20Territory%2C%20Pakistan!5e0!3m2!1sen!2s!4v1713795652988!5m2!1sen!2s" 
+                        width="600" height="400" style="border:0; width: 100%; height: 400px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                     </div>
                 </div>
             </div>
@@ -134,7 +134,7 @@
     </section>
 
     <!-- FAQ Section -->
-    <section class="py-5 my-5">
+    <section class="py-5 d-none my-5">
         <div class="container">
             <div class="row text-center mb-5">
                 <div class="col-lg-8 mx-auto animate">
@@ -182,7 +182,7 @@
                             <h5>How can I request a quote for my project?</h5>
                         </div>
                         <div class="faq-body">
-                            <p>You can request a quote by filling out our contact form with details about your project, or by directly emailing us at info@invidiatech.com. For more comprehensive projects, we recommend scheduling a consultation call to discuss your requirements in detail before providing a formal quote.</p>
+                            <p>You can request a quote by filling out our contact form with details about your project, or by directly emailing us at sardarnawaz122@gmail.com. For more comprehensive projects, we recommend scheduling a consultation call to discuss your requirements in detail before providing a formal quote.</p>
                         </div>
                     </div>
                 </div>

@@ -26,7 +26,7 @@
                     <a class="nav-link" href="{{ route('contact') }}">Contact</a>
                 </li>
                 <li class="nav-item ms-lg-3">
-                    <a class="btn btn-accent-custom rounded-pill px-4" href="{{ route('hire-us') }}">Hire Us</a>
+                    <a class="btn btn-accent-custom rounded-pill px-4" href="https://www.fiverr.com/sellers/muhammadnawa564/">Hire Us</a>
                 </li>
             </ul>
         </div>

@@ -321,3 +321,247 @@ body {
         margin-bottom: 2rem;
     }
 }
+/* review section */
+/* Enhanced Fiverr Reviews Slider Styling */
+.reviews-section {
+    position: relative;
+    background-color: #f9fbfd;
+    overflow: hidden;
+}
+
+.text-accent {
+    color: var(--accent);
+}
+
+.section-title {
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.review-slider-wrapper {
+    position: relative;
+    padding: 30px 15px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.review-image-container {
+    background-color: #ffffff;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(4, 65, 104, 0.1);
+    margin: 0 auto;
+    max-width: 850px;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    border: 1px solid var(--border-color);
+}
+
+.carousel-item.active .review-image-container {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(4, 65, 104, 0.15);
+}
+
+.review-image {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Carousel controls styling */
+#reviewsCarousel {
+    padding-bottom: 50px;
+}
+
+#reviewsCarousel .carousel-indicators {
+    bottom: 0;
+    margin-bottom: 0;
+}
+
+#reviewsCarousel .carousel-indicators button {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #c4d7e6;
+    border: none;
+    opacity: 0.7;
+    margin: 0 4px;
+    transition: all 0.3s ease;
+}
+
+#reviewsCarousel .carousel-indicators button.active {
+    background-color: var(--accent);
+    opacity: 1;
+    width: 12px;
+    height: 12px;
+}
+
+.control-circle {
+    width: 50px;
+    height: 50px;
+    background-color: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(4, 65, 104, 0.2);
+}
+
+#reviewsCarousel .carousel-control-prev,
+#reviewsCarousel .carousel-control-next {
+    width: 60px;
+    height: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 1;
+}
+
+#reviewsCarousel .carousel-control-prev {
+    left: 0;
+}
+
+#reviewsCarousel .carousel-control-next {
+    right: 0;
+}
+
+#reviewsCarousel .carousel-control-prev:hover .control-circle,
+#reviewsCarousel .carousel-control-next:hover .control-circle {
+    background-color: var(--accent);
+    transform: scale(1.1);
+}
+
+#reviewsCarousel .carousel-control-prev-icon,
+#reviewsCarousel .carousel-control-next-icon {
+    width: 20px;
+    height: 20px;
+}
+
+/* Decorative elements */
+.review-decoration {
+    position: absolute;
+    border-radius: 50%;
+    z-index: -1;
+}
+
+.review-decoration-1 {
+    width: 300px;
+    height: 300px;
+    background: linear-gradient(135deg, rgba(0, 169, 255, 0.1) 0%, rgba(4, 65, 104, 0.05) 100%);
+    top: -150px;
+    left: -150px;
+}
+
+.review-decoration-2 {
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(135deg, rgba(0, 105, 170, 0.08) 0%, rgba(0, 169, 255, 0.04) 100%);
+    bottom: -100px;
+    right: -100px;
+}
+
+/* Fiverr badge */
+.fiverr-badge {
+    display: inline-block;
+    background-color: #ffffff;
+    color: var(--primary);
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 30px;
+    box-shadow: 0 5px 15px rgba(4, 65, 104, 0.1);
+    border: 1px solid var(--border-color);
+}
+
+/* Animation for slider appearance */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate {
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.animate-delay-1 {
+    animation-delay: 0.2s;
+}
+
+.animate-delay-2 {
+    animation-delay: 0.4s;
+}
+
+/* Responsive adjustments */
+@media (max-width: 991.98px) {
+    .review-slider-wrapper {
+        padding: 20px 10px;
+    }
+    
+    .control-circle {
+        width: 45px;
+        height: 45px;
+    }
+    
+    #reviewsCarousel .carousel-control-prev,
+    #reviewsCarousel .carousel-control-next {
+        width: 45px;
+        height: 45px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .review-slider-wrapper {
+        padding: 15px 5px;
+    }
+    
+    .control-circle {
+        width: 40px;
+        height: 40px;
+    }
+    
+    #reviewsCarousel .carousel-control-prev,
+    #reviewsCarousel .carousel-control-next {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .review-decoration {
+        display: none;
+    }
+}
+
+/* Additional animations */
+.carousel-item {
+    transition: transform .6s ease-in-out;
+}
+
+.carousel-fade .carousel-item {
+    opacity: 0;
+    transition-property: opacity;
+}
+
+.carousel-fade .carousel-item.active {
+    opacity: 1;
+}
+
+/* Optional: Add custom transitions between slides */
+.carousel-item-next.carousel-item-start,
+.carousel-item-prev.carousel-item-end {
+    transform: translateX(0);
+}
+
+.carousel-item-next,
+.active.carousel-item-end {
+    transform: translateX(0);
+    opacity: 0;
+}
+
+.carousel-item-prev,
+.active.carousel-item-start {
+    transform: translateX(0);
+    opacity: 0;
+}

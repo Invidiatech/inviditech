@@ -20,7 +20,7 @@
             <div class="row align-items-center">
                 <div class="col-lg-5 animate">
                     <div class="about-img">
-                        <img src="/api/placeholder/500/500" alt="Muhammad Nawaz" class="img-fluid rounded">
+                    <img src="{{ asset('assets/profile-gallery/Muhamm-Nawaz.png') }}" alt="Muhammad Nawaz" class="img-fluid rounded">
                     </div>
                 </div>
                 <div class="col-lg-7 animate">
@@ -43,8 +43,8 @@
                         </a>
                     </div>
                     <div class="mt-4">
-                        <a href="services.html" class="btn btn-primary-custom px-4 me-3">My Services</a>
-                        <a href="contact.html" class="btn btn-outline-secondary px-4">Contact Me</a>
+                        <a href="{{ route('services') }}" class="btn btn-primary-custom px-4 me-3">My Services</a>
+                        <a href="{{ route('contact') }}"  class="btn btn-outline-secondary px-4">Contact Me</a>
                     </div>
                 </div>
             </div>

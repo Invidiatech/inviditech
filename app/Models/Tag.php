@@ -14,8 +14,15 @@ class Tag extends Model
         'name',
         'slug',
         'description',
+        'meta_title',
+        'meta_description'
     ];
 
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
     protected static function boot()
     {
         parent::boot();
@@ -24,14 +31,25 @@ class Tag extends Model
             if (empty($tag->slug)) {
                 $tag->slug = Str::slug($tag->name);
             }
+            if (empty($tag->meta_title)) {
+                $tag->meta_title = $tag->name;
+            }
         });
     }
 
+    /**
+     * Get the articles that belong to the tag.
+     */
     public function articles()
     {
         return $this->belongsToMany(Article::class);
     }
 
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
     public function getRouteKeyName()
     {
         return 'slug';

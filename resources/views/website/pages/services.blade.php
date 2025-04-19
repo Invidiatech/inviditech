@@ -239,148 +239,345 @@
         </div>
     </section>
 
-    <!-- Testimonials -->
-    <section class="py-5 bg-light">
-        <div class="container">
-            <div class="row text-center mb-5">
-                <div class="col-lg-8 mx-auto animate">
-                    <h6 class="text-uppercase text-accent-custom fw-bold">Client Feedback</h6>
-                    <h2 class="fw-bold">What Our Clients Say</h2>
-                    <p class="lead">Hear from businesses who have experienced our services</p>
+ <!-- Enhanced Fiverr Reviews Section -->
+<section class="py-5 my-5 reviews-section">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-lg-8 mx-auto animate">
+                <h6 class="text-uppercase text-accent fw-bold">Client Success</h6>
+                <h2 class="fw-bold section-title">Our Client Reviews</h2>
+                <p class="lead">Real feedback from satisfied clients across our platforms</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-12 animate">
+                <div class="review-slider-wrapper">
+                    <div id="reviewsCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000">
+                        <!-- Indicators -->
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#reviewsCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Review 1"></button>
+                            <button type="button" data-bs-target="#reviewsCarousel" data-bs-slide-to="1" aria-label="Review 2"></button>
+                            <button type="button" data-bs-target="#reviewsCarousel" data-bs-slide-to="2" aria-label="Review 3"></button>
+                            <button type="button" data-bs-target="#reviewsCarousel" data-bs-slide-to="3" aria-label="Review 4"></button>
+                            <button type="button" data-bs-target="#reviewsCarousel" data-bs-slide-to="4" aria-label="Review 5"></button>
+                            <button type="button" data-bs-target="#reviewsCarousel" data-bs-slide-to="5" aria-label="Review 6"></button>
+                            <button type="button" data-bs-target="#reviewsCarousel" data-bs-slide-to="6" aria-label="Review 7"></button>
+                            <button type="button" data-bs-target="#reviewsCarousel" data-bs-slide-to="7" aria-label="Review 8"></button>
+                            <button type="button" data-bs-target="#reviewsCarousel" data-bs-slide-to="8" aria-label="Review 9"></button>
+                            <button type="button" data-bs-target="#reviewsCarousel" data-bs-slide-to="9" aria-label="Review 10"></button>
+                            <button type="button" data-bs-target="#reviewsCarousel" data-bs-slide-to="10" aria-label="Review 11"></button>
+                            <button type="button" data-bs-target="#reviewsCarousel" data-bs-slide-to="11" aria-label="Review 12"></button>
+                            <button type="button" data-bs-target="#reviewsCarousel" data-bs-slide-to="12" aria-label="Review 13"></button>
+                            <button type="button" data-bs-target="#reviewsCarousel" data-bs-slide-to="13" aria-label="Review 14"></button>
+                            <button type="button" data-bs-target="#reviewsCarousel" data-bs-slide-to="14" aria-label="Review 15"></button>
+                            <button type="button" data-bs-target="#reviewsCarousel" data-bs-slide-to="15" aria-label="Review 16"></button>
+                        </div>
+                        
+                        <!-- Slides -->
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <div class="review-image-container">
+                                    <img src="{{ asset('assets/client-review/paull_mann.png') }}" alt="Fiverr Review" class="img-fluid review-image">
+                                </div>
+                            </div>
+                            
+                            <div class="carousel-item">
+                                <div class="review-image-container">
+                                    <img src="{{ asset('assets/client-review/ryder.png') }}" alt="Fiverr Review" class="img-fluid review-image">
+                                </div>
+                            </div>
+                            
+                            <div class="carousel-item">
+                                <div class="review-image-container">
+                                    <img src="{{ asset('assets/client-review/ryder2.png') }}" alt="Fiverr Review" class="img-fluid review-image">
+                                </div>
+                            </div>
+                            
+                            <div class="carousel-item">
+                                <div class="review-image-container">
+                                    <img src="{{ asset('assets/client-review/ryder3.png') }}" alt="Fiverr Review" class="img-fluid review-image">
+                                </div>
+                            </div>
+                            
+                            <div class="carousel-item">
+                                <div class="review-image-container">
+                                    <img src="{{ asset('assets/client-review/ryder4.png') }}" alt="Fiverr Review" class="img-fluid review-image">
+                                </div>
+                            </div>
+                            
+                            <div class="carousel-item">
+                                <div class="review-image-container">
+                                    <img src="{{ asset('assets/client-review/ryder5.png') }}" alt="Fiverr Review" class="img-fluid review-image">
+                                </div>
+                            </div>
+                            
+                            <div class="carousel-item">
+                                <div class="review-image-container">
+                                    <img src="{{ asset('assets/client-review/ryder6.png') }}" alt="Fiverr Review" class="img-fluid review-image">
+                                </div>
+                            </div>
+                            
+                            <div class="carousel-item">
+                                <div class="review-image-container">
+                                    <img src="{{ asset('assets/client-review/amit.png') }}" alt="Fiverr Review" class="img-fluid review-image">
+                                </div>
+                            </div>
+                            
+                            <div class="carousel-item">
+                                <div class="review-image-container">
+                                    <img src="{{ asset('assets/client-review/ashleygledhill.png') }}" alt="Fiverr Review" class="img-fluid review-image">
+                                </div>
+                            </div>
+                            
+                            <div class="carousel-item">
+                                <div class="review-image-container">
+                                    <img src="{{ asset('assets/client-review/avelino.png') }}" alt="Fiverr Review" class="img-fluid review-image">
+                                </div>
+                            </div>
+                            
+                            <div class="carousel-item">
+                                <div class="review-image-container">
+                                    <img src="{{ asset('assets/client-review/avelino2.png') }}" alt="Fiverr Review" class="img-fluid review-image">
+                                </div>
+                            </div>
+                            
+                            <div class="carousel-item">
+                                <div class="review-image-container">
+                                    <img src="{{ asset('assets/client-review/diamondlcredit.png') }}" alt="Fiverr Review" class="img-fluid review-image">
+                                </div>
+                            </div>
+                            
+                            <div class="carousel-item">
+                                <div class="review-image-container">
+                                    <img src="{{ asset('assets/client-review/erinthompson.png') }}" alt="Fiverr Review" class="img-fluid review-image">
+                                </div>
+                            </div>
+                            
+                            <div class="carousel-item">
+                                <div class="review-image-container">
+                                    <img src="{{ asset('assets/client-review/evadaboh.png') }}" alt="Fiverr Review" class="img-fluid review-image">
+                                </div>
+                            </div>
+                            
+                            <div class="carousel-item">
+                                <div class="review-image-container">
+                                    <img src="{{ asset('assets/client-review/freelancer.png') }}" alt="Fiverr Review" class="img-fluid review-image">
+                                </div>
+                            </div>
+                            
+                            <div class="carousel-item">
+                                <div class="review-image-container">
+                                    <img src="{{ asset('assets/client-review/lizzie.png') }}" alt="Fiverr Review" class="img-fluid review-image">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Controls -->
+                        <button class="carousel-control-prev" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="prev">
+                            <div class="control-circle">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            </div>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="next">
+                            <div class="control-circle">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            </div>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Additional decorative elements -->
+                    <div class="review-decoration review-decoration-1"></div>
+                    <div class="review-decoration review-decoration-2"></div>
+                </div>
+                
+                <!-- Counter and platform indicator -->
+                <div class="review-platform-indicator text-center mt-5">
+                    <div class="fiverr-badge">
+                        <i class="fas fa-star text-warning me-2"></i>
+                        <span>Verified Fiverr Reviews</span>
+                    </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-4 col-md-6 animate">
-                    <div class="testimonial-card">
-                        <div class="d-flex align-items-center mb-4">
-                            <img src="/api/placeholder/80/80" alt="Client" class="client-img">
-                            <div class="ms-3">
-                                <h5 class="mb-1">Jane Smith</h5>
-                                <p class="mb-0 text-muted">CEO, TechStart Inc.</p>
+        </div>
+    </div>
+</section>
+<!-- FAQ Section -->
+<section class="py-5 my-5 faq-section">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-lg-8 mx-auto animate">
+                <span class="badge bg-light text-accent fw-bold px-3 py-2 mb-3">Common Questions</span>
+                <h2 class="fw-bold section-title">Frequently Asked Questions</h2>
+                <p class="lead">Find answers to common questions about our services</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 mx-auto animate">
+                <div class="accordion" id="faqAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                What is your development process?
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p>Our development process follows an agile methodology that includes discovery, planning, development, testing, and deployment phases. We maintain transparent communication throughout the project, with regular updates and demonstrations to ensure the final product meets your expectations.</p>
                             </div>
-                        </div>
-                        <p class="mb-0">"Invidiatech helped us transform our outdated system into a modern, efficient platform. Their Laravel expertise and commitment to quality were evident throughout the project."</p>
-                        <div class="mt-3">
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-4 col-md-6 animate animate-delay-1">
-                    <div class="testimonial-card">
-                        <div class="d-flex align-items-center mb-4">
-                            <img src="/api/placeholder/80/80" alt="Client" class="client-img">
-                            <div class="ms-3">
-                                <h5 class="mb-1">Michael Johnson</h5>
-                                <p class="mb-0 text-muted">CTO, GlobalTech Solutions</p>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                How do you handle project timelines and deadlines?
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p>We create detailed project plans with realistic timelines based on the project scope and complexity. Our agile approach allows us to adapt to changes while staying on track. We provide regular progress updates and communicate proactively if any adjustments to the timeline are needed.</p>
                             </div>
-                        </div>
-                        <p class="mb-0">"We've worked with several development teams before, but Invidiatech's approach to full-stack development is exceptional. Their attention to detail and code quality has significantly improved our platform's performance."</p>
-                        <div class="mt-3">
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-4 col-md-6 animate animate-delay-2">
-                    <div class="testimonial-card">
-                        <div class="d-flex align-items-center mb-4">
-                            <img src="/api/placeholder/80/80" alt="Client" class="client-img">
-                            <div class="ms-3">
-                                <h5 class="mb-1">Sarah Williams</h5>
-                                <p class="mb-0 text-muted">Product Manager, InnovateX</p>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                What makes your Laravel development services unique?
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p>Our Laravel development expertise goes beyond basic implementation. We focus on building scalable, maintainable applications using the latest Laravel best practices, design patterns, and performance optimization techniques. Our developers regularly contribute to the Laravel community and stay updated with the latest framework updates and features.</p>
                             </div>
                         </div>
-                        <p class="mb-0">"The team at Invidiatech delivered our project ahead of schedule and exceeded our expectations. Their Laravel expertise and proactive communication made the development process smooth and efficient."</p>
-                        <div class="mt-3">
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingFour">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                Do you provide ongoing support after project completion?
+                            </button>
+                        </h2>
+                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p>Yes, we offer various support and maintenance packages to ensure your application continues to run smoothly after launch. These include regular updates, security patches, performance monitoring, and feature enhancements. We can tailor a support plan to meet your specific needs and budget.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingFive">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                Can you work with our existing team?
+                            </button>
+                        </h2>
+                        <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p>Absolutely! We're experienced in collaborating with in-house teams, providing specialized expertise where needed. We can integrate seamlessly with your existing workflows, tools, and processes to deliver value without disruption. Many clients find this hybrid approach allows them to leverage our expertise while maintaining internal control.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- FAQ Section -->
-    <section class="py-5 my-5">
-        <div class="container">
-            <div class="row text-center mb-5">
-                <div class="col-lg-8 mx-auto animate">
-                    <h6 class="text-uppercase text-accent-custom fw-bold">Common Questions</h6>
-                    <h2 class="fw-bold">Frequently Asked Questions</h2>
-                    <p class="lead">Find answers to common questions about our services</p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-8 mx-auto animate">
-                    <div class="faq-item">
-                        <div class="faq-header" onclick="toggleFaq(this)">
-                            <h5>What is your development process?</h5>
+<!-- CTA Section -->
+<section class="py-5 modern-cta">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="cta-card">
+                    <div class="row align-items-center">
+                        <div class="col-lg-7 text-lg-start text-center mb-4 mb-lg-0">
+                            <h2 class="fw-bold mb-3">Ready to Transform Your Digital Presence?</h2>
+                            <p class="lead mb-0">Let's discuss your project and create a custom solution that drives results</p>
                         </div>
-                        <div class="faq-body">
-                            <p>Our development process follows an agile methodology that includes discovery, planning, development, testing, and deployment phases. We maintain transparent communication throughout the project, with regular updates and demonstrations to ensure the final product meets your expectations.</p>
+                        <div class="col-lg-5 text-lg-end text-center">
+                            <div class="d-flex flex-column flex-sm-row justify-content-center justify-content-lg-end gap-3">
+                                <a href="hire-us.html" class="btn btn-primary btn-lg rounded-pill px-4 shadow-sm">Hire Us Now</a>
+                                <a href="contact.html" class="btn btn-outline-primary btn-lg rounded-pill px-4">Contact Us</a>
+                            </div>
                         </div>
                     </div>
-                    <div class="faq-item">
-                        <div class="faq-header" onclick="toggleFaq(this)">
-                            <h5>How do you handle project timelines and deadlines?</h5>
-                        </div>
-                        <div class="faq-body">
-                            <p>We create detailed project plans with realistic timelines based on the project scope and complexity. Our agile approach allows us to adapt to changes while staying on track. We provide regular progress updates and communicate proactively if any adjustments to the timeline are needed.</p>
-                        </div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-header" onclick="toggleFaq(this)">
-                            <h5>What makes your Laravel development services unique?</h5>
-                        </div>
-                        <div class="faq-body">
-                            <p>Our Laravel development expertise goes beyond basic implementation. We focus on building scalable, maintainable applications using the latest Laravel best practices, design patterns, and performance optimization techniques. Our developers regularly contribute to the Laravel community and stay updated with the latest framework updates and features.</p>
-                        </div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-header" onclick="toggleFaq(this)">
-                            <h5>Do you provide ongoing support after project completion?</h5>
-                        </div>
-                        <div class="faq-body">
-                            <p>Yes, we offer various support and maintenance packages to ensure your application continues to run smoothly after launch. These include regular updates, security patches, performance monitoring, and feature enhancements. We can tailor a support plan to meet your specific needs and budget.</p>
-                        </div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-header" onclick="toggleFaq(this)">
-                            <h5>Can you work with our existing team?</h5>
-                        </div>
-                        <div class="faq-body">
-                            <p>Absolutely! We're experienced in collaborating with in-house teams, providing specialized expertise where needed. We can integrate seamlessly with your existing workflows, tools, and processes to deliver value without disruption. Many clients find this hybrid approach allows them to leverage our expertise while maintaining internal control.</p>
-                        </div>
-                    </div>
+                    <div class="cta-decoration"></div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- CTA Section -->
-    <section class="py-5 bg-primary-custom">
-        <div class="container">
-            <div class="row justify-content-center text-center">
-                <div class="col-lg-8 text-white animate">
-                    <h2 class="fw-bold mb-4">Ready to Transform Your Digital Presence?</h2>
-                    <p class="lead mb-5">Let's discuss your project requirements and create a custom solution that drives results</p>
-                    <div class="d-flex justify-content-center gap-3">
-                        <a href="hire-us.html" class="btn btn-accent-custom btn-lg rounded-pill px-5">Hire Us Now</a>
-                        <a href="contact.html" class="btn btn-outline-light btn-lg rounded-pill px-5">Contact Us</a>
+<!-- Optional Testimonials Brief Section -->
+<section class="py-5 bg-light testimonial-brief-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="testimonial-brief-content px-4 py-5">
+                    <h3 class="fw-bold mb-4">Client Success Stories</h3>
+                    <div class="testimonial-quote">
+                        <i class="fas fa-quote-left fa-2x text-accent opacity-25 mb-3"></i>
+                        <p class="lead mb-4">InvidiaTech transformed our e-commerce platform with their Laravel expertise. The team delivered a scalable solution that has significantly improved our customer experience and boosted our sales by 45%.</p>
+                        <div class="d-flex align-items-center">
+                            <div class="testimonial-brief-img me-3">
+                                <img src="/api/placeholder/60/60" alt="Client" class="rounded-circle">
+                            </div>
+                            <div>
+                                <h5 class="mb-1">Sarah Johnson</h5>
+                                <p class="text-muted mb-0">CTO, ShopWave</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="stats-brief px-4 py-5">
+                    <h3 class="fw-bold mb-4">Our Track Record</h3>
+                    <div class="row">
+                        <div class="col-6 mb-4">
+                            <div class="stat-item text-center">
+                                <div class="stat-number text-primary fw-bold display-5">500+</div>
+                                <div class="stat-label">Projects Completed</div>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-4">
+                            <div class="stat-item text-center">
+                                <div class="stat-number text-primary fw-bold display-5">100+</div>
+                                <div class="stat-label">Happy Clients</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-item text-center">
+                                <div class="stat-number text-primary fw-bold display-5">15+</div>
+                                <div class="stat-label">Expert Developers</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-item text-center">
+                                <div class="stat-number text-primary fw-bold display-5">5+</div>
+                                <div class="stat-label">Years of Experience</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+
+<!-- Call Us Banner -->
+<section class="py-4 call-banner">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8 mb-3 mb-md-0">
+                <h4 class="mb-0 text-white">Have questions about our services?</h4>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="tel:+1234567890" class="btn btn-light rounded-pill px-4">
+                    <i class="fas fa-phone-alt me-2"></i> Call Us Today
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
 @endsection

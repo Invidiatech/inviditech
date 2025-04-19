@@ -3,7 +3,7 @@
     <span class="menu-title">Main</span>
 </li>
 <li>
-    <a class="menu" href="#">
+    <a class="menu" href="{{ route('admin.dashboard') }}">
         <span>
             <img class="menu-icon" src="{{ asset('assets/icons-admin/dashboard.svg') }}" alt="icon" loading="lazy" />
             Dashboard
@@ -25,14 +25,11 @@
     </a>
     <div class="dropdownMenuCollapse collapse" id="categoryMenu">
         <div class="listBar">
-            <a href="#" class="subMenu">
+            <a href="{{ route('admin.categories.index') }}" class="subMenu {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
                 Category
             </a>
-            <a href="#" class="subMenu">
-                Sub Category
-            </a>
-            <a href="#" class="subMenu">
-                Sub Sub Category
+            <a href="{{ route('admin.categories.create') }}" class="subMenu {{ request()->routeIs('admin.categories.create') ? 'active' : '' }}">
+                Add Category
             </a>
         </div>
     </div>
@@ -52,10 +49,12 @@
     </a>
     <div class="dropdownMenuCollapse collapse" id="blogMenu">
         <div class="listBar">
-            <a href="{{ route('admin.articles.index') }}" class="subMenu">
-                Article
+            <a href="{{ route('admin.articles.index') }}" class="subMenu {{ request()->routeIs('admin.articles.index') ? 'active' : '' }}">
+                Articles
             </a>
-            <!-- Add more submenu items here if needed -->
+            <a href="{{ route('admin.articles.create') }}" class="subMenu {{ request()->routeIs('admin.articles.create') ? 'active' : '' }}">
+                Add Article
+            </a>
         </div>
     </div>
 </li>
@@ -92,10 +91,14 @@
 
 <!--- Logout --->
 <li>
-    <a href="javascript:void(0)" class="menu logout">
+    <a href="javascript:void(0)" class="menu logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
         <span>
             <img class="menu-icon" src="{{ asset('assets/icons-admin/log-out.svg') }}" alt="icon" loading="lazy" />
             Logout Account
         </span>
     </a>
 </li>
+
+<form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+    @csrf
+</form>

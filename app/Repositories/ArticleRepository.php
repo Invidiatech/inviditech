@@ -14,25 +14,29 @@ use Carbon\Carbon;
 class ArticleRepository implements ArticleRepositoryInterface
 {
     protected $article;
+    protected $category;
+    protected $tag;
     
-    public function __construct(Article $article)
+    public function __construct(Article $article, Category $category, Tag $tag)
     {
         $this->article = $article;
+        $this->category = $category;
+        $this->tag = $tag;
     }
     
     /**
-     * Get all articles with pagination
+     * Get all articles with pagination and filters
      *
      * @param int $perPage
-     * @param string $search
-     * @param string $status
-     * @param int $categoryId
+     * @param string|null $search
+     * @param string|null $status
+     * @param int|null $categoryId
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */
     public function getAllArticles($perPage = 10, $search = null, $status = null, $categoryId = null)
     {
         $query = $this->article->with(['user', 'category', 'tags'])
-                            ->withCount(['comments', 'likes', 'claps', 'bookmarks']);
+                            ->withCount(['comments']);
         
         // Apply search filter
         if ($search) {
@@ -62,7 +66,7 @@ class ArticleRepository implements ArticleRepositoryInterface
      */
     public function getArticleById($id)
     {
-        return $this->article->findOrFail($id);
+        return $this->article->with(['category', 'tags'])->findOrFail($id);
     }
     
     /**
@@ -73,7 +77,7 @@ class ArticleRepository implements ArticleRepositoryInterface
      */
     public function getArticleBySlug($slug)
     {
-        return $this->article->where('slug', $slug)->firstOrFail();
+        return $this->article->with(['category', 'tags', 'user'])->where('slug', $slug)->firstOrFail();
     }
     
     /**
@@ -84,8 +88,7 @@ class ArticleRepository implements ArticleRepositoryInterface
      */
     public function createArticle(array $data)
     {
-
-         // Handle featured image upload
+        // Handle featured image upload
         if (isset($data['featured_image']) && $data['featured_image']) {
             $data['featured_image'] = $this->uploadImage($data['featured_image']);
         }
@@ -96,8 +99,13 @@ class ArticleRepository implements ArticleRepositoryInterface
         }
         
         // Set additional defaults
-        $data['user_id'] = Auth::id();
-        $data['published_at'] = $data['status'] === 'published' ? Carbon::now() : null;
+        if (!isset($data['user_id'])) {
+            $data['user_id'] = Auth::id();
+        }
+        
+        if ($data['status'] === 'published' && !isset($data['published_at'])) {
+            $data['published_at'] = Carbon::now();
+        }
         
         // Set social media metadata defaults if not provided
         if (!isset($data['og_title']) || empty($data['og_title'])) {
@@ -128,7 +136,7 @@ class ArticleRepository implements ArticleRepositoryInterface
         $article = $this->article->create($data);
         
         // Sync tags if provided
-        if (isset($data['tags']) && is_array($data['tags'])) {
+        if (isset($data['tags']) && !empty($data['tags'])) {
             $this->syncTags($article, $data['tags']);
         }
         
@@ -147,7 +155,7 @@ class ArticleRepository implements ArticleRepositoryInterface
         $article = $this->getArticleById($id);
         
         // Handle status change to published
-        if ($article->status !== 'published' && $data['status'] === 'published' && !$article->published_at) {
+        if ($article->status !== 'published' && isset($data['status']) && $data['status'] === 'published' && !$article->published_at) {
             $data['published_at'] = Carbon::now();
         }
         
@@ -243,9 +251,10 @@ class ArticleRepository implements ArticleRepositoryInterface
             if (empty($tagName)) continue;
             
             // Find or create tag
-            $tag = Tag::firstOrCreate(['name' => $tagName], [
-                'slug' => Str::slug($tagName)
-            ]);
+            $tag = $this->tag->firstOrCreate(
+                ['name' => $tagName],
+                ['slug' => Str::slug($tagName)]
+            );
             
             $tagIds[] = $tag->id;
         }
@@ -260,12 +269,22 @@ class ArticleRepository implements ArticleRepositoryInterface
      */
     public function getCategoriesForDropdown()
     {
-        return Category::orderBy('name')->get();
+        return $this->category->orderBy('name')->get();
     }
     
     /**
-     * Get tags for article
+     * Get all tags
      *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getAllTags()
+    {
+        return $this->tag->orderBy('name')->get();
+    }
+    
+    /**
+     * Get article tags
+     * 
      * @param int $articleId
      * @return array
      */
@@ -273,5 +292,128 @@ class ArticleRepository implements ArticleRepositoryInterface
     {
         $article = $this->getArticleById($articleId);
         return $article->tags->pluck('name')->toArray();
+    }
+    
+    /**
+     * Get featured articles
+     *
+     * @param int $limit
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getFeaturedArticles($limit = 5)
+    {
+        return $this->article->with(['category', 'user'])
+                    ->where('is_featured', true)
+                    ->where('status', 'published')
+                    ->where('published_at', '<=', now())
+                    ->latest('published_at')
+                    ->limit($limit)
+                    ->get();
+    }
+    
+    /**
+     * Get popular articles based on views
+     *
+     * @param int $limit
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getPopularArticles($limit = 5)
+    {
+        return $this->article->with(['category', 'user'])
+                    ->where('status', 'published')
+                    ->where('published_at', '<=', now())
+                    ->orderBy('views_count', 'desc')
+                    ->limit($limit)
+                    ->get();
+    }
+    
+    /**
+     * Get recent articles
+     *
+     * @param int $limit
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getRecentArticles($limit = 5)
+    {
+        return $this->article->with(['category', 'user'])
+                    ->where('status', 'published')
+                    ->where('published_at', '<=', now())
+                    ->latest('published_at')
+                    ->limit($limit)
+                    ->get();
+    }
+    
+    /**
+     * Get related articles
+     *
+     * @param int $articleId
+     * @param int $limit
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getRelatedArticles($articleId, $limit = 4)
+    {
+        $article = $this->getArticleById($articleId);
+        
+        // Get articles in the same category
+        return $this->article->with(['category', 'user'])
+                    ->where('id', '!=', $article->id)
+                    ->where('category_id', $article->category_id)
+                    ->where('status', 'published')
+                    ->where('published_at', '<=', now())
+                    ->latest('published_at')
+                    ->limit($limit)
+                    ->get();
+    }
+    
+    /**
+     * Increment article views
+     *
+     * @param int $articleId
+     * @return bool
+     */
+    public function incrementViews($articleId)
+    {
+        $article = $this->getArticleById($articleId);
+        $article->increment('views_count');
+        
+        return true;
+    }
+    
+    /**
+     * Get articles by tag
+     *
+     * @param string $tagSlug
+     * @param int $perPage
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getArticlesByTag($tagSlug, $perPage = 10)
+    {
+        $tag = $this->tag->where('slug', $tagSlug)->firstOrFail();
+        
+        return $tag->articles()
+                ->with(['category', 'user', 'tags'])
+                ->where('status', 'published')
+                ->where('published_at', '<=', now())
+                ->latest('published_at')
+                ->paginate($perPage);
+    }
+    
+    /**
+     * Get articles by category
+     *
+     * @param string $categorySlug
+     * @param int $perPage
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getArticlesByCategory($categorySlug, $perPage = 10)
+    {
+        $category = $this->category->where('slug', $categorySlug)->firstOrFail();
+        
+        return $this->article->with(['category', 'user', 'tags'])
+                    ->where('category_id', $category->id)
+                    ->where('status', 'published')
+                    ->where('published_at', '<=', now())
+                    ->latest('published_at')
+                    ->paginate($perPage);
     }
 }

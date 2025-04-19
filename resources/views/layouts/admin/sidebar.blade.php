@@ -2,9 +2,10 @@
     <div class="scrollbar-sidebar">
         <div class="branding-logo">
             
-            <a href="">
+           {{-- <a href="">
                 <img src="{{ $generaleSetting?->logo ?? asset('assets/logo.png') }}" alt="logo" loading="lazy" />
-            </a>
+            </a>--}}
+            <h1>InvidiaTech<h1>
         </div>
         <div class="branding-logo-forMobile">
             <a href="{{ $generaleSetting?->logo ?? asset('assets/logo.png') }}"></a>

@@ -4,28 +4,38 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Repositories\Interfaces\CategoryRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
 {
+    protected $categoryRepository;
+    
+    public function __construct(CategoryRepositoryInterface $categoryRepository)
+    {
+        $this->categoryRepository = $categoryRepository;
+    }
+    
     /**
      * Display a listing of the categories.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::with('parent')
-                            ->orderBy('sort_order')
-                            ->orderBy('name')
-                            ->paginate(10);
+        $search = $request->input('search');
+        $perPage = $request->input('per_page', 10);
+        $parentId = $request->input('parent_id');
         
-        return view('admin.categories.index', compact('categories'));
+        $categories = $this->categoryRepository->getAllCategories($perPage, $search, $parentId);
+        $parentCategories = $this->categoryRepository->getParentCategories();
+        
+        return view('admin.categories.index', compact('categories', 'parentCategories', 'search', 'parentId'));
     }
-
+    
     /**
      * Show the form for creating a new category.
      *
@@ -33,14 +43,10 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $parentCategories = Category::whereNull('parent_id')
-                                ->orWhere('parent_id', 0)
-                                ->orderBy('name')
-                                ->get();
-        
-        return view('admin.categories.create', compact('parentCategories'));
+        $parentCategories = $this->categoryRepository->getParentCategories();
+         return view('admin.categories.create', compact('parentCategories'));
     }
-
+    
     /**
      * Store a newly created category in storage.
      *
@@ -49,124 +55,131 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        // Validate the request data
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:categories',
+            'slug' => 'nullable|string|max:255|unique:categories,slug',
             'description' => 'nullable|string',
-            'meta_title' => 'nullable|string|max:255',
-            'meta_description' => 'nullable|string',
             'parent_id' => 'nullable|exists:categories,id',
-            'is_featured' => 'boolean',
-            'sort_order' => 'nullable|integer',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string|max:255',
+            'is_featured' => 'boolean',
+            'sort_order' => 'nullable|integer'
         ]);
         
-        if (empty($validated['slug'])) {
-            $validated['slug'] = Str::slug($validated['name']);
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
         }
         
-        if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('categories', 'public');
+        // Prepare data for repository
+        $data = $request->all();
+        
+        // Handle boolean fields properly
+        $data['is_featured'] = $request->has('is_featured');
+        
+        // Generate slug if not provided
+        if (empty($data['slug']) && !empty($data['name'])) {
+            $data['slug'] = Str::slug($data['name']);
         }
         
-        Category::create($validated);
-        
-        return redirect()->route('admin.categories.index')
-                        ->with('success', 'Category created successfully.');
+        try {
+            $category = $this->categoryRepository->createCategory($data);
+            
+            return redirect()->route('admin.categories.index')
+                ->with('success', 'Category created successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Error creating category: ' . $e->getMessage())
+                ->withInput();
+        }
     }
-
+    
     /**
      * Show the form for editing the specified category.
      *
-     * @param  \App\Models\Category  $category
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Category $category)
+    public function edit($id)
     {
-        $parentCategories = Category::where('id', '!=', $category->id)
-                                ->where(function($query) use ($category) {
-                                    $query->whereNull('parent_id')
-                                        ->orWhere('parent_id', 0);
-                                })
-                                ->orderBy('name')
-                                ->get();
+        $category = $this->categoryRepository->getCategoryById($id);
+        $parentCategories = $this->categoryRepository->getParentCategoriesExcept($id);
         
         return view('admin.categories.edit', compact('category', 'parentCategories'));
     }
-
+    
     /**
      * Update the specified category in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Category  $category
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(Request $request, $id)
     {
-        $validated = $request->validate([
+        // Validate the request data
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'slug' => [
-                'nullable',
-                'string',
-                'max:255',
-                Rule::unique('categories')->ignore($category->id),
-            ],
+            'slug' => 'nullable|string|max:255|unique:categories,slug,' . $id,
             'description' => 'nullable|string',
-            'meta_title' => 'nullable|string|max:255',
-            'meta_description' => 'nullable|string',
             'parent_id' => 'nullable|exists:categories,id',
-            'is_featured' => 'boolean',
-            'sort_order' => 'nullable|integer',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string|max:255',
+            'is_featured' => 'boolean',
+            'sort_order' => 'nullable|integer'
         ]);
         
-        if (empty($validated['slug'])) {
-            $validated['slug'] = Str::slug($validated['name']);
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
         }
         
-        if ($request->hasFile('image')) {
-            // Delete old image if exists
-            if ($category->image) {
-                Storage::disk('public')->delete($category->image);
-            }
+        // Make sure a category cannot be its own parent
+        if ($request->parent_id == $id) {
+            return redirect()->back()
+                ->with('error', 'A category cannot be its own parent.')
+                ->withInput();
+        }
+        
+        // Prepare data for repository
+        $data = $request->all();
+        
+        // Handle boolean fields properly
+        $data['is_featured'] = $request->has('is_featured');
+        
+        try {
+            $this->categoryRepository->updateCategory($id, $data);
             
-            $validated['image'] = $request->file('image')->store('categories', 'public');
+            return redirect()->route('admin.categories.index')
+                ->with('success', 'Category updated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Error updating category: ' . $e->getMessage())
+                ->withInput();
         }
-        
-        $category->update($validated);
-        
-        return redirect()->route('admin.categories.index')
-                        ->with('success', 'Category updated successfully.');
     }
-
+    
     /**
      * Remove the specified category from storage.
      *
-     * @param  \App\Models\Category  $category
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public function destroy($id)
     {
-        // Check if there are child categories
-        if ($category->children()->count() > 0) {
+        try {
+            $this->categoryRepository->deleteCategory($id);
+            
             return redirect()->route('admin.categories.index')
-                            ->with('error', 'Cannot delete category with child categories. Please delete or reassign child categories first.');
+                ->with('success', 'Category deleted successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Error deleting category: ' . $e->getMessage());
         }
-        
-        // Check if there are associated articles
-        if ($category->articles()->count() > 0) {
-            return redirect()->route('admin.categories.index')
-                            ->with('error', 'Cannot delete category with associated articles. Please remove category from articles first.');
-        }
-        
-        // Delete image if exists
-        if ($category->image) {
-            Storage::disk('public')->delete($category->image);
-        }
-        
-        $category->delete();
-        
-        return redirect()->route('admin.categories.index')
-                        ->with('success', 'Category deleted successfully.');
     }
 }

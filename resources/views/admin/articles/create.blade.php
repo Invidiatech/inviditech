@@ -3,11 +3,6 @@
 @section('title', 'Create Article')
 
 @section('styles')
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-<!-- Tagify CSS -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.17.7/tagify.min.css" rel="stylesheet">
-
 <style>
     /* Animation */
     .animate-fade-in {
@@ -32,47 +27,6 @@
         background-color: #f5f5f7;
     }
     
-    /* Editor styling */
-    .tox-tinymce {
-        border-radius: 0.375rem !important;
-        border-color: #dee2e6 !important;
-    }
-    
-    .editor-toolbar {
-        background-color: #f8f9fa;
-        border: 1px solid #dee2e6;
-        border-bottom: none;
-        border-top-left-radius: 0.375rem;
-        border-top-right-radius: 0.375rem;
-        padding: 0.5rem;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.25rem;
-    }
-    
-    .editor-toolbar button {
-        width: 2rem;
-        height: 2rem;
-        padding: 0;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .editor-content {
-        border: 1px solid #dee2e6;
-        border-bottom-left-radius: 0.375rem;
-        border-bottom-right-radius: 0.375rem;
-        min-height: 400px;
-        padding: 1rem;
-        outline: none;
-    }
-    
-    .editor-content:focus {
-        border-color: #86b7fe;
-        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-    }
-    
     /* Image preview */
     .image-preview-container {
         aspect-ratio: 16/9;
@@ -90,33 +44,6 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-    }
-    
-    /* Recording */
-    .record-button {
-        width: 4rem;
-        height: 4rem;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s;
-    }
-    
-    .record-button.recording {
-        background-color: #dc3545;
-        animation: pulse 1.5s infinite;
-    }
-    
-    @keyframes pulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-        100% { transform: scale(1); }
-    }
-    
-    .recording-timer {
-        font-family: monospace;
-        font-size: 1.5rem;
     }
     
     /* SEO Preview */
@@ -146,16 +73,6 @@
         line-height: 1.5;
     }
     
-    /* Tags */
-    .tagify {
-        --tag-bg: #e9ecef;
-        --tag-hover: #dee2e6;
-        --tag-text-color: #495057;
-        --tags-border-color: #ced4da;
-        --tags-focus-border-color: #86b7fe;
-        --tag-border-radius: 0.375rem;
-    }
-    
     /* Character counter */
     .char-counter {
         position: absolute;
@@ -182,26 +99,8 @@
         margin-top: 0.25rem;
     }
     
-    .form-control:focus, .form-select:focus {
-        border-color: #86b7fe;
-        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-    }
-    
     .required-indicator {
         color: #dc3545;
-    }
-    
-    /* Card styling */
-    .card {
-        border: none;
-        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-        overflow: hidden;
-    }
-    
-    .card-header {
-        background-color: #f5f5f7;
-        font-weight: 500;
-        padding: 0.75rem 1rem;
     }
 </style>
 @endsection
@@ -275,12 +174,17 @@
                             <small class="form-text text-muted">Leave empty to generate from content</small>
                         </div>
                         
-                        <div class="mb-3">
-                            <label for="editor" class="form-label">Content <span class="required-indicator">*</span></label>
-                            <textarea id="editor" name="content" class="form-control">{{ old('content') }}</textarea>
-                            
+                        <div class="mt-3">
+                            <label for="editor" class="form-label">
+                                {{ __('Content') }}
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div id="editor" style="max-height: 750px; overflow-y: auto; min-height: 200px">
+                                {!! old('content') !!}
+                            </div>
+                            <input type="hidden" id="content" name="content" value="{{ old('content') }}">
                             @error('content')
-                                <div class="text-danger mt-2">{{ $message }}</div>
+                                <p class="text text-danger m-0">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
@@ -443,7 +347,7 @@
                         
                         <div class="mb-3">
                             <label for="category_id" class="form-label">Category <span class="required-indicator">*</span></label>
-                            <select class="form-select @error('category_id') is-invalid @enderror" id="category_id" name="category_id" required>
+                            <select class="form-select select2 @error('category_id') is-invalid @enderror" id="category_id" name="category_id" required>
                                 <option value="">Select a category</option>
                                 @foreach($categories as $category)
                                     <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
@@ -457,12 +361,17 @@
                         </div>
                         
                         <div class="mb-3">
-                            <label for="tags_input" class="form-label">Tags</label>
-                            <input type="text" class="form-control @error('tags_input') is-invalid @enderror" 
-                                id="tags_input" name="tags_input" value="{{ old('tags_input') }}" 
-                                placeholder="Enter tag and press Enter">
-                            @error('tags_input')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                            <label for="tags" class="form-label">Tags</label>
+                            <select id="tags" name="tags[]" class="form-control select2" multiple="multiple">
+                                @foreach ($tags as $tag)
+                                    <option value="{{ $tag->name }}" {{ (is_array(old('tags')) && in_array($tag->name, old('tags'))) ? 'selected' : '' }}>
+                                        {{ $tag->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <small class="form-text text-muted">Type to add new tags or select existing ones</small>
+                            @error('tags')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
                         </div>
                         
@@ -617,176 +526,161 @@
 </div>
 @endsection
 
-@section('scripts')
-<script src="https://cdn.tiny.cloud/1/v04q0zq0dq2acgwhdd65ic4ambrrmqd6wv14rhzzb2wutf5p/tinymce/6/tinymce.min.js" ></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.17.7/tagify.min.js"></script>
-
+@push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Initialize TinyMCE
-        tinymce.init({
-            selector: '#editor',
-            height: 400,
-            menubar: true,
-            plugins: [
-                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-                'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                'insertdatetime', 'media', 'table', 'help', 'wordcount'
-            ],
-            toolbar: 'undo redo | blocks | ' +
-                'bold italic backcolor | alignleft aligncenter ' +
-                'alignright alignjustify | bullist numlist outdent indent | ' +
-                'removeformat | help',
-            content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-size: 14px; }'
+    $(document).ready(function() {
+        // Initialize Select2 on the category and tags fields
+        $("#category_id").select2({
+            placeholder: "Select a category"
         });
         
-        // Initialize Tagify
-        const tagInput = document.getElementById('tags_input');
-        if (tagInput) {
-            new Tagify(tagInput, {
-                duplicates: false,
-                maxTags: 10
-            });
-        }
+        $("#tags").select2({
+            tags: true,
+            placeholder: "Enter tags and press Enter",
+            tokenSeparators: [',', ' ']
+        });
         
-        // Image preview
-        const imageInput = document.getElementById('featured_image');
-        const imagePreview = document.getElementById('imagePreview');
-        const imagePlaceholder = document.getElementById('imagePlaceholder');
-        
-        if (imageInput) {
-            imageInput.addEventListener('change', function() {
-                if (this.files && this.files[0]) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        imagePreview.src = e.target.result;
-                        imagePreview.classList.remove('d-none');
-                        imagePlaceholder.classList.add('d-none');
-                    };
-                    reader.readAsDataURL(this.files[0]);
-                }
-            });
-        }
-        
-        // Audio file preview
-        const audioInput = document.getElementById('audio_file');
-        const audioPreview = document.getElementById('audioPreview');
-        const audioPreviewContainer = document.getElementById('uploadedAudioPreview');
-        
-        if (audioInput) {
-            audioInput.addEventListener('change', function() {
-                if (this.files && this.files[0]) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        audioPreview.src = e.target.result;
-                        audioPreviewContainer.classList.remove('d-none');
-                    };
-                    reader.readAsDataURL(this.files[0]);
-                }
-            });
-        }
-        
-        // Character counters
-        const metaTitle = document.getElementById('meta_title');
-        const metaTitleCounter = document.getElementById('metaTitleCounter');
-        const metaDesc = document.getElementById('meta_description');
-        const metaDescCounter = document.getElementById('metaDescCounter');
-        
-        function updateCharCounter(input, counter, max) {
-            if (input && counter) {
-                input.addEventListener('input', function() {
-                    const count = this.value.length;
-                    counter.textContent = count + '/' + max;
-                    
-                    if (count > max) {
-                        counter.classList.add('danger');
-                        counter.classList.remove('warning');
-                    } else if (count > max * 0.8) {
-                        counter.classList.add('warning');
-                        counter.classList.remove('danger');
-                    } else {
-                        counter.classList.remove('warning', 'danger');
-                    }
-                });
-                
-                // Trigger on load
-                input.dispatchEvent(new Event('input'));
+        // Initialize Quill editor
+        var quill = new Quill('#editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{
+                        'header': [1, 2, 3, 4, 5, 6, false]
+                    }],
+                    [{
+                        'font': []
+                    }],
+                    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                    [{
+                        'list': 'ordered'
+                    }, {
+                        'list': 'bullet'
+                    }],
+                    [{
+                        'align': []
+                    }],
+                    [{
+                        'script': 'sub'
+                    }, {
+                        'script': 'super'
+                    }],
+                    [{
+                        'indent': '-1'
+                    }, {
+                        'indent': '+1'
+                    }],
+                    [{
+                        'direction': 'rtl'
+                    }],
+                    [{
+                        'color': []
+                    }, {
+                        'background': []
+                    }],
+                    ['link', 'image', 'video', 'formula']
+                ]
             }
-        }
+        });
+
+        // Update hidden input when editor content changes
+        quill.on('text-change', function() {
+            document.getElementById('content').value = quill.root.innerHTML;
+        });
         
-        updateCharCounter(metaTitle, metaTitleCounter, 60);
-        updateCharCounter(metaDesc, metaDescCounter, 160);
+        // Image preview functionality
+        $("#featured_image").change(function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    $("#imagePreview").attr('src', e.target.result);
+                    $("#imagePreview").removeClass('d-none');
+                    $("#imagePlaceholder").addClass('d-none');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
         
-        // Slug generation
-        const titleInput = document.getElementById('title');
-        const slugInput = document.getElementById('slug');
-        const seoPreviewTitle = document.getElementById('seoPreviewTitle');
-        const seoPreviewSlug = document.getElementById('seoPreviewSlug');
+        // Audio preview functionality
+        $("#audio_file").change(function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    $("#audioPreview").attr('src', e.target.result);
+                    $("#uploadedAudioPreview").removeClass('d-none');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
         
-        function createSlug(text) {
-            return text
-                .toString()
-                .toLowerCase()
-                .trim()
-                .replace(/\s+/g, '-')
-                .replace(/[^\w\-]+/g, '')
-                .replace(/\-\-+/g, '-');
-        }
+        // Generate slug from title
+        $('#title').on('blur', function() {
+            if ($('#slug').val() === '') {
+                const title = $(this).val();
+                const slug = title.toLowerCase()
+                    .replace(/[^\w\s-]/g, '')
+                    .replace(/\s+/g, '-')
+                    .replace(/-+/g, '-');
+                $('#slug').val(slug);
+                $('#seoPreviewSlug').text(slug);
+            }
+        });
         
-        if (titleInput && slugInput) {
-            titleInput.addEventListener('blur', function() {
-                if (!slugInput.value) {
-                    slugInput.value = createSlug(this.value);
-                    
-                    if (seoPreviewSlug) {
-                        seoPreviewSlug.textContent = slugInput.value;
-                    }
-                }
-                
-                if (seoPreviewTitle && !document.getElementById('meta_title').value) {
-                    seoPreviewTitle.textContent = this.value;
-                }
-            });
+        // Update SEO preview
+        $('#meta_title').on('input', function() {
+            let value = $(this).val();
+            if (value) {
+                $('#seoPreviewTitle').text(value);
+            } else {
+                $('#seoPreviewTitle').text($('#title').val() || 'Your article title will appear here');
+            }
             
-            slugInput.addEventListener('input', function() {
-                if (seoPreviewSlug) {
-                    seoPreviewSlug.textContent = this.value || 'article-slug';
-                }
-            });
-        }
+            // Update character counter
+            const count = value.length;
+            $('#metaTitleCounter').text(count + '/60');
+            
+            if (count > 60) {
+                $('#metaTitleCounter').addClass('danger').removeClass('warning');
+            } else if (count > 48) {
+                $('#metaTitleCounter').addClass('warning').removeClass('danger');
+            } else {
+                $('#metaTitleCounter').removeClass('warning danger');
+            }
+        });
         
-        // SEO Preview updates
-        const metaTitleInput = document.getElementById('meta_title');
-        const metaDescInput = document.getElementById('meta_description');
-        const seoPreviewDesc = document.getElementById('seoPreviewDescription');
+        $('#meta_description').on('input', function() {
+            let value = $(this).val();
+            if (value) {
+                $('#seoPreviewDescription').text(value);
+            } else {
+                $('#seoPreviewDescription').text('Your meta description will appear here. It should be between 120-160 characters for optimal SEO performance.');
+            }
+            
+            // Update character counter
+            const count = value.length;
+            $('#metaDescCounter').text(count + '/160');
+            
+            if (count > 160) {
+                $('#metaDescCounter').addClass('danger').removeClass('warning');
+            } else if (count > 128) {
+                $('#metaDescCounter').addClass('warning').removeClass('danger');
+            } else {
+                $('#metaDescCounter').removeClass('warning danger');
+            }
+        });
         
-        if (metaTitleInput && seoPreviewTitle) {
-            metaTitleInput.addEventListener('input', function() {
-                seoPreviewTitle.textContent = this.value || titleInput.value || 'Your article title will appear here';
-            });
-        }
+        // Slug change updates preview
+        $('#slug').on('input', function() {
+            $('#seoPreviewSlug').text($(this).val() || 'article-slug');
+        });
         
-        if (metaDescInput && seoPreviewDesc) {
-            metaDescInput.addEventListener('input', function() {
-                seoPreviewDesc.textContent = this.value || 'Your meta description will appear here. It should be between 120-160 characters for optimal SEO performance.';
-            });
-        }
-        
-        // Audio Recording functionality
+        // Recording functionality
         let mediaRecorder;
         let recordedChunks = [];
         let startTime;
         let timerInterval;
-        
-        const recordButton = document.getElementById('recordButton');
-        const recordingStatus = document.getElementById('recordingStatus');
-        const recordingTimer = document.getElementById('recordingTimer');
-        const recordedAudio = document.getElementById('recordedAudio');
-        const recordedAudioContainer = document.getElementById('recordedAudioContainer');
-        const recordedAudioData = document.getElementById('recorded_audio_data');
-        const discardRecordingBtn = document.getElementById('discardRecording');
-        const saveRecordingBtn = document.getElementById('saveRecording');
         
         function updateTimer() {
             const now = new Date();
@@ -794,103 +688,78 @@
             const seconds = Math.floor((elapsedTime / 1000) % 60).toString().padStart(2, '0');
             const minutes = Math.floor((elapsedTime / 1000 / 60) % 60).toString().padStart(2, '0');
             
-            recordingTimer.textContent = `${minutes}:${seconds}`;
+            $('#recordingTimer').text(`${minutes}:${seconds}`);
         }
         
-        if (recordButton) {
-            recordButton.addEventListener('click', function() {
-                if (!mediaRecorder || mediaRecorder.state === 'inactive') {
-                    // Start recording
-                    navigator.mediaDevices.getUserMedia({ audio: true })
-                        .then(function(stream) {
-                            recordButton.classList.add('recording');
-                            recordingStatus.textContent = 'Recording... Click to stop';
-                            
-                            mediaRecorder = new MediaRecorder(stream);
-                            recordedChunks = [];
-                            
-                            mediaRecorder.addEventListener('dataavailable', function(e) {
-                                if (e.data.size > 0) {
-                                    recordedChunks.push(e.data);
-                                }
-                            });
-                            
-                            mediaRecorder.addEventListener('stop', function() {
-                                const audioBlob = new Blob(recordedChunks, { type: 'audio/webm' });
-                                const audioUrl = URL.createObjectURL(audioBlob);
-                                recordedAudio.src = audioUrl;
-                                
-                                // Convert to base64 for form submission
-                                const reader = new FileReader();
-                                reader.readAsDataURL(audioBlob);
-                                reader.onloadend = function() {
-                                    const base64Audio = reader.result;
-                                    recordedAudioData.value = base64Audio;
-                                };
-                                
-                                recordedAudioContainer.classList.remove('d-none');
-                                
-                                // Stop all tracks to release the microphone
-                                stream.getTracks().forEach(track => track.stop());
-                                
-                                // Clear timer
-                                clearInterval(timerInterval);
-                            });
-                            
-                            // Start recording
-                            mediaRecorder.start();
-                            
-                            // Start timer
-                            startTime = new Date();
-                            timerInterval = setInterval(updateTimer, 1000);
-                            updateTimer(); // Initial update
-                        })
-                        .catch(function(err) {
-                            console.error('Error accessing microphone:', err);
-                            alert('Could not access your microphone. Please check permissions and try again.');
+        $('#recordButton').on('click', function() {
+            if (!mediaRecorder || mediaRecorder.state === 'inactive') {
+                // Start recording
+                navigator.mediaDevices.getUserMedia({ audio: true })
+                    .then(function(stream) {
+                        $('#recordButton').addClass('recording');
+                        $('#recordingStatus').text('Recording... Click to stop');
+                        
+                        mediaRecorder = new MediaRecorder(stream);
+                        recordedChunks = [];
+                        
+                        mediaRecorder.addEventListener('dataavailable', function(e) {
+                            if (e.data.size > 0) {
+                                recordedChunks.push(e.data);
+                            }
                         });
-                } else {
-                    // Stop recording
-                    mediaRecorder.stop();
-                    recordButton.classList.remove('recording');
-                    recordingStatus.textContent = 'Click to start recording';
-                }
-            });
-        }
+                        
+                        mediaRecorder.addEventListener('stop', function() {
+                            const audioBlob = new Blob(recordedChunks, { type: 'audio/webm' });
+                            const audioUrl = URL.createObjectURL(audioBlob);
+                            $('#recordedAudio').attr('src', audioUrl);
+                            
+                            // Convert to base64 for form submission
+                            const reader = new FileReader();
+                            reader.readAsDataURL(audioBlob);
+                            reader.onloadend = function() {
+                                const base64Audio = reader.result;
+                                $('#recorded_audio_data').val(base64Audio);
+                            };
+                            
+                            $('#recordedAudioContainer').removeClass('d-none');
+                            
+                            // Stop all tracks to release the microphone
+                            stream.getTracks().forEach(track => track.stop());
+                            
+                            // Clear timer
+                            clearInterval(timerInterval);
+                        });
+                        
+                        // Start recording
+                        mediaRecorder.start();
+                        
+                        // Start timer
+                        startTime = new Date();
+                        timerInterval = setInterval(updateTimer, 1000);
+                        updateTimer(); // Initial update
+                    })
+                    .catch(function(err) {
+                        console.error('Error accessing microphone:', err);
+                        alert('Could not access your microphone. Please check permissions and try again.');
+                    });
+            } else {
+                // Stop recording
+                mediaRecorder.stop();
+                $('#recordButton').removeClass('recording');
+                $('#recordingStatus').text('Click to start recording');
+            }
+        });
         
-        if (discardRecordingBtn) {
-            discardRecordingBtn.addEventListener('click', function() {
-                recordedAudioContainer.classList.add('d-none');
-                recordedAudio.src = '';
-                recordedAudioData.value = '';
-            });
-        }
+        $('#discardRecording').on('click', function() {
+            $('#recordedAudioContainer').addClass('d-none');
+            $('#recordedAudio').attr('src', '');
+            $('#recorded_audio_data').val('');
+        });
         
         // Preview button functionality
-        const previewBtn = document.getElementById('previewBtn');
-        const articleForm = document.getElementById('articleForm');
-        
-        if (previewBtn && articleForm) {
-            previewBtn.addEventListener('click', function() {
-                // Clone the form and change action and method
-                const previewForm = articleForm.cloneNode(true);
-                previewForm.action = '';
-                previewForm.method = 'POST';
-                previewForm.target = '_blank';
-                
-                // Create a hidden input for indicating preview mode
-                const previewInput = document.createElement('input');
-                previewInput.type = 'hidden';
-                previewInput.name = 'preview_mode';
-                previewInput.value = '1';
-                previewForm.appendChild(previewInput);
-                
-                // Submit the form
-                document.body.appendChild(previewForm);
-                previewForm.submit();
-                document.body.removeChild(previewForm);
-            });
-        }
+        $('#previewBtn').on('click', function() {
+            alert('Preview functionality will be implemented in future updates.');
+        });
     });
 </script>
-@endsection
+@endpush

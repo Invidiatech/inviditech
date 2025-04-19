@@ -2,17 +2,15 @@
 
 namespace App\Repositories\Interfaces;
 
-use App\Models\Article;
-
 interface ArticleRepositoryInterface
 {
     /**
-     * Get all articles with pagination
+     * Get all articles with pagination and filters
      *
      * @param int $perPage
-     * @param string $search
-     * @param string $status
-     * @param int $categoryId
+     * @param string|null $search
+     * @param string|null $status
+     * @param int|null $categoryId
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */
     public function getAllArticles($perPage = 10, $search = null, $status = null, $categoryId = null);
@@ -21,7 +19,7 @@ interface ArticleRepositoryInterface
      * Get article by ID
      *
      * @param int $id
-     * @return Article
+     * @return \App\Models\Article
      */
     public function getArticleById($id);
     
@@ -29,7 +27,7 @@ interface ArticleRepositoryInterface
      * Get article by slug
      *
      * @param string $slug
-     * @return Article
+     * @return \App\Models\Article
      */
     public function getArticleBySlug($slug);
     
@@ -37,7 +35,7 @@ interface ArticleRepositoryInterface
      * Create new article
      *
      * @param array $data
-     * @return Article
+     * @return \App\Models\Article
      */
     public function createArticle(array $data);
     
@@ -46,7 +44,7 @@ interface ArticleRepositoryInterface
      *
      * @param int $id
      * @param array $data
-     * @return Article
+     * @return \App\Models\Article
      */
     public function updateArticle($id, array $data);
     
@@ -66,10 +64,76 @@ interface ArticleRepositoryInterface
     public function getCategoriesForDropdown();
     
     /**
-     * Get tags for article
+     * Get all tags
      *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getAllTags();
+    
+    /**
+     * Get article tags
+     * 
      * @param int $articleId
      * @return array
      */
     public function getArticleTags($articleId);
+    
+    /**
+     * Get featured articles
+     *
+     * @param int $limit
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getFeaturedArticles($limit = 5);
+    
+    /**
+     * Get popular articles based on views
+     *
+     * @param int $limit
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getPopularArticles($limit = 5);
+    
+    /**
+     * Get recent articles
+     *
+     * @param int $limit
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getRecentArticles($limit = 5);
+    
+    /**
+     * Get related articles
+     *
+     * @param int $articleId
+     * @param int $limit
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getRelatedArticles($articleId, $limit = 4);
+    
+    /**
+     * Increment article views
+     *
+     * @param int $articleId
+     * @return bool
+     */
+    public function incrementViews($articleId);
+    
+    /**
+     * Get articles by tag
+     *
+     * @param string $tagSlug
+     * @param int $perPage
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getArticlesByTag($tagSlug, $perPage = 10);
+    
+    /**
+     * Get articles by category
+     *
+     * @param string $categorySlug
+     * @param int $perPage
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getArticlesByCategory($categorySlug, $perPage = 10);
 }

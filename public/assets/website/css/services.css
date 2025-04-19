@@ -407,3 +407,139 @@ body {
         margin-bottom: 2rem;
     }
 }
+/* faq */
+/* Additional CSS for remaining services page sections */
+
+/* Testimonial Brief Section */
+.testimonial-brief-section {
+    position: relative;
+    background-color: #f9fbfd;
+    overflow: hidden;
+}
+
+.testimonial-brief-content, .stats-brief {
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    height: 100%;
+    transition: all 0.3s ease;
+    border: 1px solid var(--border-color);
+}
+
+.testimonial-brief-content:hover, .stats-brief:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.testimonial-quote {
+    position: relative;
+}
+
+.testimonial-brief-img img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border: 3px solid var(--border-color);
+}
+
+.stat-item {
+    padding: 15px;
+    transition: all 0.3s ease;
+}
+
+.stat-number {
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+/* Call Banner */
+.call-banner {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.call-banner::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 80%);
+    pointer-events: none;
+}
+
+.call-banner h4 {
+    font-weight: 600;
+}
+
+.call-banner .btn {
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.call-banner .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* CTA Section Enhancements */
+.modern-cta {
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-card {
+    position: relative;
+    z-index: 1;
+    transition: all 0.4s ease;
+}
+
+.cta-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.cta-decoration {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(0, 169, 255, 0.1) 0%, rgba(4, 65, 104, 0.05) 100%);
+    top: -100px;
+    right: -50px;
+    z-index: -1;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 991.98px) {
+    .stat-number {
+        font-size: 2.5rem !important;
+    }
+    
+    .testimonial-brief-content, .stats-brief {
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .testimonial-brief-content, .stats-brief {
+        padding: 1.5rem !important;
+    }
+    
+    .call-banner .btn {
+        width: 100%;
+    }
+    
+    .stat-number {
+        font-size: 2rem !important;
+    }
+}

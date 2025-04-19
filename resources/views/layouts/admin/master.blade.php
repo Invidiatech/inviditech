@@ -4,10 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-    <!-- App favicon -->
-    <link rel="shortcut icon" type="image/png" href="{{ $generaleSetting?->favicon ?? asset('assets/favicon.png') }}" />
-
+ 
     <!-- App title -->
     <title>{{ $generaleSetting?->title ?? config('app.name', 'Laravel') }}</title>
 
@@ -511,50 +508,7 @@
 
     <!-- Show Notifications Using Pusher JS -->
 
-    @if (request()->is('admin/*', 'admin'))
-        @hasPermission('admin.dashboard.notification')
-            <script>
-                channel.bind('admin-product-request', function(data) {
-                    var message = data.message;
-                    if (message.startsWith('"') && message.endsWith('"')) {
-                        message = message.slice(1, -1);
-                    }
-                    toastr.success(message)
-                    // new Audio("{{ asset('assets/audio/notification.mp3') }}").play();
-                    fetchAdminNotifications()
-                });
-
-                channel.bind('support-ticket-event', function(data) {
-                    var message = data.message;
-                    if (message.startsWith('"') && message.endsWith('"')) {
-                        message = message.slice(1, -1);
-                    }
-                    toastr.success(message)
-                    fetchAdminNotifications()
-                });
-
-                fetchAdminNotifications() // fetch Admin Notifications
-            </script>
-        @endhasPermission
-    @else
-        @hasPermission('shop.dashboard.notification')
-            <script>
-                var shopID = "{{ generaleSetting('shop')?->id }}";
-                channel.bind('product-approve-event', function(data) {
-                    var requestShopId = data.shop_id;
-                    var message = data.message;
-                    if (requestShopId == shopID) {
-                        if (message.startsWith('"') && message.endsWith('"')) {
-                            message = message.slice(1, -1);
-                        }
-                        toastr.success(message)
-                        fetchShopNotifications()
-                    }
-                });
-                fetchShopNotifications() // fetch Shop Notifications
-            </script>
-        @endhasPermission
-    @endif
+   
 
     <script>
         const Toast = Swal.mixin({
