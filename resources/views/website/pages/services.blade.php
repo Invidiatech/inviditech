@@ -508,63 +508,7 @@
     </div>
 </section>
 
-<!-- Optional Testimonials Brief Section -->
-<section class="py-5 bg-light testimonial-brief-section">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6 mb-4 mb-lg-0">
-                <div class="testimonial-brief-content px-4 py-5">
-                    <h3 class="fw-bold mb-4">Client Success Stories</h3>
-                    <div class="testimonial-quote">
-                        <i class="fas fa-quote-left fa-2x text-accent opacity-25 mb-3"></i>
-                        <p class="lead mb-4">InvidiaTech transformed our e-commerce platform with their Laravel expertise. The team delivered a scalable solution that has significantly improved our customer experience and boosted our sales by 45%.</p>
-                        <div class="d-flex align-items-center">
-                            <div class="testimonial-brief-img me-3">
-                                <img src="/api/placeholder/60/60" alt="Client" class="rounded-circle">
-                            </div>
-                            <div>
-                                <h5 class="mb-1">Sarah Johnson</h5>
-                                <p class="text-muted mb-0">CTO, ShopWave</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="stats-brief px-4 py-5">
-                    <h3 class="fw-bold mb-4">Our Track Record</h3>
-                    <div class="row">
-                        <div class="col-6 mb-4">
-                            <div class="stat-item text-center">
-                                <div class="stat-number text-primary fw-bold display-5">500+</div>
-                                <div class="stat-label">Projects Completed</div>
-                            </div>
-                        </div>
-                        <div class="col-6 mb-4">
-                            <div class="stat-item text-center">
-                                <div class="stat-number text-primary fw-bold display-5">100+</div>
-                                <div class="stat-label">Happy Clients</div>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="stat-item text-center">
-                                <div class="stat-number text-primary fw-bold display-5">15+</div>
-                                <div class="stat-label">Expert Developers</div>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="stat-item text-center">
-                                <div class="stat-number text-primary fw-bold display-5">5+</div>
-                                <div class="stat-label">Years of Experience</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
+ 
 <!-- Call Us Banner -->
 <section class="py-4 call-banner">
     <div class="container">
@@ -573,7 +517,7 @@
                 <h4 class="mb-0 text-white">Have questions about our services?</h4>
             </div>
             <div class="col-md-4 text-md-end">
-                <a href="tel:+1234567890" class="btn btn-light rounded-pill px-4">
+                <a href="tel:+03145184047" class="btn btn-light rounded-pill px-4">
                     <i class="fas fa-phone-alt me-2"></i> Call Us Today
                 </a>
             </div>

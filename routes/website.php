@@ -29,8 +29,7 @@ Route::get('/blog/{slug}', [PageController::class, 'blogPost'])->name('blog.post
 // Tutorial articles by category
 Route::get('/articles', [PageController::class, 'articles'])->name('articles');
 Route::get('/article/{slug}', [PageController::class, 'show'])->name('article.show');
-Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
-Route::post('/article/pdf', [NewsletterController::class, 'pdf'])->name('newsletter.subscribe');
+Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');Route::post('/article/pdf', [NewsletterController::class, 'pdf'])->name('newsletter.subscribe');
 // Comment routes (with auth middleware)
 Route::middleware(['auth'])->group(function () {
     Route::post('/article/{id}/comment', [ArticleController::class, 'storeComment'])->name('article.comment');

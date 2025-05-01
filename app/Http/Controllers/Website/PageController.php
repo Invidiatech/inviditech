@@ -33,8 +33,7 @@ class PageController extends Controller
     }
     public function articles(Request $request)
     {
-        // Get category filter if provided
-        $categorySlug = $request->query('category');
+         $categorySlug = $request->query('category');
         $tagSlug = $request->query('tag');
         $search = $request->query('search');
         
@@ -111,20 +110,35 @@ class PageController extends Controller
     
     public function show($slug)
     {
+        // Get the article with its relationships
         $article = Article::where('slug', $slug)
             ->where('status', 'published')
-            ->with(['category', 'tags', 'user'])
+            ->with(['category', 'tags', 'user', 'comments.user', 'comments.replies.user'])
             ->firstOrFail();
-        $article->increment('views_count');
+        
+        // Increment the view count
+        $article->incrementViews();
         
         // Get related articles from same category
         $relatedArticles = Article::where('category_id', $article->category_id)
             ->where('id', '!=', $article->id)
             ->where('status', 'published')
+            ->with('user')
             ->limit(3)
             ->get();
             
-        return view('website.pages.article-detail', compact('article', 'relatedArticles'));
+        // Get popular articles for the sidebar
+        $popularArticles = Article::where('status', 'published')
+            ->where('id', '!=', $article->id)
+            ->orderBy('views_count', 'desc')
+            ->limit(3)
+            ->get();
+            
+        return view('website.pages.article-detail', compact(
+            'article', 
+            'relatedArticles',
+            'popularArticles'
+        ));
     }
     /**
      * Display the tutorials page with Laravel focus.
@@ -237,7 +251,7 @@ class PageController extends Controller
      */
     public function blogPost(string $slug): View
     {
-        $article = Article::with(['category', 'tags', 'user'])
+         $article = Article::with(['category', 'tags', 'user'])
                     ->where('slug', $slug)
                     ->where('status', 'published')
                     ->firstOrFail();

@@ -527,239 +527,53 @@
 @endsection
 
 @push('scripts')
-<script>
-    $(document).ready(function() {
-        // Initialize Select2 on the category and tags fields
-        $("#category_id").select2({
-            placeholder: "Select a category"
-        });
-        
-        $("#tags").select2({
-            tags: true,
-            placeholder: "Enter tags and press Enter",
-            tokenSeparators: [',', ' ']
-        });
-        
-        // Initialize Quill editor
-        var quill = new Quill('#editor', {
-            theme: 'snow',
-            modules: {
-                toolbar: [
-                    [{
-                        'header': [1, 2, 3, 4, 5, 6, false]
-                    }],
-                    [{
-                        'font': []
-                    }],
-                    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                    [{
-                        'list': 'ordered'
-                    }, {
-                        'list': 'bullet'
-                    }],
-                    [{
-                        'align': []
-                    }],
-                    [{
-                        'script': 'sub'
-                    }, {
-                        'script': 'super'
-                    }],
-                    [{
-                        'indent': '-1'
-                    }, {
-                        'indent': '+1'
-                    }],
-                    [{
-                        'direction': 'rtl'
-                    }],
-                    [{
-                        'color': []
-                    }, {
-                        'background': []
-                    }],
-                    ['link', 'image', 'video', 'formula']
-                ]
-            }
-        });
+ <script>
+// Initialize Quill editor
+var quill = new Quill('#editor', {
+    theme: 'snow',
+    modules: {
+        toolbar: [
+            [{
+                'header': [1, 2, 3, 4, 5, 6, false]
+            }],
+            [{
+                'font': []
+            }],
+            ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+            [{
+                'list': 'ordered'
+            }, {
+                'list': 'bullet'
+            }],
+            [{
+                'align': []
+            }],
+            [{
+                'script': 'sub'
+            }, {
+                'script': 'super'
+            }],
+            [{
+                'indent': '-1'
+            }, {
+                'indent': '+1'
+            }],
+            [{
+                'direction': 'rtl'
+            }],
+            [{
+                'color': []
+            }, {
+                'background': []
+            }],
+            ['link', 'image', 'video', 'formula', 'code-block']
+        ]
+    }
+});
 
-        // Update hidden input when editor content changes
-        quill.on('text-change', function() {
-            document.getElementById('content').value = quill.root.innerHTML;
-        });
-        
-        // Image preview functionality
-        $("#featured_image").change(function() {
-            const file = this.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    $("#imagePreview").attr('src', e.target.result);
-                    $("#imagePreview").removeClass('d-none');
-                    $("#imagePlaceholder").addClass('d-none');
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-        
-        // Audio preview functionality
-        $("#audio_file").change(function() {
-            const file = this.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    $("#audioPreview").attr('src', e.target.result);
-                    $("#uploadedAudioPreview").removeClass('d-none');
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-        
-        // Generate slug from title
-        $('#title').on('blur', function() {
-            if ($('#slug').val() === '') {
-                const title = $(this).val();
-                const slug = title.toLowerCase()
-                    .replace(/[^\w\s-]/g, '')
-                    .replace(/\s+/g, '-')
-                    .replace(/-+/g, '-');
-                $('#slug').val(slug);
-                $('#seoPreviewSlug').text(slug);
-            }
-        });
-        
-        // Update SEO preview
-        $('#meta_title').on('input', function() {
-            let value = $(this).val();
-            if (value) {
-                $('#seoPreviewTitle').text(value);
-            } else {
-                $('#seoPreviewTitle').text($('#title').val() || 'Your article title will appear here');
-            }
-            
-            // Update character counter
-            const count = value.length;
-            $('#metaTitleCounter').text(count + '/60');
-            
-            if (count > 60) {
-                $('#metaTitleCounter').addClass('danger').removeClass('warning');
-            } else if (count > 48) {
-                $('#metaTitleCounter').addClass('warning').removeClass('danger');
-            } else {
-                $('#metaTitleCounter').removeClass('warning danger');
-            }
-        });
-        
-        $('#meta_description').on('input', function() {
-            let value = $(this).val();
-            if (value) {
-                $('#seoPreviewDescription').text(value);
-            } else {
-                $('#seoPreviewDescription').text('Your meta description will appear here. It should be between 120-160 characters for optimal SEO performance.');
-            }
-            
-            // Update character counter
-            const count = value.length;
-            $('#metaDescCounter').text(count + '/160');
-            
-            if (count > 160) {
-                $('#metaDescCounter').addClass('danger').removeClass('warning');
-            } else if (count > 128) {
-                $('#metaDescCounter').addClass('warning').removeClass('danger');
-            } else {
-                $('#metaDescCounter').removeClass('warning danger');
-            }
-        });
-        
-        // Slug change updates preview
-        $('#slug').on('input', function() {
-            $('#seoPreviewSlug').text($(this).val() || 'article-slug');
-        });
-        
-        // Recording functionality
-        let mediaRecorder;
-        let recordedChunks = [];
-        let startTime;
-        let timerInterval;
-        
-        function updateTimer() {
-            const now = new Date();
-            const elapsedTime = now - startTime;
-            const seconds = Math.floor((elapsedTime / 1000) % 60).toString().padStart(2, '0');
-            const minutes = Math.floor((elapsedTime / 1000 / 60) % 60).toString().padStart(2, '0');
-            
-            $('#recordingTimer').text(`${minutes}:${seconds}`);
-        }
-        
-        $('#recordButton').on('click', function() {
-            if (!mediaRecorder || mediaRecorder.state === 'inactive') {
-                // Start recording
-                navigator.mediaDevices.getUserMedia({ audio: true })
-                    .then(function(stream) {
-                        $('#recordButton').addClass('recording');
-                        $('#recordingStatus').text('Recording... Click to stop');
-                        
-                        mediaRecorder = new MediaRecorder(stream);
-                        recordedChunks = [];
-                        
-                        mediaRecorder.addEventListener('dataavailable', function(e) {
-                            if (e.data.size > 0) {
-                                recordedChunks.push(e.data);
-                            }
-                        });
-                        
-                        mediaRecorder.addEventListener('stop', function() {
-                            const audioBlob = new Blob(recordedChunks, { type: 'audio/webm' });
-                            const audioUrl = URL.createObjectURL(audioBlob);
-                            $('#recordedAudio').attr('src', audioUrl);
-                            
-                            // Convert to base64 for form submission
-                            const reader = new FileReader();
-                            reader.readAsDataURL(audioBlob);
-                            reader.onloadend = function() {
-                                const base64Audio = reader.result;
-                                $('#recorded_audio_data').val(base64Audio);
-                            };
-                            
-                            $('#recordedAudioContainer').removeClass('d-none');
-                            
-                            // Stop all tracks to release the microphone
-                            stream.getTracks().forEach(track => track.stop());
-                            
-                            // Clear timer
-                            clearInterval(timerInterval);
-                        });
-                        
-                        // Start recording
-                        mediaRecorder.start();
-                        
-                        // Start timer
-                        startTime = new Date();
-                        timerInterval = setInterval(updateTimer, 1000);
-                        updateTimer(); // Initial update
-                    })
-                    .catch(function(err) {
-                        console.error('Error accessing microphone:', err);
-                        alert('Could not access your microphone. Please check permissions and try again.');
-                    });
-            } else {
-                // Stop recording
-                mediaRecorder.stop();
-                $('#recordButton').removeClass('recording');
-                $('#recordingStatus').text('Click to start recording');
-            }
-        });
-        
-        $('#discardRecording').on('click', function() {
-            $('#recordedAudioContainer').addClass('d-none');
-            $('#recordedAudio').attr('src', '');
-            $('#recorded_audio_data').val('');
-        });
-        
-        // Preview button functionality
-        $('#previewBtn').on('click', function() {
-            alert('Preview functionality will be implemented in future updates.');
-        });
-    });
+// Update hidden input when editor content changes
+quill.on('text-change', function() {
+    document.getElementById('content').value = quill.root.innerHTML;
+});
 </script>
 @endpush
