@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('linkedin_handle')->nullable();
             $table->string('website')->nullable();
             $table->boolean('is_verified')->default(false);
-            $table->enum('role', ['admin', 'user'])->default('user'); // Role column
+            $table->enum('role', ['admin', 'author', 'editor', 'user'])->default('user');
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
