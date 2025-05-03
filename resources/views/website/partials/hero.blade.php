@@ -1,5 +1,5 @@
 <!-- Hero Section -->
-<section class="hero bg-white">
+<section class=" bg-white">
     <div class="hero-pattern"></div>
     <div class="container">
         <div class="row align-items-center">
@@ -16,7 +16,7 @@
                 </div>
             </div>
             <div class="col-lg-6 animate animate-delay-1 text-center">
-                <img src="{{ asset('frontend/assets/images/home/invidiatech-hero.svg') }}" 
+                <img src="{{ asset('frontend/invidiatech-hero.svg') }}" 
                     alt="Technology Illustration" class="img-fluid hero-img">
             </div>
         </div>

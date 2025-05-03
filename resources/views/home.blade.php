@@ -1,5 +1,4 @@
-{{-- resources/views/layouts/admin/sidebar.blade.php --}}
-<nav id="sidebar" class="sidebar">
+ <nav id="sidebar" class="sidebar">
     <div class="sidebar-header d-flex align-items-center">
         <div class="sidebar-logo">CP</div>
         <h5 class="mb-0">{{ config('app.name', 'Company') }}</h5>

@@ -79,7 +79,7 @@
         </div>
     </section>
 
-  <!-- Latest Articles -->
+<!-- Latest Articles -->
 <section class="py-5 my-5">
     <div class="container">
         <div class="row mb-5">
@@ -88,61 +88,39 @@
                 <h2 class="fw-bold">Discover Our Latest Articles</h2>
             </div>
             <div class="col-lg-6 text-lg-end animate">
-                <a href="#" class="btn btn-outline-primary rounded-pill px-4">View All Articles</a>
+                <a href="{{ route('articles') }}" class="btn btn-outline-primary rounded-pill px-4">View All Articles</a>
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-4 col-md-6 mb-4 animate animate-delay-1">
-                <div class="blog-card h-100">
-                    <div class="position-relative">
-                        <img src="{{ asset('frontend/assets/images/home/invidaitech-blog-1.png') }}" alt="Blog Image" class="blog-img">
-                        <span class="blog-tag">Laravel</span>
-                    </div>
-                    <div class="p-4">
-                        <div class="d-flex justify-content-between mb-3">
-                            <small class="text-muted"><i class="far fa-calendar-alt me-1"></i> Mar 10, 2025</small>
-                            <small class="text-muted"><i class="far fa-clock me-1"></i> 5 min read</small>
+            @forelse($latestArticles as $article)
+                <div class="col-lg-4 col-md-6 mb-4 animate animate-delay-{{ $loop->index + 1 }}">
+                    <div class="blog-card h-100">
+                        <div class="position-relative">
+                            @if($article->featured_image)
+                                <img src="{{ asset('storage/' . $article->featured_image) }}" 
+                                     alt="{{ $article->featured_image_alt ?? $article->title }}" 
+                                     class="blog-img">
+                            @else
+                                <img src="/api/placeholder/600/350" alt="{{ $article->title }}" class="blog-img">
+                            @endif
+                            <span class="blog-tag">{{ $article->category->name }}</span>
                         </div>
-                        <h5 class="card-title">Advanced Laravel Eloquent Techniques</h5>
-                        <p class="card-text">Explore advanced Eloquent ORM features that can supercharge your Laravel applications...</p>
-                        <a href="#" class="text-accent-custom fw-bold">Read more <i class="fas fa-arrow-right ms-1"></i></a>
+                        <div class="p-4">
+                            <div class="d-flex justify-content-between mb-3">
+                                <small class="text-muted"><i class="far fa-calendar-alt me-1"></i> {{ $article->created_at->format('M d, Y') }}</small>
+                                <small class="text-muted"><i class="far fa-clock me-1"></i> {{ $article->reading_time ?? '5' }} min read</small>
+                            </div>
+                            <h5 class="card-title">{{ $article->title }}</h5>
+                            <p class="card-text">{{ Str::limit($article->excerpt, 100) }}</p>
+                            <a href="{{ route('article.show', $article->slug) }}" class="text-accent-custom fw-bold">Read more <i class="fas fa-arrow-right ms-1"></i></a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-4 col-md-6 mb-4 animate animate-delay-2">
-                <div class="blog-card h-100">
-                    <div class="position-relative">
-                        <img src="{{ asset('frontend/assets/images/home/invidaitech-blog-2.png') }}" alt="Blog Image" class="blog-img">
-                        <span class="blog-tag">DevOps</span>
-                    </div>
-                    <div class="p-4">
-                        <div class="d-flex justify-content-between mb-3">
-                            <small class="text-muted"><i class="far fa-calendar-alt me-1"></i> Mar 08, 2025</small>
-                            <small class="text-muted"><i class="far fa-clock me-1"></i> 7 min read</small>
-                        </div>
-                        <h5 class="card-title">CI/CD Pipeline for Laravel Applications</h5>
-                        <p class="card-text">Build a robust continuous integration and deployment pipeline for your Laravel projects...</p>
-                        <a href="#" class="text-accent-custom fw-bold">Read more <i class="fas fa-arrow-right ms-1"></i></a>
-                    </div>
+            @empty
+                <div class="col-12 text-center">
+                    <p>No articles available yet.</p>
                 </div>
-            </div>
-            <div class="col-lg-4 col-md-6 mb-4 animate animate-delay-3">
-                <div class="blog-card h-100">
-                    <div class="position-relative">
-                        <img src="{{ asset('frontend/assets/images/home/invidaitech-blog-4.png') }}" alt="Blog Image" class="blog-img">
-                        <span class="blog-tag">API</span>
-                    </div>
-                    <div class="p-4">
-                        <div class="d-flex justify-content-between mb-3">
-                            <small class="text-muted"><i class="far fa-calendar-alt me-1"></i> Mar 05, 2025</small>
-                            <small class="text-muted"><i class="far fa-clock me-1"></i> 6 min read</small>
-                        </div>
-                        <h5 class="card-title">RESTful API Design Best Practices</h5>
-                        <p class="card-text">Learn how to design clean, efficient and developer-friendly RESTful APIs for your projects...</p>
-                        <a href="#" class="text-accent-custom fw-bold">Read more <i class="fas fa-arrow-right ms-1"></i></a>
-                    </div>
-                </div>
-            </div>
+            @endforelse
         </div>
     </div>
 </section>

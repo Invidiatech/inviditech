@@ -109,7 +109,7 @@
                                         <p class="text-muted mb-3">{{ Str::limit($article->excerpt, 100) }}</p>
                                         <div class="d-flex justify-content-between align-items-center mb-3">
                                             <small class="text-muted"><i class="far fa-clock me-1"></i> {{ $article->created_at->format('F d, Y') }}</small>
-                                            <small class="text-muted"><i class="far fa-eye me-1"></i> {{ number_format($article->views) }}</small>
+                                            <small class="text-muted"><i class="far fa-eye me-1"></i> {{ number_format($article->views_count) }}</small>
                                         </div>
                                         <a href="{{ route('article.show', $article->slug) }}" class="text-accent-custom fw-bold">Read more <i class="fas fa-arrow-right ms-1"></i></a>
                                     </div>
@@ -123,11 +123,7 @@
                             </div>
                         @endforelse
                     </div>
-                    
-                    <!-- Pagination -->
-                    <nav aria-label="Page navigation" class="mt-5 animate">
-                        {{ $articles->appends(request()->except('page'))->links() }}
-                    </nav>
+                   
                 </div>
                 
                 <!-- Sidebar -->

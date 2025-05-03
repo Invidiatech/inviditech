@@ -109,7 +109,21 @@ class PageController extends Controller
             ->orderBy('articles_count', 'desc')
             ->limit(12)
             ->get();
-        
+            if (Auth::check()) {
+                $user = Auth::user();
+                
+                $userLiked = Like::where('user_id', $user->id)
+                    ->where('article_id', $article->id)
+                    ->exists();
+                    
+                $userBookmarked = Bookmark::where('user_id', $user->id)
+                    ->where('article_id', $article->id)
+                    ->exists();
+                    
+                $userFollowing = Follow::where('follower_id', $user->id)
+                    ->where('following_id', $article->user_id)
+                    ->exists();
+            }
         return view('website.pages.article', compact(
             'articles', 
             'featuredArticle', 

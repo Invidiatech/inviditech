@@ -15,7 +15,11 @@
     <link href="{{ asset('assets/website/css/article-detial.css') }}" rel="stylesheet">
      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
+    <script src="{{ asset('frontend/js/article-interactions.js') }}"></script>
+    <script src="{{ asset('frontend/js/article-js..js') }}"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+
 </head>
 <body>
     @include('website.partials.header')

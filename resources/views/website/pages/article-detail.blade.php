@@ -1,202 +1,100 @@
 @extends('website.layouts.app')
 @section('title', $article->title . ' - InvidiaTech')
-
-<!-- Enhanced Code Block Styling -->
-<style>
- .ql-code-block-container {
-  background: #1e1e1e;
-  padding: 1.25rem 1rem 1rem;
-  margin: 1.5rem 0;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  overflow-x: auto;
-  position: relative;
-  border: 1px solid #333;
-  transition: all 0.3s ease;
-}
-
-.ql-code-block-container:hover {
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-  border-color: #444;
-}
-
-/* Language label with dynamic colors */
-.code-language-label {
-  position: absolute;
-  top: 10px;
-  left: 15px;
-  font-size: 0.75rem;
-  background: #66d9ef;
-  color: #000;
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-family: sans-serif;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* Language-specific coloring */
-.lang-js, .lang-javascript { background: #f7df1e; color: #000; }
-.lang-php { background: #8892bf; color: #fff; }
-.lang-python { background: #3776ab; color: #fff; }
-.lang-html { background: #e34c26; color: #fff; }
-.lang-css { background: #264de4; color: #fff; }
-.lang-sql { background: #f29111; color: #fff; }
-.lang-bash, .lang-shell { background: #4eaa25; color: #fff; }
-.lang-json { background: #f8c307; color: #000; }
-.lang-typescript { background: #007acc; color: #fff; }
-
-/* Actual code block styling */
-.ql-code-block {
-  background: transparent;
-  color: #f8f8f2;
-  font-family: 'Fira Code', 'JetBrains Mono', 'Courier New', monospace;
-  font-size: 0.95rem;
-  line-height: 1.6;
-  white-space: pre;
-  margin: 0;
-  padding-top: 1rem;
-}
-
-/* Line numbers for code blocks */
-.ql-code-block.with-line-numbers {
-  counter-reset: line;
-  padding-left: 3.5rem;
-}
-
-.ql-code-block.with-line-numbers > div {
-  position: relative;
-}
-
-.ql-code-block.with-line-numbers > div::before {
-  counter-increment: line;
-  content: counter(line);
-  position: absolute;
-  left: -3rem;
-  width: 2rem;
-  text-align: right;
-  color: #606366;
-  user-select: none;
-}
-
-/* Copy button styling */
-.copy-btn {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  background-color: #66d9ef;
-  color: #000;
-  border: none;
-  padding: 4px 12px;
-  font-size: 0.75rem;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.copy-btn:hover {
-  background-color: #4ec5de;
-  transform: translateY(-1px);
-}
-
-.copy-btn:active {
-  transform: translateY(1px);
-}
-
-.copy-btn i {
-  font-size: 0.8rem;
-}
-
-/* Copy success animation */
-.copy-btn.copied {
-  background-color: #50fa7b;
-  animation: pulse 0.5s;
-}
-
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
-}
-
-/* Custom scrollbar for overflow */
-.ql-code-block-container::-webkit-scrollbar {
-  height: 6px;
-}
-
-.ql-code-block-container::-webkit-scrollbar-track {
-  background: #2a2a2a;
-  border-radius: 3px;
-}
-
-.ql-code-block-container::-webkit-scrollbar-thumb {
-  background-color: #555;
-  border-radius: 3px;
-}
-
-.ql-code-block-container::-webkit-scrollbar-thumb:hover {
-  background-color: #777;
-}
-
-/* Syntax highlighting classes for common languages */
-.ql-code-block .keyword { color: #ff79c6; }
-.ql-code-block .function { color: #50fa7b; }
-.ql-code-block .string { color: #f1fa8c; }
-.ql-code-block .number { color: #bd93f9; }
-.ql-code-block .comment { color: #6272a4; font-style: italic; }
-.ql-code-block .operator { color: #ff79c6; }
-.ql-code-block .variable { color: #f8f8f2; }
-.ql-code-block .property { color: #8be9fd; }
-.ql-code-block .tag { color: #ff79c6; }
-.ql-code-block .attr-name { color: #50fa7b; }
-.ql-code-block .attr-value { color: #f1fa8c; }
-
-/* Dark mode adjustments */
-body.dark-mode .ql-code-block-container {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-</style>
+     <link rel="stylesheet" href="{{ asset('frontend/css/article-detail.css') }}">
 
 @section('content')    
      <!-- Main Content -->
      <main class="py-5" style="margin-top:60px">
         <div class="container">
             <div class="row">
- 
+            @auth
+@endauth
+
 <!-- Article Tools (Left Sidebar) -->
 <div class="col-lg-1 d-none d-lg-block article-tools-container">
     <div class="article-tools">
-        <div class="article-tool-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Like">
-            <i class="far fa-heart"></i>
+        <div class="article-tool-item like-button @if($userLiked) active @endif" 
+             data-article-id="{{ $article->id }}" 
+             data-bs-toggle="tooltip" 
+             data-bs-placement="right" 
+             title="@if($userLiked) Unlike @else Like @endif"
+             id="likeButton">
+            <i class="@if($userLiked) fas @else far @endif fa-heart"></i>
+            <span class="tool-count" id="likeCount">{{ $likesCount }}</span>
         </div>
-        <div class="article-tool-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Comment">
+        
+        <div class="article-tool-item" 
+             data-bs-toggle="tooltip" 
+             data-bs-placement="right" 
+             title="Comment"
+             onclick="scrollToComments()">
             <i class="far fa-comment"></i>
+            <span class="tool-count">{{ $article->comments->count() }}</span>
         </div>
-        <div class="article-tool-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Save">
-            <i class="far fa-bookmark"></i>
+        
+        <div class="article-tool-item bookmark-button @if($userBookmarked) active @endif" 
+             data-article-id="{{ $article->id }}" 
+             data-bs-toggle="tooltip" 
+             data-bs-placement="right" 
+             title="@if($userBookmarked) Remove Bookmark @else Bookmark @endif"
+             id="bookmarkButton">
+            <i class="@if($userBookmarked) fas @else far @endif fa-bookmark"></i>
         </div>
-        <div class="article-tool-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Share">
+        
+        <div class="article-tool-item" 
+             data-bs-toggle="tooltip" 
+             data-bs-placement="right" 
+             title="Share"
+             onclick="toggleShareMenu()">
             <i class="fas fa-share-alt"></i>
+            <div class="share-menu" id="shareMenu">
+                <a href="https://twitter.com/intent/tweet?url={{ urlencode(url()->current()) }}&text={{ urlencode($article->title) }}" target="_blank">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}" target="_blank">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ urlencode(url()->current()) }}&title={{ urlencode($article->title) }}" target="_blank">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="#" onclick="copyArticleLink(event)">
+                    <i class="fas fa-link"></i>
+                </a>
+            </div>
         </div>
-        <div class="article-tool-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Download PDF" id="downloadPdf">
+        
+        <div class="article-tool-item" 
+             data-bs-toggle="tooltip" 
+             data-bs-placement="right" 
+             title="Download PDF" 
+             id="downloadPdf">
             <i class="fas fa-file-pdf"></i>
         </div>
-        <div class="article-tool-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Dark Mode" id="darkModeToggle">
+        
+        <div class="article-tool-item" 
+             data-bs-toggle="tooltip" 
+             data-bs-placement="right" 
+             title="Dark Mode" 
+             id="darkModeToggle">
             <i class="fas fa-moon"></i>
         </div>
+        
+        @if($article->user_id != auth()->id())
+        <div class="article-tool-item follow-button @if($userFollowing) active @endif" 
+             data-user-id="{{ $article->user_id }}" 
+             data-bs-toggle="tooltip" 
+             data-bs-placement="right" 
+             title="@if($userFollowing) Unfollow @else Follow @endif Author"
+             id="followButton">
+            <i class="@if($userFollowing) fas @else far @endif fa-user-circle"></i>
+        </div>
+        @endif
     </div>
 </div>
-
                 <!-- Article Content -->
                 <div class="col-lg-7 animate animate-delay-1">
                     <!-- Audio Player -->
-                    @if($article->audio_path)
-                    <div class="audio-player mb-4">
+                     <div class="audio-player mb-4">
                         <div class="audio-player-header">
                             <h4 class="audio-player-title">Listen to this article</h4>
                             <div class="audio-player-controls">
@@ -224,10 +122,10 @@ body.dark-mode .ql-code-block-container {
                             </div>
                         </div>
                     </div>
-                    @endif
 
                     <!-- Article Content -->
                     <article class="article-content">
+                    <h1 class="article-title">{{ $article->title }}</h1>
                         {!! $article->content !!}
                     </article>
 
@@ -256,36 +154,45 @@ body.dark-mode .ql-code-block-container {
                         </a>
                     </div>
 
-                    <!-- Author Bio -->
-                    <div class="article-author">
-                        <img src="{{ $article->user->avatar ?? '/api/placeholder/100/100' }}" alt="{{ $article->user->name }}" class="article-author-img">
-                        <div>
-                            <h4 class="article-author-name">{{ $article->user->name }}</h4>
-                            <p class="article-author-bio">{{ $article->user->bio ?? 'Author at InvidiaTech' }}</p>
-                            <div class="article-author-social">
-                                @if($article->user->twitter)
-                                <a href="{{ $article->user->twitter }}" class="article-author-social-link" title="Twitter" target="_blank">
-                                    <i class="fab fa-twitter"></i>
-                                </a>
-                                @endif
-                                @if($article->user->linkedin)
-                                <a href="{{ $article->user->linkedin }}" class="article-author-social-link" title="LinkedIn" target="_blank">
-                                    <i class="fab fa-linkedin-in"></i>
-                                </a>
-                                @endif
-                                @if($article->user->github)
-                                <a href="{{ $article->user->github }}" class="article-author-social-link" title="GitHub" target="_blank">
-                                    <i class="fab fa-github"></i>
-                                </a>
-                                @endif
-                                @if($article->user->website)
-                                <a href="{{ $article->user->website }}" class="article-author-social-link" title="Personal Website" target="_blank">
-                                    <i class="fas fa-globe"></i>
-                                </a>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
+<!-- Enhanced Author Bio with TikTok-style Follow Button -->
+<div class="article-author">
+    <img src="{{ asset('assets/profile-gallery/Muhamm-Nawaz.png') }}" alt="Muhammad Nawaz" class="article-author-img">
+    <div class="article-author-info">
+        <div class="author-header">
+            <div>
+                <h4 class="article-author-name">Muhammad Nawaz</h4>
+                <p class="article-author-position">Full Stack Web Developer</p>
+            </div>
+            @if(auth()->check() && auth()->id() != $article->user_id)
+            <button class="author-follow-btn follow-button @if($userFollowing) active @endif" 
+                   data-user-id="{{ $article->user_id }}">
+                <i class="@if($userFollowing) fas @else far @endif fa-user-circle"></i>
+                <span>@if($userFollowing) Following @else Follow @endif</span>
+            </button>
+            @elseif(!auth()->check())
+            <a href="{{ route('login') }}" class="author-follow-btn">
+                <i class="far fa-user-circle"></i>
+                <span>Login to Follow</span>
+            </a>
+            @endif
+        </div>
+        <p class="article-author-bio">Welcome to Invidiatech, a freelance-based development studio founded in 2020. I specialize in PHP, Laravel, WordPress, Shopify, HTML, CSS, Bootstrap, and JavaScript. I transform business challenges into efficient digital experiences with dedicated personal attention on every project.</p>
+        <div class="article-author-social">
+            <a href="https://twitter.com/MuhammadNawaz" class="article-author-social-link twitter" title="Follow on Twitter" target="_blank">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/muhammadnawaz/" class="article-author-social-link linkedin" title="Connect on LinkedIn" target="_blank">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="https://github.com/muhammadnawaz" class="article-author-social-link github" title="Follow on GitHub" target="_blank">
+                <i class="fab fa-github"></i>
+            </a>
+            <a href="https://invidiatech.com" class="article-author-social-link website" title="Visit Website" target="_blank">
+                <i class="fas fa-globe"></i>
+            </a>
+        </div>
+    </div>
+</div>
 
                     <!-- Related Articles -->
                     @if(count($relatedArticles) > 0)
@@ -312,74 +219,38 @@ body.dark-mode .ql-code-block-container {
                     </div>
                     @endif
 
-                    <!-- Comments Section -->
-                    <div class="comments-section mt-5">
-                        <h3 class="mb-4">Comments ({{ $article->comments->count() }})</h3>
-                        
-                        <!-- Comment Form -->
-                        <div class="comment-form mb-5">
-                            <div class="mb-3">
-                                <textarea class="form-control" rows="4" placeholder="Add a comment..."></textarea>
-                            </div>
-                            <button class="btn btn-accent-custom">Post Comment</button>
-                        </div>
-                        
-                        <!-- Comment List -->
-                        <div class="comment-list">
-                            @forelse($article->comments as $comment)
-                            <div class="comment">
-                                <div class="comment-header">
-                                    <img src="{{ $comment->user->avatar ?? '/api/placeholder/50/50' }}" alt="{{ $comment->user->name }}" class="comment-img">
-                                    <div class="comment-meta">
-                                        <div class="comment-name">
-                                            {{ $comment->user->name }}
-                                            @if($comment->user_id == $article->user_id)
-                                            <span class="badge bg-accent-custom ms-2">Author</span>
-                                            @endif
-                                        </div>
-                                        <div class="comment-date">{{ $comment->created_at->format('F d, Y') }}</div>
-                                    </div>
-                                </div>
-                                <div class="comment-content">
-                                    <p>{{ $comment->content }}</p>
-                                </div>
-                                <div class="comment-actions mt-2">
-                                    <a href="#" class="me-3"><i class="far fa-thumbs-up me-1"></i> Like ({{ $comment->likes_count ?? 0 }})</a>
-                                    <a href="#"><i class="far fa-reply me-1"></i> Reply</a>
-                                </div>
-                                
-                                <!-- Comment Replies -->
-                                @foreach($comment->replies as $reply)
-                                <div class="comment-reply mt-3">
-                                    <div class="comment-header">
-                                        <img src="{{ $reply->user->avatar ?? '/api/placeholder/50/50' }}" alt="{{ $reply->user->name }}" class="comment-img">
-                                        <div class="comment-meta">
-                                            <div class="comment-name">
-                                                {{ $reply->user->name }}
-                                                @if($reply->user_id == $article->user_id)
-                                                <span class="badge bg-accent-custom ms-2">Author</span>
-                                                @endif
-                                            </div>
-                                            <div class="comment-date">{{ $reply->created_at->format('F d, Y') }}</div>
-                                        </div>
-                                    </div>
-                                    <div class="comment-content">
-                                        <p>{{ $reply->content }}</p>
-                                    </div>
-                                    <div class="comment-actions mt-2">
-                                        <a href="#" class="me-3"><i class="far fa-thumbs-up me-1"></i> Like ({{ $reply->likes_count ?? 0 }})</a>
-                                        <a href="#"><i class="far fa-reply me-1"></i> Reply</a>
-                                    </div>
-                                </div>
-                                @endforeach
-                            </div>
-                            @empty
-                            <div class="alert alert-info">
-                                No comments yet. Be the first to comment!
-                            </div>
-                            @endforelse
-                        </div>
-                    </div>
+                  <!-- Comments Section -->
+<div class="comments-section mt-5" id="comments">
+    <h3 class="mb-4">Comments ({{ $article->comments->count() }})</h3>
+    
+    <!-- Comment Form -->
+    @auth
+    <div class="comment-form mb-5">
+        <div class="mb-3">
+            <textarea class="form-control" id="commentTextarea" rows="4" placeholder="Add a comment..."></textarea>
+        </div>
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="text-muted">Please be respectful and constructive in your comments.</div>
+            <button class="btn btn-accent-custom" id="submitComment" data-article-id="{{ $article->id }}">Post Comment</button>
+        </div>
+    </div>
+    @else
+    <div class="alert alert-info mb-4">
+        <i class="fas fa-info-circle me-2"></i> <a href="{{ route('login') }}">Log in</a> to add your comment.
+    </div>
+    @endauth
+    
+    <!-- Comment List -->
+    <div class="comment-list" id="commentList">
+        @forelse($article->comments->where('parent_id', null) as $comment)
+            @include('website.pages.components.comment', ['comment' => $comment, 'article' => $article])
+        @empty
+            <div class="alert alert-info" id="noCommentsMessage">
+                No comments yet. Be the first to comment!
+            </div>
+        @endforelse
+    </div>
+</div>
                 </div>
 
                 <!-- Sidebar (Table of Contents) -->
