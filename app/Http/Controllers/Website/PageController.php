@@ -7,7 +7,7 @@ use App\Models\Article;
 use App\Models\Category;
 use App\Models\Tag;
 use App\Models\Like;
-use App\Models\Bookmark;
+use App\Models\BookMark;
 use App\Models\Follow;
 
 
