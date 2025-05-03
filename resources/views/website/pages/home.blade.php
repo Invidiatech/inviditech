@@ -54,31 +54,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Statistics Section -->
-    <section class="py-5 bg-light">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3 col-6 text-center mb-4 animate">
-                    <div class="stats-counter" data-count="500">50+</div>
-                    <div class="stats-text">Projects Completed</div>
-                </div>
-                <div class="col-md-3 col-6 text-center mb-4 animate animate-delay-1">
-                    <div class="stats-counter" data-count="100">50+</div>
-                    <div class="stats-text">Happy Clients</div>
-                </div>
-                <div class="col-md-3 col-6 text-center mb-4 animate animate-delay-2">
-                    <div class="stats-counter" data-count="300">100+</div>
-                    <div class="stats-text">Articles Published</div>
-                </div>
-                <div class="col-md-3 col-6 text-center mb-4 animate animate-delay-3">
-                    <div class="stats-counter" data-count="15">5</div>
-                    <div class="stats-text">Expert Developers</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
 <!-- Latest Articles -->
 <section class="py-5 my-5">
     <div class="container">

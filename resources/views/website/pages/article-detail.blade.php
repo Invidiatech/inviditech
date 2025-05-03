@@ -162,6 +162,10 @@
             <div>
                 <h4 class="article-author-name">Muhammad Nawaz</h4>
                 <p class="article-author-position">Full Stack Web Developer</p>
+                <p class="author-stats">
+                    <span class="author-followers"><i class="fas fa-user-friends"></i> {{ $userFollowing ?? 0 }} Followers</span>
+                    <!-- <span class="author-articles"><i class="fas fa-file-alt"></i> {{ $articleCount ?? 0 }} Articles</span> -->
+                </p>
             </div>
             @if(auth()->check() && auth()->id() != $article->user_id)
             <button class="author-follow-btn follow-button @if($userFollowing) active @endif" 
@@ -178,13 +182,13 @@
         </div>
         <p class="article-author-bio">Welcome to Invidiatech, a freelance-based development studio founded in 2020. I specialize in PHP, Laravel, WordPress, Shopify, HTML, CSS, Bootstrap, and JavaScript. I transform business challenges into efficient digital experiences with dedicated personal attention on every project.</p>
         <div class="article-author-social">
-            <a href="https://twitter.com/MuhammadNawaz" class="article-author-social-link twitter" title="Follow on Twitter" target="_blank">
-                <i class="fab fa-twitter"></i>
+            <a href="https://www.facebook.com/Muhammad.Nawaz.Dev/" class="article-author-social-link facebook" title="Follow on Facebook" target="_blank">
+                <i class="fab fa-facebook-f"></i>
             </a>
-            <a href="https://www.linkedin.com/in/muhammadnawaz/" class="article-author-social-link linkedin" title="Connect on LinkedIn" target="_blank">
+            <a href="https://www.linkedin.com/in/muhammad-nawaz-43a354201/" class="article-author-social-link linkedin" title="Connect on LinkedIn" target="_blank">
                 <i class="fab fa-linkedin-in"></i>
             </a>
-            <a href="https://github.com/muhammadnawaz" class="article-author-social-link github" title="Follow on GitHub" target="_blank">
+            <a href="https://github.com/nawazfdev" class="article-author-social-link github" title="Follow on GitHub" target="_blank">
                 <i class="fab fa-github"></i>
             </a>
             <a href="https://invidiatech.com" class="article-author-social-link website" title="Visit Website" target="_blank">

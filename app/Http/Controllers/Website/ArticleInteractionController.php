@@ -189,9 +189,13 @@ class ArticleInteractionController extends Controller
                 $isFollowing = true;
             }
             
+            // Count followers for this author
+            $followerCount = Follow::where('following_id', $authorId)->count();
+            
             return response()->json([
                 'success' => true,
-                'following' => $isFollowing
+                'following' => $isFollowing,
+                'followerCount' => $followerCount
             ]);
         } catch (\Exception $e) {
             Log::error('Error in toggleFollow: ' . $e->getMessage());

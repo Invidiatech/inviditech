@@ -362,14 +362,26 @@ function initializeFollowButton() {
                     this.classList.add('active');
                     const icon = this.querySelector('i');
                     if (icon) icon.className = 'fas fa-user-circle';
+                    const textSpan = this.querySelector('span');
+                    if (textSpan) textSpan.textContent = 'Following';
                     this.setAttribute('title', 'Unfollow Author');
                     showToast('You are now following this author!');
                 } else {
                     this.classList.remove('active');
                     const icon = this.querySelector('i');
                     if (icon) icon.className = 'far fa-user-circle';
+                    const textSpan = this.querySelector('span');
+                    if (textSpan) textSpan.textContent = 'Follow';
                     this.setAttribute('title', 'Follow Author');
                     showToast('You unfollowed this author!');
+                }
+                
+                // Update follower count display
+                if (data.followerCount !== undefined) {
+                    const followerCountElement = document.querySelector('.author-followers');
+                    if (followerCountElement) {
+                        followerCountElement.innerHTML = `<i class="fas fa-user-friends"></i> ${data.followerCount} Followers`;
+                    }
                 }
                 
                 // Refresh tooltip

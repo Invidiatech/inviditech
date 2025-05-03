@@ -132,7 +132,7 @@ class PageController extends Controller
         
         // Increment view count - fix the method name and remove extra space
         $article->increment('views_count');
-        
+ 
         // Get related articles
         $relatedArticles = Article::where('id', '!=', $article->id)
             ->where('status', 'published')
