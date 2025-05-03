@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->text('bio')->nullable();
             $table->string('profile_image')->nullable();
+            $table->json('display_preferences')->nullable();
             $table->string('cover_image')->nullable();
             $table->string('twitter_handle')->nullable();
             $table->string('facebook_handle')->nullable();
