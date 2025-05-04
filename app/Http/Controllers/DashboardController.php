@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Article;
-use App\Models\Bookmark;
+use App\Models\BookMark;
 use App\Models\Comment;
 use App\Models\Like;
 
