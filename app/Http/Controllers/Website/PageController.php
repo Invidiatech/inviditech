@@ -9,9 +9,6 @@ use App\Models\Tag;
 use App\Models\Like;
 use App\Models\BookMark;
 use App\Models\Follow;
-
-
-
 use Illuminate\Support\Facades\Auth;
 class PageController extends Controller
 {

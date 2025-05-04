@@ -3,7 +3,7 @@ namespace App\Http\Controllers\Website;
 
 use App\Http\Controllers\Controller;
 use App\Models\Article;
-use App\Models\Bookmark;
+use App\Models\BookMark;
 use App\Models\Clap;
 use App\Models\Comment;
 use App\Models\Follow;
