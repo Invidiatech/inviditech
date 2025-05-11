@@ -58,67 +58,144 @@ class ArticleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        // Validate the request data
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
-            'content' => 'required|string',
-            'tags' => 'nullable|array',
-            'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'featured_image_alt' => 'nullable|string|max:255',
-            'excerpt' => 'nullable|string|max:500',
-            'status' => 'required|in:draft,published,private',
-            'is_premium' => 'boolean',
-            'is_featured' => 'boolean',
-            'meta_title' => 'nullable|string|max:255',
-            'meta_description' => 'nullable|string|max:255',
-            'og_title' => 'nullable|string|max:255',
-            'og_description' => 'nullable|string|max:255',
-            'twitter_title' => 'nullable|string|max:255',
-            'twitter_description' => 'nullable|string|max:255',
-            'canonical_url' => 'nullable|url',
-            'audio_file' => 'nullable|file|mimes:mp3,wav,ogg|max:20480',
-        ]);
-        
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-        
-        // Prepare data
-        $data = $request->all();
-        
-        // Add user ID
-        $data['user_id'] = Auth::id();
-        
-        // Handle slug
-        if (empty($data['slug'])) {
-            $data['slug'] = Str::slug($data['title']);
-        }
-        
-        // Handle boolean fields
-        $data['is_premium'] = $request->has('is_premium');
-        $data['is_featured'] = $request->has('is_featured');
-        
-        // Set published_at for published articles
-        if ($data['status'] === 'published' && empty($data['published_at'])) {
-            $data['published_at'] = now();
-        }
-        
-        try {
-            $article = $this->articleRepository->createArticle($data);
-            
-            return redirect()->route('admin.articles.index')
-                ->with('success', 'Article created successfully.');
-        } catch (\Exception $e) {
-            return redirect()->back()
-                ->with('error', 'Error creating article: ' . $e->getMessage())
-                ->withInput();
+   public function store(Request $request)
+{
+    // Add validation for recorded audio data
+    $validator = Validator::make($request->all(), [
+        'title' => 'required|string|max:255',
+        'category_id' => 'required|exists:categories,id',
+        'content' => 'required|string',
+        'tags' => 'nullable|array',
+        'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'featured_image_alt' => 'nullable|string|max:255',
+        'excerpt' => 'nullable|string|max:500',
+        'status' => 'required|in:draft,published,private',
+        'is_premium' => 'boolean',
+        'is_featured' => 'boolean',
+        'meta_title' => 'nullable|string|max:255',
+        'meta_description' => 'nullable|string|max:255',
+        'og_title' => 'nullable|string|max:255',
+        'og_description' => 'nullable|string|max:255',
+        'twitter_title' => 'nullable|string|max:255',
+        'twitter_description' => 'nullable|string|max:255',
+        'canonical_url' => 'nullable|url',
+        'audio_file' => 'nullable|file|mimes:mp3,wav,ogg|max:20480',
+        'recorded_audio_data' => 'nullable|string', // Add validation for recorded audio
+    ]);
+    
+    if ($validator->fails()) {
+        return redirect()->back()
+            ->withErrors($validator)
+            ->withInput();
+    }
+    
+    // Process recorded audio if it exists
+    if ($request->has('recorded_audio_data') && !empty($request->recorded_audio_data)) {
+        // Convert base64 to file and add to request
+        $audioFile = $this->processRecordedAudio($request->recorded_audio_data);
+        if ($audioFile) {
+            // Replace the base64 data with the processed file
+            $request->merge(['audio_file' => $audioFile]);
+            // Remove the large base64 string to prevent DB issues
+            $request->request->remove('recorded_audio_data');
         }
     }
+    
+    // Prepare data
+    $data = $request->all();
+    
+    // Add user ID
+    $data['user_id'] = Auth::id();
+    
+    // Handle slug
+    if (empty($data['slug'])) {
+        $data['slug'] = Str::slug($data['title']);
+    }
+    
+    // Handle boolean fields
+    $data['is_premium'] = $request->has('is_premium');
+    $data['is_featured'] = $request->has('is_featured');
+    
+    // Set published_at for published articles
+    if ($data['status'] === 'published' && empty($data['published_at'])) {
+        $data['published_at'] = now();
+    }
+     try {
+        $article = $this->articleRepository->createArticle($data);
+        
+        return redirect()->route('admin.articles.index')
+            ->with('success', 'Article created successfully.');
+    } catch (\Exception $e) {
+        return redirect()->back()
+            ->with('error', 'Error creating article: ' . $e->getMessage())
+            ->withInput();
+    }
+}
+
+/**
+ * Process recorded audio data from base64 to file
+ * 
+ * @param string $base64Data
+ * @return \Illuminate\Http\UploadedFile|null
+ */
+private function processRecordedAudio($base64Data)
+{
+    try {
+        // Check if the data is actually base64 encoded
+        if (strpos($base64Data, 'data:audio') !== 0) {
+            return null;
+        }
+
+        // Extract the content type and base64 data
+        list($type, $data) = explode(';', $base64Data);
+        list(, $data) = explode(',', $data);
+        $extension = $this->getAudioExtensionFromMimeType($type);
+        
+        // Decode the base64 data
+        $decodedData = base64_decode($data);
+        if (!$decodedData) {
+            return null;
+        }
+        
+        // Create a temporary file
+        $tempFilePath = sys_get_temp_dir() . '/' . uniqid('audio_', true) . '.' . $extension;
+        file_put_contents($tempFilePath, $decodedData);
+        
+        // Create an UploadedFile instance from the temporary file
+        $file = new \Illuminate\Http\UploadedFile(
+            $tempFilePath,
+            'recorded_audio.' . $extension,
+            mime_content_type($tempFilePath),
+            null,
+            true // Let Laravel handle the temp file deletion
+        );
+        
+        return $file;
+    } catch (\Exception $e) {
+        \Log::error('Error processing recorded audio: ' . $e->getMessage());
+        return null;
+    }
+}
+
+/**
+ * Get audio file extension from MIME type
+ * 
+ * @param string $mimeType
+ * @return string
+ */
+private function getAudioExtensionFromMimeType($mimeType)
+{
+    $mimeMap = [
+        'data:audio/webm' => 'webm',
+        'data:audio/ogg' => 'ogg',
+        'data:audio/mp3' => 'mp3',
+        'data:audio/mpeg' => 'mp3',
+        'data:audio/wav' => 'wav',
+        'data:audio/x-wav' => 'wav'
+    ];
+    
+    return $mimeMap[$mimeType] ?? 'webm'; // Default to webm if unknown
+}
     
     /**
      * Display the specified article.

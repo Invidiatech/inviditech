@@ -4,6 +4,68 @@
 
 @section('styles')
 <style>
+    /* Audio recording styles */
+.record-button {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.record-button.recording {
+    background-color: #dc3545;
+    color: white;
+    border-color: #dc3545;
+    animation: pulse 1.5s infinite;
+}
+
+.recording-timer {
+    font-size: 1.5rem;
+    font-weight: 500;
+    font-family: monospace;
+}
+
+/* Pulsing animation for recording button */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(220, 53, 69, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+    }
+}
+
+/* Tab styling */
+.nav-tabs .nav-link {
+    color: #6c757d;
+}
+
+.nav-tabs .nav-link.active {
+    color: #212529;
+    font-weight: 500;
+}
+
+/* Audio player styling */
+audio {
+    border-radius: 8px;
+}
+
+/* Form validation feedback */
+.is-invalid {
+    border-color: #dc3545;
+}
+
+.invalid-feedback {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
     /* Animation */
     .animate-fade-in {
         animation: fadeIn 0.5s ease-in-out;
@@ -450,76 +512,109 @@
                 </div>
                 
                 <!-- Audio Content Card -->
-                <div class="card mb-4">
-                    <div class="card-header bg-apple-lightgray">
-                        <h5 class="card-title mb-0">Audio Content</h5>
+               <!-- Audio Content Card -->
+<div class="card mb-4">
+    <div class="card-header bg-apple-lightgray">
+        <h5 class="card-title mb-0">Audio Summary</h5>
+    </div>
+    
+    <div class="card-body p-4">
+        <p class="text-muted mb-3">Add an audio summary related to your article. You can either upload an existing audio file or record a new one.</p>
+        
+        <ul class="nav nav-tabs" id="audioTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="upload-tab" data-bs-toggle="tab" data-bs-target="#upload-tab-pane" type="button" role="tab">
+                    <i class="bi bi-upload me-2"></i>Upload
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="record-tab" data-bs-toggle="tab" data-bs-target="#record-tab-pane" type="button" role="tab">
+                    <i class="bi bi-mic me-2"></i>Record
+                </button>
+            </li>
+        </ul>
+        
+        <div class="tab-content p-3" id="audioTabsContent">
+            <!-- Upload Tab -->
+            <div class="tab-pane fade show active" id="upload-tab-pane" role="tabpanel" tabindex="0">
+                <div class="mb-3">
+                    <input type="file" class="form-control @error('audio_file') is-invalid @enderror" 
+                        id="audio_file" name="audio_file" accept="audio/*">
+                    @error('audio_file')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                    <small class="form-text text-muted">Supported formats: MP3, WAV, OGG. Max size: 20MB.</small>
+                </div>
+                
+                <div id="uploadedAudioPreview" class="d-none mt-3">
+                    <audio id="audioPreview" controls class="w-100"></audio>
+                </div>
+            </div>
+            
+            <!-- Record Tab -->
+            <div class="tab-pane fade" id="record-tab-pane" role="tabpanel" tabindex="0">
+                <div class="text-center py-3">
+                    <div class="mb-3">
+                        <span class="recording-timer" id="recordingTimer">00:00</span>
                     </div>
                     
-                    <div class="card-body p-4">
-                        <ul class="nav nav-tabs" id="audioTabs" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="upload-tab" data-bs-toggle="tab" data-bs-target="#upload-tab-pane" type="button" role="tab">
-                                    <i class="bi bi-upload me-2"></i>Upload
-                                </button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="record-tab" data-bs-toggle="tab" data-bs-target="#record-tab-pane" type="button" role="tab">
-                                    <i class="bi bi-mic me-2"></i>Record
-                                </button>
-                            </li>
-                        </ul>
+                    <button type="button" id="recordButton" class="btn btn-outline-secondary record-button mb-2">
+                        <i class="bi bi-mic fs-4"></i>
+                    </button>
+                    
+                    <p id="recordingStatus" class="mb-0 text-muted">
+                        Click to start recording
+                    </p>
+                </div>
+                
+                <div id="recordedAudioContainer" class="d-none mt-3">
+                    <audio id="recordedAudio" controls class="w-100 mb-3"></audio>
+                    
+                    <div class="d-flex justify-content-between">
+                        <button type="button" id="discardRecording" class="btn btn-outline-danger btn-sm">
+                            <i class="bi bi-x me-1"></i> Discard
+                        </button>
                         
-                        <div class="tab-content p-3" id="audioTabsContent">
-                            <!-- Upload Tab -->
-                            <div class="tab-pane fade show active" id="upload-tab-pane" role="tabpanel" tabindex="0">
-                                <div class="mb-3">
-                                    <input type="file" class="form-control @error('audio_file') is-invalid @enderror" 
-                                        id="audio_file" name="audio_file" accept="audio/*">
-                                    @error('audio_file')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                    <small class="form-text text-muted">Supported formats: MP3, WAV, OGG. Max size: 20MB.</small>
-                                </div>
-                                
-                                <div id="uploadedAudioPreview" class="d-none mt-3">
-                                    <audio id="audioPreview" controls class="w-100"></audio>
-                                </div>
-                            </div>
-                            
-                            <!-- Record Tab -->
-                            <div class="tab-pane fade" id="record-tab-pane" role="tabpanel" tabindex="0">
-                                <div class="text-center py-3">
-                                    <div class="mb-3">
-                                        <span class="recording-timer" id="recordingTimer">00:00</span>
-                                    </div>
-                                    
-                                    <button type="button" id="recordButton" class="btn btn-outline-secondary record-button mb-2">
-                                        <i class="bi bi-mic fs-4"></i>
-                                    </button>
-                                    
-                                    <p id="recordingStatus" class="mb-0 text-muted">
-                                        Click to start recording
-                                    </p>
-                                </div>
-                                
-                                <div id="recordedAudioContainer" class="d-none mt-3">
-                                    <audio id="recordedAudio" controls class="w-100 mb-3"></audio>
-                                    
-                                    <div class="d-flex justify-content-between">
-                                        <button type="button" id="discardRecording" class="btn btn-outline-danger btn-sm">
-                                            <i class="bi bi-x me-1"></i> Discard
-                                        </button>
-                                        
-                                        <button type="button" id="saveRecording" class="btn btn-primary btn-sm">
-                                            <i class="bi bi-check me-1"></i> Use Recording
-                                        </button>
-                                    </div>
-                                </div>
-                                <input type="hidden" id="recorded_audio_data" name="recorded_audio_data">
-                            </div>
-                        </div>
+                        <button type="button" id="saveRecording" class="btn btn-primary btn-sm">
+                            <i class="bi bi-check me-1"></i> Use Recording
+                        </button>
                     </div>
                 </div>
+                <input type="hidden" id="recorded_audio_data" name="recorded_audio_data">
+            </div>
+        </div>
+        
+        <!-- Audio Summary Title and Description -->
+        <div class="mt-4 pt-3 border-top">
+            <div class="mb-3">
+                <label for="audio_title" class="form-label">Audio Summary Title</label>
+                <input type="text" class="form-control @error('audio_title') is-invalid @enderror" 
+                    id="audio_title" name="audio_title" placeholder="Brief title for your audio summary">
+                @error('audio_title')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            
+            <div class="mb-3">
+                <label for="audio_description" class="form-label">Description (Optional)</label>
+                <textarea class="form-control @error('audio_description') is-invalid @enderror" 
+                    id="audio_description" name="audio_description" rows="2" 
+                    placeholder="Short description of what your audio summary covers"></textarea>
+                @error('audio_description')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+        </div>
+        
+        <!-- Audio Submission Status -->
+        <div id="audioSubmissionStatus" class="mt-3 d-none">
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle me-2"></i> 
+                <span id="audioStatusMessage">Your audio summary is ready to be submitted with the article.</span>
+            </div>
+        </div>
+    </div>
+</div>
             </div>
         </div>
     </form>
@@ -574,6 +669,154 @@ var quill = new Quill('#editor', {
 // Update hidden input when editor content changes
 quill.on('text-change', function() {
     document.getElementById('content').value = quill.root.innerHTML;
+});
+
+//article voice recording js
+// Audio Recording Implementation
+document.addEventListener('DOMContentLoaded', function() {
+    // Elements
+    const recordButton = document.getElementById('recordButton');
+    const recordingStatus = document.getElementById('recordingStatus');
+    const recordingTimer = document.getElementById('recordingTimer');
+    const recordedAudioContainer = document.getElementById('recordedAudioContainer');
+    const recordedAudio = document.getElementById('recordedAudio');
+    const discardRecording = document.getElementById('discardRecording');
+    const saveRecording = document.getElementById('saveRecording');
+    const recordedAudioDataInput = document.getElementById('recorded_audio_data');
+    const audioFileInput = document.getElementById('audio_file');
+    const uploadedAudioPreview = document.getElementById('uploadedAudioPreview');
+    const audioPreview = document.getElementById('audioPreview');
+    
+    // Recording variables
+    let mediaRecorder;
+    let audioChunks = [];
+    let startTime;
+    let timerInterval;
+    let audioBlob;
+    let audioUrl;
+    
+    // Function to format timer
+    function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+    
+    // Function to update timer
+    function updateTimer() {
+        const currentTime = Math.floor((Date.now() - startTime) / 1000);
+        recordingTimer.textContent = formatTime(currentTime);
+    }
+    
+    // Start recording
+    recordButton.addEventListener('click', function() {
+        if (!mediaRecorder || mediaRecorder.state === 'inactive') {
+            // Request microphone access
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(stream => {
+                    audioChunks = [];
+                    mediaRecorder = new MediaRecorder(stream);
+                    
+                    mediaRecorder.addEventListener('dataavailable', event => {
+                        audioChunks.push(event.data);
+                    });
+                    
+                    mediaRecorder.addEventListener('stop', () => {
+                        // Clear timer
+                        clearInterval(timerInterval);
+                        
+                        // Create audio blob
+                        audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                        audioUrl = URL.createObjectURL(audioBlob);
+                        
+                        // Display the recorded audio
+                        recordedAudio.src = audioUrl;
+                        recordedAudioContainer.classList.remove('d-none');
+                        
+                        // Convert to base64 for form submission
+                        const reader = new FileReader();
+                        reader.readAsDataURL(audioBlob);
+                        reader.onloadend = function() {
+                            const base64data = reader.result;
+                            recordedAudioDataInput.value = base64data;
+                        };
+                    });
+                    
+                    // Start recording
+                    mediaRecorder.start();
+                    startTime = Date.now();
+                    timerInterval = setInterval(updateTimer, 1000);
+                    
+                    // Update UI
+                    recordButton.innerHTML = '<i class="bi bi-stop-fill fs-4"></i>';
+                    recordButton.classList.add('recording');
+                    recordingStatus.textContent = 'Recording in progress...';
+                })
+                .catch(error => {
+                    console.error('Error accessing microphone:', error);
+                    recordingStatus.textContent = 'Error: Could not access microphone';
+                });
+        } else {
+            // Stop recording
+            mediaRecorder.stop();
+            mediaRecorder.stream.getTracks().forEach(track => track.stop());
+            
+            // Update UI
+            recordButton.innerHTML = '<i class="bi bi-mic fs-4"></i>';
+            recordButton.classList.remove('recording');
+            recordingStatus.textContent = 'Recording completed';
+        }
+    });
+    
+    // Discard recording
+    discardRecording.addEventListener('click', function() {
+        // Reset recording
+        if (audioUrl) {
+            URL.revokeObjectURL(audioUrl);
+        }
+        
+        recordedAudioContainer.classList.add('d-none');
+        recordedAudio.src = '';
+        recordedAudioDataInput.value = '';
+        recordingStatus.textContent = 'Click to start recording';
+        recordingTimer.textContent = '00:00';
+    });
+    
+    // Save recording (just keeps it visible for submission)
+    saveRecording.addEventListener('click', function() {
+        // This will keep the current recording and make sure the data is in the hidden input
+        // We'll add a confirmation message
+        recordingStatus.textContent = 'Recording ready for submission';
+    });
+    
+    // Handle file upload preview
+    audioFileInput.addEventListener('change', function(e) {
+        if (this.files && this.files[0]) {
+            const file = this.files[0];
+            
+            // Clear any recorded audio if we're uploading instead
+            recordedAudioDataInput.value = '';
+            
+            // Show preview
+            audioPreview.src = URL.createObjectURL(file);
+            uploadedAudioPreview.classList.remove('d-none');
+        }
+    });
+    
+    // Form submission validation
+    document.querySelector('form').addEventListener('submit', function(event) {
+        // Check if we have either an uploaded file or a recorded audio
+        const hasUploadedFile = audioFileInput.files && audioFileInput.files.length > 0;
+        const hasRecordedAudio = recordedAudioDataInput.value !== '';
+        
+        // If we're on the audio tab and have neither, prevent submission
+        const audioTabActive = document.querySelector('.card-title').textContent.includes('Audio');
+        
+        if (audioTabActive && !hasUploadedFile && !hasRecordedAudio) {
+            event.preventDefault();
+            alert('Please upload an audio file or record audio before submitting.');
+        }
+    });
 });
 </script>
 @endpush

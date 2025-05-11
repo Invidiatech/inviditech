@@ -93,35 +93,42 @@
 </div>
                 <!-- Article Content -->
                 <div class="col-lg-7 animate animate-delay-1">
-                    <!-- Audio Player -->
-                     <div class="audio-player mb-4">
-                        <div class="audio-player-header">
-                            <h4 class="audio-player-title">Listen to this article</h4>
-                            <div class="audio-player-controls">
-                                <button class="audio-player-btn" title="Speed">
-                                    <i class="fas fa-tachometer-alt"></i> 1.0x
-                                </button>
-                                <button class="audio-player-btn" title="Volume">
-                                    <i class="fas fa-volume-up"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center mb-3">
-                            <button class="audio-player-btn-play">
-                                <i class="fas fa-play"></i>
-                            </button>
-                            <div class="w-100">
-                                <div class="audio-player-progress">
-                                    <div class="audio-player-progress-fill"></div>
-                                    <div class="audio-player-progress-handle"></div>
-                                </div>
-                                <div class="audio-player-time">
-                                    <span>00:00</span>
-                                    <span>{{ $article->reading_time ?? '00:00' }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                 <!-- Audio Player -->
+<div class="audio-player mb-4">
+    <div class="audio-player-header">
+        <h4 class="audio-player-title">Listen to this article</h4>
+        <div class="audio-player-controls">
+            <button class="audio-player-btn" title="Speed">
+                <i class="fas fa-tachometer-alt"></i> 1.0x
+            </button>
+            <button class="audio-player-btn" title="Volume">
+                <i class="fas fa-volume-up"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- 🔊 Actual Audio Element -->
+    <audio id="audio-player" preload="metadata" controls style="width: 100%; display: none;">
+        <source src="{{ asset('storage/audio/kEh7LWlpSVKYDPB1JqIhHKLoNQezU1I420AYGlR0.webm') }}" type="audio/webm">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div class="d-flex align-items-center mb-3">
+        <button class="audio-player-btn-play" onclick="document.getElementById('audio-player').play()">
+            <i class="fas fa-play"></i>
+        </button>
+        <div class="w-100">
+            <div class="audio-player-progress">
+                <div class="audio-player-progress-fill"></div>
+                <div class="audio-player-progress-handle"></div>
+            </div>
+            <div class="audio-player-time">
+                <span>00:00</span>
+                <span>{{ $article->reading_time ?? '00:00' }}</span>
+            </div>
+        </div>
+    </div>
+</div>
 
                     <!-- Article Content -->
                     <article class="article-content">
@@ -800,4 +807,198 @@ body.dark-mode .toast {
   }
 }
 </style>
+<script>
+// Audio Player Implementation
+document.addEventListener('DOMContentLoaded', function() {
+    // Get elements
+    const audioElement = document.getElementById('audio-player');
+    if (!audioElement) return;
+
+    const playButton = document.querySelector('.audio-player-btn-play');
+    const playIcon = playButton.querySelector('i');
+    const progressBar = document.querySelector('.audio-player-progress');
+    const progressFill = document.querySelector('.audio-player-progress-fill');
+    const progressHandle = document.querySelector('.audio-player-progress-handle');
+    const timeDisplay = document.querySelector('.audio-player-time');
+    const currentTime = timeDisplay.querySelectorAll('span')[0];
+    const durationTime = timeDisplay.querySelectorAll('span')[1];
+    const speedButton = document.querySelector('.audio-player-btn[title="Speed"]');
+    const speedText = speedButton.innerHTML.trim(); // Store original text
+    const volumeButton = document.querySelector('.audio-player-btn[title="Volume"]');
+    const volumeIcon = volumeButton.querySelector('i');
+
+    // Variables
+    let isDragging = false;
+    let playbackRates = [0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0];
+    let currentRateIndex = 2; // Default to 1.0x
+    let isMuted = false;
+    let previousVolume = 1;
+
+    // ===== FUNCTIONS =====
+
+    // Format time in seconds to MM:SS
+    function formatTime(seconds) {
+        if (isNaN(seconds) || !isFinite(seconds)) return "00:00";
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    // Update progress bar and time
+    function updateProgress() {
+        if (!isDragging && audioElement.duration) {
+            const percent = (audioElement.currentTime / audioElement.duration) * 100;
+            progressFill.style.width = `${percent}%`;
+            progressHandle.style.left = `${percent}%`;
+            currentTime.textContent = formatTime(audioElement.currentTime);
+        }
+    }
+
+    // Toggle play/pause
+    function togglePlay() {
+        if (audioElement.paused) {
+            const playPromise = audioElement.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    playIcon.classList.remove('fa-play');
+                    playIcon.classList.add('fa-pause');
+                }).catch(error => {
+                    console.error('Error playing audio:', error);
+                });
+            }
+        } else {
+            audioElement.pause();
+            playIcon.classList.remove('fa-pause');
+            playIcon.classList.add('fa-play');
+        }
+    }
+
+    // Update when audio ends
+    function onEnded() {
+        playIcon.classList.remove('fa-pause');
+        playIcon.classList.add('fa-play');
+        progressFill.style.width = '0%';
+        progressHandle.style.left = '0%';
+        audioElement.currentTime = 0;
+    }
+
+    // Seek in the audio when clicking progress bar
+    function seekAudio(e) {
+        const rect = progressBar.getBoundingClientRect();
+        const pos = (e.clientX - rect.left) / rect.width;
+        if (audioElement.duration) {
+            audioElement.currentTime = pos * audioElement.duration;
+        }
+    }
+
+    // Start dragging progress handle
+    function startDrag(e) {
+        isDragging = true;
+        document.body.classList.add('no-select'); // Prevent text selection
+    }
+
+    // Drag progress handle
+    function drag(e) {
+        if (!isDragging) return;
+        
+        // Get mouse position
+        let clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+        
+        const rect = progressBar.getBoundingClientRect();
+        let pos = (clientX - rect.left) / rect.width;
+        pos = Math.max(0, Math.min(1, pos)); // Clamp between 0 and 1
+        
+        // Update UI
+        progressFill.style.width = `${pos * 100}%`;
+        progressHandle.style.left = `${pos * 100}%`;
+        
+        // Update time display
+        if (audioElement.duration) {
+            currentTime.textContent = formatTime(pos * audioElement.duration);
+        }
+    }
+
+    // End dragging and set position
+    function endDrag(e) {
+        if (!isDragging) return;
+        
+        // Get final position
+        let clientX = e.type.includes('touch') ? e.changedTouches[0].clientX : e.clientX;
+        
+        const rect = progressBar.getBoundingClientRect();
+        let pos = (clientX - rect.left) / rect.width;
+        pos = Math.max(0, Math.min(1, pos)); // Clamp between 0 and 1
+        
+        // Set audio position
+        if (audioElement.duration) {
+            audioElement.currentTime = pos * audioElement.duration;
+        }
+        
+        // End drag state
+        isDragging = false;
+        document.body.classList.remove('no-select');
+    }
+
+    // Change playback speed
+    function changeSpeed() {
+        currentRateIndex = (currentRateIndex + 1) % playbackRates.length;
+        const rate = playbackRates[currentRateIndex];
+        audioElement.playbackRate = rate;
+        speedButton.innerHTML = `<i class="fas fa-tachometer-alt"></i> ${rate.toFixed(1)}x`;
+    }
+
+    // Toggle mute
+    function toggleMute() {
+        if (audioElement.volume > 0 && !isMuted) {
+            previousVolume = audioElement.volume;
+            audioElement.volume = 0;
+            isMuted = true;
+            volumeIcon.classList.remove('fa-volume-up');
+            volumeIcon.classList.add('fa-volume-mute');
+        } else {
+            audioElement.volume = previousVolume;
+            isMuted = false;
+            volumeIcon.classList.remove('fa-volume-mute');
+            volumeIcon.classList.add('fa-volume-up');
+        }
+    }
+
+    // Update duration display when metadata is loaded
+    function updateDuration() {
+        if (audioElement.duration && !isNaN(audioElement.duration)) {
+            durationTime.textContent = formatTime(audioElement.duration);
+        }
+    }
+
+    // ===== EVENT LISTENERS =====
+
+    // Audio events
+    audioElement.addEventListener('timeupdate', updateProgress);
+    audioElement.addEventListener('ended', onEnded);
+    audioElement.addEventListener('loadedmetadata', updateDuration);
+    audioElement.addEventListener('durationchange', updateDuration);
+
+    // UI controls
+    playButton.addEventListener('click', togglePlay);
+    progressBar.addEventListener('click', seekAudio);
+    speedButton.addEventListener('click', changeSpeed);
+    volumeButton.addEventListener('click', toggleMute);
+
+    // Progress handle drag events
+    progressHandle.addEventListener('mousedown', startDrag);
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('mouseup', endDrag);
+
+    // Touch events for mobile
+    progressHandle.addEventListener('touchstart', startDrag);
+    document.addEventListener('touchmove', drag);
+    document.addEventListener('touchend', endDrag);
+
+    // Replace the default onclick handler with our toggle function
+    playButton.removeAttribute('onclick');
+    
+    // Initialize duration display if available
+    updateDuration();
+});
+</script>
 @endsection

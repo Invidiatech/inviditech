@@ -69,8 +69,7 @@ body {
 }
 
 .btn-primary {
-    background: var(--theme-color);
-    border-color: var(--theme-color);
+    background-color: #123f53;
 }
 
 .bg-primary {

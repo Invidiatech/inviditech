@@ -86,62 +86,86 @@ class ArticleRepository implements ArticleRepositoryInterface
      * @param array $data
      * @return Article
      */
-    public function createArticle(array $data)
-    {
-        // Handle featured image upload
-        if (isset($data['featured_image']) && $data['featured_image']) {
-            $data['featured_image'] = $this->uploadImage($data['featured_image']);
-        }
-        
-        // Handle audio upload
-        if (isset($data['audio_file']) && $data['audio_file']) {
-            $data['audio_path'] = $this->uploadAudio($data['audio_file']);
-        }
-        
-        // Set additional defaults
-        if (!isset($data['user_id'])) {
-            $data['user_id'] = Auth::id();
-        }
-        
-        if ($data['status'] === 'published' && !isset($data['published_at'])) {
-            $data['published_at'] = Carbon::now();
-        }
-        
-        // Set social media metadata defaults if not provided
-        if (!isset($data['og_title']) || empty($data['og_title'])) {
-            $data['og_title'] = $data['title'];
-        }
-        
-        if (!isset($data['og_description']) || empty($data['og_description'])) {
-            $data['og_description'] = $data['excerpt'] ?? Str::limit(strip_tags($data['content']), 160);
-        }
-        
-        if (!isset($data['og_image']) && isset($data['featured_image'])) {
-            $data['og_image'] = $data['featured_image'];
-        }
-        
-        if (!isset($data['twitter_title']) || empty($data['twitter_title'])) {
-            $data['twitter_title'] = $data['og_title'];
-        }
-        
-        if (!isset($data['twitter_description']) || empty($data['twitter_description'])) {
-            $data['twitter_description'] = $data['og_description'];
-        }
-        
-        if (!isset($data['twitter_image']) && isset($data['og_image'])) {
-            $data['twitter_image'] = $data['og_image'];
-        }
-        
-        // Create article
-        $article = $this->article->create($data);
-        
-        // Sync tags if provided
-        if (isset($data['tags']) && !empty($data['tags'])) {
-            $this->syncTags($article, $data['tags']);
-        }
-        
-        return $article;
+  public function createArticle(array $data)
+{
+    // Handle featured image upload
+    if (isset($data['featured_image']) && $data['featured_image']) {
+        $data['featured_image'] = $this->uploadImage($data['featured_image']);
     }
+    
+    // Handle audio upload
+    if (isset($data['audio_file']) && $data['audio_file']) {
+        $data['audio_path'] = $this->uploadAudio($data['audio_file']);
+    }
+    
+    // Set additional defaults
+    if (!isset($data['user_id'])) {
+        $data['user_id'] = Auth::id();
+    }
+    
+    if ($data['status'] === 'published' && !isset($data['published_at'])) {
+        $data['published_at'] = Carbon::now();
+    }
+    
+    // Set social media metadata defaults if not provided
+    if (!isset($data['og_title']) || empty($data['og_title'])) {
+        $data['og_title'] = $data['title'];
+    }
+    
+    if (!isset($data['og_description']) || empty($data['og_description'])) {
+        $data['og_description'] = $data['excerpt'] ?? Str::limit(strip_tags($data['content']), 160);
+    }
+    
+    if (!isset($data['og_image']) && isset($data['featured_image'])) {
+        $data['og_image'] = $data['featured_image'];
+    }
+    
+    if (!isset($data['twitter_title']) || empty($data['twitter_title'])) {
+        $data['twitter_title'] = $data['og_title'];
+    }
+    
+    if (!isset($data['twitter_description']) || empty($data['twitter_description'])) {
+        $data['twitter_description'] = $data['og_description'];
+    }
+    
+    if (!isset($data['twitter_image']) && isset($data['og_image'])) {
+        $data['twitter_image'] = $data['og_image'];
+    }
+    
+    // Make sure the recorded_audio_data is not passed to create
+    if (isset($data['recorded_audio_data'])) {
+        unset($data['recorded_audio_data']);
+    }
+    
+    // Create article
+    $article = $this->article->create($data);
+    
+    // Sync tags if provided
+    if (isset($data['tags']) && !empty($data['tags'])) {
+        $this->syncTags($article, $data['tags']);
+    }
+    
+    return $article;
+}
+
+/**
+ * Upload audio file and return the file path
+ *
+ * @param UploadedFile $file
+ * @return string
+ */
+public function uploadAudio($file)
+{
+    // Generate a unique name for the file
+    $fileName = 'audio_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+    
+    // Store the file in the audio directory on the public disk
+    // This will save it to storage/app/public/audio/filename
+    $path = $file->store('audio', 'public');
+     // Return just the path, without any modifications
+    // This is important - we're storing the raw path relative to the public disk
+    return $path;
+}
     
     /**
      * Update existing article
@@ -230,10 +254,7 @@ class ArticleRepository implements ArticleRepositoryInterface
      * @param \Illuminate\Http\UploadedFile $audio
      * @return string
      */
-    protected function uploadAudio($audio)
-    {
-        return $audio->store('articles/audio', 'public');
-    }
+ 
     
     /**
      * Sync tags with article
