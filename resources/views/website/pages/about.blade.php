@@ -148,7 +148,7 @@
     </section>
 
     <!-- Freelance Platforms -->
-    <section class="py-5">
+    <section class="py-5 d-none">
         <div class="container">
             <div class="row text-center mb-4">
                 <div class="col-lg-8 mx-auto animate">
@@ -178,7 +178,7 @@
                                 </div>
                                 <div class="platform-info">
                                     <h4>Fiverr</h4>
-                                    <p>Level 2 seller offering premium development services</p>
+                                    <p>offering premium development services</p>
                                     <span class="platform-cta">View Gigs <i class="fas fa-external-link-alt"></i></span>
                                 </div>
                             </a>
