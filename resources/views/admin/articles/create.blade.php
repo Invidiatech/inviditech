@@ -1,4 +1,4 @@
-@extends('layouts.admin.master')
+ @extends('layouts.admin.master')
 
 @section('title', 'Create Article')
 
@@ -76,13 +76,21 @@ audio {
         to { opacity: 1; }
     }
     
-    /* Apple-inspired style */
+    /* Apple-inspired style - Fixed save button color */
     .bg-apple-blue {
-        background-color: #0071e3;
+        background-color: #0071e3 !important;
+        border-color: #0071e3 !important;
     }
     
     .bg-apple-blue:hover {
-        background-color: #0077ed;
+        background-color: #0077ed !important;
+        border-color: #0077ed !important;
+    }
+    
+    .bg-apple-blue:focus {
+        background-color: #0077ed !important;
+        border-color: #0077ed !important;
+        box-shadow: 0 0 0 0.2rem rgba(0, 113, 227, 0.25) !important;
     }
     
     .bg-apple-lightgray {
@@ -182,7 +190,7 @@ audio {
             </div>
             
             <div>
-                <button type="submit" class="btn bg-apple-blue text-white d-inline-flex align-items-center">
+                <button type="submit" class="btn btn-primary bg-apple-blue text-white d-inline-flex align-items-center">
                     <i class="bi bi-save me-2"></i>
                     Create Article
                 </button>
@@ -460,7 +468,7 @@ audio {
                         <hr class="my-4">
                         
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn bg-apple-blue text-white d-flex align-items-center justify-content-center">
+                            <button type="submit" class="btn btn-primary bg-apple-blue text-white d-flex align-items-center justify-content-center">
                                 <i class="bi bi-save me-2"></i>
                                 Save Article
                             </button>

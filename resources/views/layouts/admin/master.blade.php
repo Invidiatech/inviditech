@@ -116,22 +116,8 @@
 
         <!-- Header-Right-Section -->
         <div class="app-header-right">
-            <!-- search bar -->
-            <div class="searchingBox">
-                <div class="d-flex position-relative">
-                    <input type="text" id="searchInput" class="form-control" placeholder="Search Menu" autocomplete="off">
-                    <span class="searchIcon"><i class="fa fa-search"></i></span>
-                </div>
-                <ul class="search-list" style="display: none"></ul>
-            </div>
-            <div class="badgeButtonBox me-1 me-md-3">
-                <div id="searchBtn" class="notificationIcon">
-                    <button type="button" class="emailBadge">
-                        <img src="{{ asset('assets/icons-admin/search.svg') }}" alt="search" loading="lazy" />
-                    </button>
-                </div>
-            </div>
-
+           
+            
             <!-- Theme dark and light -->
             <div class="badgeButtonBox me-1 me-md-3">
                 <div class="notificationIcon" onclick="switchTheme()">
@@ -142,107 +128,7 @@
                 </div>
             </div>
 
-            <!-- Notification Section -->
-            <div class="badgeButtonBox me-1 me-md-3">
-                <div class="notificationIcon">
-                    <button type="button" class="emailBadge dropdown-toggle position-relative" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="{{ asset('assets/icons/bell-on.svg') }}" alt="bell" loading="lazy" />
-                        <span class="position-absolute notificationCount" id="totalNotify">3</span>
-                    </button>
-                    <div class="dropdown-menu p-0 emailNotificationSection">
-                        <div class="dropdown-item emailNotification">
-                            <div class="emailHeader">
-                                <h6 class="massTitle">
-                                    Notifications
-                                </h6>
-                                <a href="#" class="text-dark">
-                                    Marks all as read
-                                </a>
-                            </div>
-                            <div class="message-section" id="notifications">
-                                <a href="#" class="item d-flex gap-2 align-items-center">
-                                    <div class="iconBox pdfIcon">
-                                        <i class="bi bi-bell"></i>
-                                    </div>
-                                    <div class="notification w-100 unread">
-                                        <div class="userName">
-                                            <p class="massTitle">New Order Received</p>
-                                            <span class="time">2 hours ago</span>
-                                        </div>
-                                        <div>
-                                            <p class="description">You have received a new order #12345</p>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a href="#" class="item d-flex gap-2 align-items-center">
-                                    <div class="iconBox cardIcon">
-                                        <i class="bi bi-envelope"></i>
-                                    </div>
-                                    <div class="notification w-100">
-                                        <div class="userName">
-                                            <p class="massTitle">Message from Customer</p>
-                                            <span class="time">Yesterday</span>
-                                        </div>
-                                        <div>
-                                            <p class="description">John Doe sent you a message regarding order #12340</p>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a href="#" class="item d-flex gap-2 align-items-center">
-                                    <div class="iconBox pdfIcon">
-                                        <i class="bi bi-check-circle"></i>
-                                    </div>
-                                    <div class="notification w-100">
-                                        <div class="userName">
-                                            <p class="massTitle">Payment Successful</p>
-                                            <span class="time">3 days ago</span>
-                                        </div>
-                                        <div>
-                                            <p class="description">Payment for order #12339 was successful</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="emailFooter">
-                                <a href="#" class="massPera text-dark">
-                                    View All Notifications
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Language Dropdown -->
-            <div class="user-profile-box dropdown mx-3">
-                <div class="nav-profile-box dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    <div class="lang">
-                        <img src="{{ asset('assets/icons-admin/Language.svg') }}" alt="icon" loading="lazy" />
-                        <span>English</span>
-                        <i class="fa-solid fa-angle-down dropIcon"></i>
-                    </div>
-                </div>
-
-                <div class="dropdown-menu profile-item">
-                    <a href="#" class="dropdown-item language-active">
-                        <i class="fa fa-language mr-3"></i>
-                        English
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fa fa-language mr-3"></i>
-                        Spanish
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fa fa-language mr-3"></i>
-                        French
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fa fa-language mr-3"></i>
-                        German
-                    </a>
-                </div>
-            </div>
-
+          
             <!-- User Profile Dropdown -->
             <div class="user-profile-box user-profile dropdown">
                 <div class="nav-profile-box dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">

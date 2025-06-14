@@ -1,4 +1,4 @@
- @extends('layouts.admin.master')
+@extends('layouts.admin.master')
 
 @section('title', 'Dashboard')
 
@@ -6,92 +6,58 @@
 
 @section('content')
 
-    <!-- Alert Box -->
-    <div id="alertBox" class="alert alert-danger align-items-center gap-1 justify-content-between mb-3" role="alert" style="display: flex">
+    <!-- Welcome Alert -->
+    <div id="alertBox" class="alert alert-info align-items-center gap-1 justify-content-between mb-3" role="alert" style="display: flex">
         <div class="d-flex align-items-center gap-2">
-            <i class="fa-solid fa-bell"></i>
+            <i class="fa-solid fa-info-circle"></i>
             <div>
-                <strong>Note</strong> This is a demo dashboard for testing purposes.
+                <strong>Welcome!</strong> Manage your tech blog and website content from here.
             </div>
         </div>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 
-    <!-- Featured Blog Post Alert -->
-    <div>
-        <div class="alert flash-deal-alert d-flex justify-content-between align-items-center flex-wrap gap-3">
-            <div class="d-flex flex-column">
-                <div class="deal-text">Latest Tech Trends 2025</div>
-                <div class="deal-title">Featured Blog Post</div>
-            </div>
-            <div class="countdown d-flex align-items-center">
-                <!-- Days -->
-                <div class="countdown-section">
-                    <div class="countdown-label">Days</div>
-                    <div id="days" class="countdown-time">03</div>
-                </div>
-                <!-- Hours -->
-                <div class="countdown-section">
-                    <div class="countdown-label">Hours</div>
-                    <div id="hours" class="countdown-time">10</div>
-                </div>
-                <!-- Minutes -->
-                <div class="countdown-section">
-                    <div class="countdown-label">Minutes</div>
-                    <div id="minutes" class="countdown-time">45</div>
-                </div>
-                <!-- Seconds -->
-                <div class="countdown-section">
-                    <div class="countdown-label">Seconds</div>
-                    <div id="seconds" class="countdown-time">20</div>
-                </div>
-            </div>
-            <a href="#" class="btn btn-primary py-2.5 addBtn">
-                Read Now
-            </a>
-        </div>
-    </div>
-    <!-- End Featured Blog Post Alert -->
-
+    
+    <!-- Dashboard Stats -->
     <div class="card">
         <div class="card-body">
             <div class="row g-3">
                 <div class="col-md-6 col-lg-4 col-xl-3">
                     <div class="dashboard-box item-1">
-                        <h2 class="count">15</h2>
-                        <h3 class="title">Total Services</h3>
+                        <h2 class="count">{{ $totalArticles ?? 25 }}</h2>
+                        <h3 class="title">Total Articles</h3>
                         <div class="icon">
-                            <img src="assets/icons-admin/service-icon.svg" alt="icon" loading="lazy" />
+                            <i class="fas fa-newspaper fa-2x text-white"></i>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-md-6 col-lg-4 col-xl-3">
                     <div class="dashboard-box item-2">
-                        <h2 class="count">50</h2>
-                        <h3 class="title">Blog Posts</h3>
+                        <h2 class="count">{{ $totalCategories ?? 8 }}</h2>
+                        <h3 class="title">Categories</h3>
                         <div class="icon">
-                            <img src="assets/icons-admin/blog-icon.svg" alt="icon" loading="lazy" />
+                            <i class="fas fa-folder fa-2x text-white"></i>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-md-6 col-lg-4 col-xl-3">
                     <div class="dashboard-box item-3">
-                        <h2 class="count">120</h2>
-                        <h3 class="title">Client Inquiries</h3>
+                        <h2 class="count">{{ $totalComments ?? 150 }}</h2>
+                        <h3 class="title">Comments</h3>
                         <div class="icon">
-                            <img src="assets/icons-admin/inquiry-icon.svg" alt="icon" loading="lazy" />
+                            <i class="fas fa-comments fa-2x text-white"></i>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-md-6 col-lg-4 col-xl-3">
                     <div class="dashboard-box item-4">
-                        <h2 class="count">25</h2>
-                        <h3 class="title">Countries Served</h3>
+                        <h2 class="count">{{ $totalUsers ?? 85 }}</h2>
+                        <h3 class="title">Registered Users</h3>
                         <div class="icon">
-                            <img src="assets/icons-admin/globe-icon.svg" alt="icon" loading="lazy" />
+                            <i class="fas fa-users fa-2x text-white"></i>
                         </div>
                     </div>
                 </div>
@@ -99,79 +65,79 @@
         </div>
     </div>
 
-    <!---- Inquiry Status -->
+    <!-- Content Status -->
     <div class="card mt-3">
         <div class="card-body">
             <div class="cardTitleBox">
                 <h5 class="card-title chartTitle">
-                    Inquiry Status
+                    Content Status
                 </h5>
             </div>
 
             <div class="d-flex flex-wrap gap-3 orderStatus">
-                <a href="#" class="d-flex status flex-grow-1 pending">
+                <a href="{{ route('admin.articles.index', ['status' => 'published']) }}" class="d-flex status flex-grow-1 completed">
                     <div class="d-flex align-items-center gap-2 justify-content-between w-100">
                         <div class="d-flex align-items-center gap-2">
-                            <img src="assets/icons-admin/clock.svg" alt="icon" loading="lazy" />
-                            <span>Pending</span>
+                            <i class="fas fa-check-circle"></i>
+                            <span>Published</span>
                         </div>
                         <div class="icon">
-                            <img src="assets/icons-admin/arrow-export.svg" alt="icon" loading="lazy" />
+                            <i class="fas fa-arrow-right"></i>
                         </div>
                     </div>
-                    <span class="count">30</span>
+                    <span class="count">{{ $publishedArticles ?? 20 }}</span>
                 </a>
-                <a href="#" class="d-flex status flex-grow-1 inProgress">
+                <a href="{{ route('admin.articles.index', ['status' => 'draft']) }}" class="d-flex status flex-grow-1 pending">
                     <div class="d-flex align-items-center gap-2 justify-content-between w-100">
                         <div class="d-flex align-items-center gap-2">
-                            <img src="assets/icons-admin/rotate-circle.svg" alt="icon" loading="lazy" />
-                            <span>In Progress</span>
+                            <i class="fas fa-edit"></i>
+                            <span>Drafts</span>
                         </div>
                         <div class="icon">
-                            <img src="assets/icons-admin/arrow-export.svg" alt="icon" loading="lazy" />
+                            <i class="fas fa-arrow-right"></i>
                         </div>
                     </div>
-                    <span class="count">40</span>
+                    <span class="count">{{ $draftArticles ?? 5 }}</span>
                 </a>
-                <a href="#" class="d-flex status flex-grow-1 completed">
+                <a href="" class="d-flex status flex-grow-1 inProgress">
                     <div class="d-flex align-items-center gap-2 justify-content-between w-100">
                         <div class="d-flex align-items-center gap-2">
-                            <img src="assets/icons-admin/box-check.svg" alt="icon" loading="lazy" />
-                            <span>Completed</span>
+                            <i class="fas fa-clock"></i>
+                            <span>Pending Comments</span>
                         </div>
                         <div class="icon">
-                            <img src="assets/icons-admin/arrow-export.svg" alt="icon" loading="lazy" />
+                            <i class="fas fa-arrow-right"></i>
                         </div>
                     </div>
-                    <span class="count">50</span>
+                    <span class="count">{{ $pendingComments ?? 8 }}</span>
                 </a>
             </div>
         </div>
     </div>
 
-    <!---- Agency Revenue -->
+    <!-- Website Analytics -->
     <div class="card mt-4">
         <div class="card-body">
             <div class="cardTitleBox">
                 <h5 class="card-title chartTitle">
-                    Agency Revenue
+                    Website Analytics
                 </h5>
             </div>
 
             <div class="row">
                 <div class="col-lg-5">
                     <div class="wallet h-100">
-                        <h3 class="balance">$25,000.00</h3>
+                        <h3 class="balance">{{ number_format($totalViews ?? 25000) }}</h3>
                         <div class="d-flex align-items-center justify-content-between gap-2 flex-wrap w-100">
                             <div>
                                 <div class="d-flex align-items-center gap-1 percentUp">
-                                    <span>+12.5%</span>
-                                    <img src="assets/icons-admin/arrow.svg" alt="icon" loading="lazy" />
+                                    <span>+15.2%</span>
+                                    <i class="fas fa-arrow-up"></i>
                                 </div>
-                                <div class="title">Total Revenue</div>
+                                <div class="title">Total Page Views</div>
                             </div>
                             <div class="wallet-icon svg-bg">
-                                <img src="assets/icons-admin/wallet.svg" alt="" width="100%">
+                                <i class="fas fa-chart-line fa-2x"></i>
                             </div>
                         </div>
                     </div>
@@ -181,11 +147,11 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <div class="wallet-others">
-                                <div class="amount">$15,000.00</div>
+                                <div class="amount">{{ number_format($monthlyViews ?? 8500) }}</div>
                                 <div class="d-flex align-items-center gap-2 justify-content-between">
-                                    <div class="title">Service Income</div>
+                                    <div class="title">Monthly Views</div>
                                     <div class="icon svg-bg">
-                                        <img src="assets/icons-admin/service-income.svg" alt="icon" loading="lazy" />
+                                        <i class="fas fa-eye"></i>
                                     </div>
                                 </div>
                             </div>
@@ -193,11 +159,11 @@
 
                         <div class="col-md-6">
                             <div class="wallet-others">
-                                <div class="amount">$8,000.00</div>
+                                <div class="amount">{{ number_format($uniqueVisitors ?? 3200) }}</div>
                                 <div class="d-flex align-items-center gap-2 justify-content-between">
-                                    <div class="title">Consulting Fees</div>
+                                    <div class="title">Unique Visitors</div>
                                     <div class="icon">
-                                        <img src="assets/icons-admin/consulting-fee.svg" alt="icon" loading="lazy" />
+                                        <i class="fas fa-user-friends"></i>
                                     </div>
                                 </div>
                             </div>
@@ -205,11 +171,23 @@
 
                         <div class="col-md-6">
                             <div class="wallet-others">
-                                <div class="amount">$2,000.00</div>
+                                <div class="amount">{{ $avgReadTime ?? '3.5' }}m</div>
                                 <div class="d-flex align-items-center gap-2 justify-content-between">
-                                    <div class="title">Pending Payments</div>
+                                    <div class="title">Avg. Read Time</div>
                                     <div class="icon">
-                                        <img src="assets/icons-admin/credit-card-orange.svg" alt="icon" loading="lazy" />
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="wallet-others">
+                                <div class="amount">{{ $bounceRate ?? '35' }}%</div>
+                                <div class="d-flex align-items-center gap-2 justify-content-between">
+                                    <div class="title">Bounce Rate</div>
+                                    <div class="icon">
+                                        <i class="fas fa-chart-pie"></i>
                                     </div>
                                 </div>
                             </div>
@@ -224,7 +202,7 @@
     <div class="card mt-3">
         <div class="card-body">
             <div class="cardTitleBox d-flex align-items-center justify-content-between flex-wrap gap-2">
-                <h5 class="card-title chartTitle mb-0">Blog Statistics</h5>
+                <h5 class="card-title chartTitle mb-0">Blog Performance</h5>
                 <div class="d-flex align-items-center gap-3 flex-wrap">
                     <div class="d-flex align-items-center flex-wrap gap-2">
                         <button class="statisticsBtn active" data-value="daily">
@@ -241,7 +219,7 @@
                     <div class="statisticsDivder"></div>
 
                     <div>
-                        <input type="date" name="date" class="statisticsInput" value="2025-04-06">
+                        <input type="date" name="date" class="statisticsInput" value="{{ date('Y-m-d') }}">
                     </div>
                 </div>
             </div>
@@ -251,7 +229,7 @@
                     <div class="card theme-dark">
                         <div class="card-body">
                             <div class="border-bottom pb-3">
-                                <h3 id="totalBlogPosts">50</h3>
+                                <h3 id="totalBlogPosts">{{ $totalArticles ?? 25 }}</h3>
                                 <p>Total Blog Posts</p>
                             </div>
                             <canvas id="myChart" width="400" height="200"></canvas>
@@ -263,8 +241,8 @@
                     <div class="card h-100 border theme-dark">
                         <div class="card-body d-flex flex-column justify-content-between">
                             <div class="border-bottom pb-3">
-                                <h3>75</h3>
-                                <p>Visitor Overview</p>
+                                <h3>{{ $totalViews ?? 75 }}k</h3>
+                                <p>Traffic Overview</p>
                             </div>
                             <div class="mt-auto colorDark">
                                 <canvas id="myPieChart" width="200" height="200"></canvas>
@@ -276,71 +254,82 @@
         </div>
     </div>
 
-    <!-- Recent Inquiries -->
+    <!-- Recent Comments -->
     <div class="card mt-3">
         <div class="card-body">
-            <div class="cardTitleBox">
+            <div class="cardTitleBox d-flex justify-content-between align-items-center">
                 <h5 class="card-title chartTitle">
-                    Recent Inquiries <span style="color: #687387">(Latest 5 Inquiries)</span>
+                    Recent Comments <span style="color: #687387">(Latest 5 Comments)</span>
                 </h5>
+                <a href="" class="btn btn-sm btn-outline-primary">View All</a>
             </div>
 
             <div class="table-responsive">
                 <table class="table dashboard">
                     <thead>
                         <tr>
-                            <th><strong>Inquiry ID</strong></th>
-                            <th><strong>Client Name</strong></th>
-                            <th><strong>Service</strong></th>
+                            <th><strong>Comment ID</strong></th>
+                            <th><strong>User</strong></th>
+                            <th><strong>Article</strong></th>
                             <th><strong>Date</strong></th>
                             <th><strong>Status</strong></th>
                             <th><strong>Action</strong></th>
                         </tr>
                     </thead>
                     <tbody>
+                        @forelse($recentComments ?? [] as $comment)
                         <tr>
-                            <td class="tableId">#INQ001</td>
+                            <td class="tableId">#{{ $comment->id }}</td>
+                            <td class="tablecustomer">{{ $comment->user->name ?? 'Guest' }}</td>
+                            <td class="tableId">{{ Str::limit($comment->article->title ?? 'Article Title', 30) }}</td>
+                            <td class="tableId">{{ $comment->created_at->format('d M, Y') ?? '06 Apr, 2025' }}</td>
+                            <td class="tableStatus">
+                                <div class="statusItem">
+                                    @if(($comment->status ?? 'approved') === 'approved')
+                                        <div class="circleDot animatedCompleted"></div>
+                                        <div class="statusText">
+                                            <span class="statusCompleted">Approved</span>
+                                        </div>
+                                    @else
+                                        <div class="circleDot animatedPending"></div>
+                                        <div class="statusText">
+                                            <span class="statusPending">Pending</span>
+                                        </div>
+                                    @endif
+                                </div>
+                            </td>
+                            <td class="tableAction">
+                                <a href="{{ route('admin.comments.show', $comment->id ?? 1) }}" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="View comment" class="circleIcon btn-sm btn-outline-primary">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        @empty
+                        <!-- Sample data if no comments -->
+                        <tr>
+                            <td class="tableId">#001</td>
                             <td class="tablecustomer">John Doe</td>
-                            <td class="tableId">Web Development</td>
-                            <td class="tableId">06 Apr, 2025</td>
+                            <td class="tableId">Getting Started with Laravel</td>
+                            <td class="tableId">{{ date('d M, Y') }}</td>
                             <td class="tableStatus">
                                 <div class="statusItem">
                                     <div class="circleDot animatedCompleted"></div>
                                     <div class="statusText">
-                                        <span class="statusCompleted">Completed</span>
+                                        <span class="statusCompleted">Approved</span>
                                     </div>
                                 </div>
                             </td>
                             <td class="tableAction">
-                                <a href="#" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="View details" class="circleIcon btn-sm btn-outline-primary svg-bg">
-                                    <img src="assets/icons-admin/eye.svg" alt="icon" loading="lazy">
+                                <a href="#" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="View comment" class="circleIcon btn-sm btn-outline-primary">
+                                    <i class="fas fa-eye"></i>
                                 </a>
                             </td>
                         </tr>
                         <tr>
-                            <td class="tableId">#INQ002</td>
+                            <td class="tableId">#002</td>
                             <td class="tablecustomer">Jane Smith</td>
-                            <td class="tableId">SEO Services</td>
-                            <td class="tableId">05 Apr, 2025</td>
-                            <td class="tableStatus">
-                                <div class="statusItem">
-                                    <div class="circleDot animatedInProgress"></div>
-                                    <div class="statusText">
-                                        <span class="statusInProgress">In Progress</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="tableAction">
-                                <a href="#" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="View details" class="circleIcon btn-sm btn-outline-primary svg-bg">
-                                    <img src="assets/icons-admin/eye.svg" alt="icon" loading="lazy">
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="tableId">#INQ003</td>
-                            <td class="tablecustomer">Alex Brown</td>
-                            <td class="tableId">App Development</td>
-                            <td class="tableId">04 Apr, 2025</td>
+                            <td class="tableId">JavaScript Best Practices</td>
+                            <td class="tableId">{{ date('d M, Y', strtotime('-1 day')) }}</td>
                             <td class="tableStatus">
                                 <div class="statusItem">
                                     <div class="circleDot animatedPending"></div>
@@ -350,49 +339,12 @@
                                 </div>
                             </td>
                             <td class="tableAction">
-                                <a href="#" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="View details" class="circleIcon btn-sm btn-outline-primary svg-bg">
-                                    <img src="assets/icons-admin/eye.svg" alt="icon" loading="lazy">
+                                <a href="#" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="View comment" class="circleIcon btn-sm btn-outline-primary">
+                                    <i class="fas fa-eye"></i>
                                 </a>
                             </td>
                         </tr>
-                        <tr>
-                            <td class="tableId">#INQ004</td>
-                            <td class="tablecustomer">Maria Garcia</td>
-                            <td class="tableId">Content Writing</td>
-                            <td class="tableId">03 Apr, 2025</td>
-                            <td class="tableStatus">
-                                <div class="statusItem">
-                                    <div class="circleDot animatedCompleted"></div>
-                                    <div class="statusText">
-                                        <span class="statusCompleted">Completed</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="tableAction">
-                                <a href="#" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="View details" class="circleIcon btn-sm btn-outline-primary svg-bg">
-                                    <img src="assets/icons-admin/eye.svg" alt="icon" loading="lazy">
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="tableId">#INQ005</td>
-                            <td class="tablecustomer">Liam Johnson</td>
-                            <td class="tableId">Cloud Consulting</td>
-                            <td class="tableId">02 Apr, 2025</td>
-                            <td class="tableStatus">
-                                <div class="statusItem">
-                                    <div class="circleDot animatedPending"></div>
-                                    <div class="statusText">
-                                        <span class="statusPending">Pending</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="tableAction">
-                                <a href="#" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="View details" class="circleIcon btn-sm btn-outline-primary svg-bg">
-                                    <img src="assets/icons-admin/eye.svg" alt="icon" loading="lazy">
-                                </a>
-                            </td>
-                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -400,39 +352,54 @@
     </div>
 
     <div class="row mb-4">
-        <!-- Top Services -->
+        <!-- Popular Categories -->
         <div class="col-xxl-4 col-lg-6 mt-3">
             <div class="card">
                 <div class="card-body">
                     <div class="cardTitleBox">
                         <h5 class="card-title chartTitle">
-                            Top Services
+                            Popular Categories
                         </h5>
                     </div>
 
                     <div class="d-flex flex-column gap-1">
+                        @forelse($popularCategories ?? [] as $category)
+                        <a href="{{ route('admin.categories.show', $category->id ?? 1) }}" class="customer-section">
+                            <div class="customer-details">
+                                <div class="customer-image">
+                                    <i class="fas fa-folder-open fa-2x text-primary"></i>
+                                </div>
+                                <div class="customer-about">
+                                    <p class="name text-dark">{{ $category->name ?? 'Web Development' }}</p>
+                                    <p class="order">Articles: {{ $category->articles_count ?? 12 }}</p>
+                                </div>
+                            </div>
+                        </a>
+                        @empty
+                        <!-- Sample data -->
                         <a href="#" class="customer-section">
                             <div class="customer-details">
                                 <div class="customer-image">
-                                    <img src="assets/service1-icon.png" alt="icon" loading="lazy"/>
+                                    <i class="fas fa-folder-open fa-2x text-primary"></i>
                                 </div>
                                 <div class="customer-about">
                                     <p class="name text-dark">Web Development</p>
-                                    <p class="order">Inquiries: 45</p>
+                                    <p class="order">Articles: 12</p>
                                 </div>
                             </div>
                         </a>
                         <a href="#" class="customer-section">
                             <div class="customer-details">
                                 <div class="customer-image">
-                                    <img src="assets/service2-icon.png" alt="icon" loading="lazy"/>
+                                    <i class="fas fa-folder-open fa-2x text-success"></i>
                                 </div>
                                 <div class="customer-about">
-                                    <p class="name text-dark">SEO Services</p>
-                                    <p class="order">Inquiries: 30</p>
+                                    <p class="name text-dark">JavaScript</p>
+                                    <p class="order">Articles: 8</p>
                                 </div>
                             </div>
                         </a>
+                        @endforelse
                     </div>
                 </div>
             </div>
@@ -444,18 +411,38 @@
                 <div class="card-body">
                     <div class="cardTitleBox">
                         <h5 class="card-title chartTitle">
-                            Most Popular Blog Posts
+                            Most Popular Posts
                         </h5>
                     </div>
 
                     <div class="d-flex flex-column gap-1">
+                        @forelse($popularPosts ?? [] as $post)
+                        <a href="{{ route('admin.articles.show', $post->id ?? 1) }}" class="customer-section">
+                            <div class="customer-details">
+                                <div class="customer-image">
+                                    @if($post->featured_image ?? null)
+                                        <img src="{{ $post->featured_image }}" alt="Post thumbnail" loading="lazy"/>
+                                    @else
+                                        <i class="fas fa-newspaper fa-2x text-info"></i>
+                                    @endif
+                                </div>
+                                <div class="customer-about">
+                                    <p class="name text-dark">{{ Str::limit($post->title ?? 'AI in Web Development 2025', 25) }}</p>
+                                    <div class="d-flex gap-1 align-items-center text-black">
+                                        <i class="bi bi-eye-fill"></i> {{ number_format($post->views ?? 1200) }} Views
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        @empty
+                        <!-- Sample data -->
                         <a href="#" class="customer-section">
                             <div class="customer-details">
                                 <div class="customer-image">
-                                    <img src="assets/blog1-thumbnail.png" alt="icon" loading="lazy"/>
+                                    <i class="fas fa-newspaper fa-2x text-info"></i>
                                 </div>
                                 <div class="customer-about">
-                                    <p class="name text-dark">AI in 2025</p>
+                                    <p class="name text-dark">AI in Web Development 2025</p>
                                     <div class="d-flex gap-1 align-items-center text-black">
                                         <i class="bi bi-eye-fill"></i> 1,200 Views
                                     </div>
@@ -465,53 +452,48 @@
                         <a href="#" class="customer-section">
                             <div class="customer-details">
                                 <div class="customer-image">
-                                    <img src="assets/blog2-thumbnail.png" alt="icon" loading="lazy"/>
+                                    <i class="fas fa-newspaper fa-2x text-warning"></i>
                                 </div>
                                 <div class="customer-about">
-                                    <p class="name text-dark">Cloud Computing Trends</p>
+                                    <p class="name text-dark">Laravel Tips & Tricks</p>
                                     <div class="d-flex gap-1 align-items-center text-black">
-                                        <i class="bi bi-eye-fill"></i> 900 Views
+                                        <i class="bi bi-eye-fill"></i> 950 Views
                                     </div>
                                 </div>
                             </div>
                         </a>
+                        @endforelse
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Global Reach -->
+        <!-- Quick Actions -->
         <div class="col-xxl-4 col-lg-6 mt-3">
             <div class="card">
                 <div class="card-body">
                     <div class="cardTitleBox">
                         <h5 class="card-title chartTitle">
-                            Top Countries
+                            Quick Actions
                         </h5>
                     </div>
 
-                    <div class="d-flex flex-column gap-1">
-                        <a href="#" class="customer-section">
-                            <div class="customer-details">
-                                <div class="customer-image">
-                                    <img src="assets/flag-us.png" alt="icon" loading="lazy" />
-                                </div>
-                                <div class="customer-about">
-                                    <p class="text-dark name">United States</p>
-                                    <p class="order">Clients: 35</p>
-                                </div>
-                            </div>
+                    <div class="d-flex flex-column gap-2">
+                        <a href="{{ route('admin.articles.create') }}" class="btn btn-primary d-flex align-items-center gap-2">
+                            <i class="fas fa-plus"></i>
+                            <span>Create New Article</span>
                         </a>
-                        <a href="#" class="customer-section">
-                            <div class="customer-details">
-                                <div class="customer-image">
-                                    <img src="assets/flag-uk.png" alt="icon" loading="lazy" />
-                                </div>
-                                <div class="customer-about">
-                                    <p class="text-dark name">United Kingdom</p>
-                                    <p class="order">Clients: 20</p>
-                                </div>
-                            </div>
+                        <a href="{{ route('admin.categories.create') }}" class="btn btn-outline-primary d-flex align-items-center gap-2">
+                            <i class="fas fa-folder-plus"></i>
+                            <span>Add Category</span>
+                        </a>
+                        <a href=" " class="btn btn-outline-secondary d-flex align-items-center gap-2">
+                            <i class="fas fa-users-cog"></i>
+                            <span>Manage Users</span>
+                        </a>
+                        <a href=" " class="btn btn-outline-info d-flex align-items-center gap-2">
+                            <i class="fas fa-cog"></i>
+                            <span>Site Settings</span>
                         </a>
                     </div>
                 </div>
@@ -519,12 +501,41 @@
         </div>
     </div>
 @endsection
+
 @section('scripts')
 <script>
-    // Any dashboard-specific JavaScript can go here
+    // Dashboard-specific JavaScript
     document.addEventListener('DOMContentLoaded', function() {
-        // Initialize any dashboard components
-        console.log('Dashboard loaded');
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+
+        // Statistics buttons
+        document.querySelectorAll('.statisticsBtn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.statisticsBtn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Here you can add AJAX call to update charts based on selected period
+                console.log('Statistics period changed to:', this.dataset.value);
+            });
+        });
+
+        // Auto-dismiss alerts after 5 seconds
+        setTimeout(() => {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                if (alert.querySelector('.btn-close')) {
+                    alert.style.transition = 'opacity 0.3s';
+                    alert.style.opacity = '0';
+                    setTimeout(() => alert.remove(), 300);
+                }
+            });
+        }, 5000);
+
+        console.log('Tech Blog Dashboard loaded successfully');
     });
 </script>
 @endsection

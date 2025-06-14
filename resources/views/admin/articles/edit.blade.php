@@ -1,4 +1,4 @@
-@extends('layouts.admin.master')
+ @extends('layouts.admin.master')
 
 @section('title', 'Edit Article')
 
@@ -14,21 +14,31 @@
         to { opacity: 1; }
     }
     
-    /* Apple-inspired style */
+    /* Apple-inspired style - Fixed save button color */
     .bg-apple-blue {
-        background-color: #0071e3;
+        background-color: #0071e3 !important;
+        border-color: #0071e3 !important;
     }
     
     .bg-apple-blue:hover {
-        background-color: #0077ed;
+        background-color: #0077ed !important;
+        border-color: #0077ed !important;
+    }
+    
+    .bg-apple-blue:focus {
+        background-color: #0077ed !important;
+        border-color: #0077ed !important;
+        box-shadow: 0 0 0 0.2rem rgba(0, 113, 227, 0.25) !important;
     }
     
     .bg-apple-lightgray {
         background-color: #f5f5f7;
     }
     
-    /* Image preview */
+    /* Fixed Image preview - responsive sizing */
     .image-preview-container {
+        width: 100%;
+        max-width: 100%;
         aspect-ratio: 16/9;
         display: flex;
         align-items: center;
@@ -38,12 +48,26 @@
         border-radius: 0.375rem;
         overflow: hidden;
         transition: all 0.3s;
+        position: relative;
     }
     
     .image-preview-container img {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        max-width: 100%;
+        max-height: 100%;
+    }
+    
+    /* Ensure Quill editor doesn't overflow */
+    .ql-editor {
+        max-width: 100%;
+        overflow-x: auto;
+    }
+    
+    .ql-editor img {
+        max-width: 100% !important;
+        height: auto !important;
     }
     
     /* SEO Preview */
@@ -102,6 +126,93 @@
     .required-indicator {
         color: #dc3545;
     }
+    
+    /* Stats card styling */
+    .stat-card {
+        transition: all 0.2s ease;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .stat-value {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #2563eb;
+    }
+    
+    .stat-label {
+        font-size: 0.875rem;
+        color: #6b7280;
+        margin-top: 0.25rem;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .image-preview-container {
+            aspect-ratio: 4/3;
+        }
+        
+        .container-fluid {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+    }
+    
+    /* Audio recording styles */
+    .record-button {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+
+    .record-button.recording {
+        background-color: #dc3545;
+        color: white;
+        border-color: #dc3545;
+        animation: pulse 1.5s infinite;
+    }
+
+    .recording-timer {
+        font-size: 1.5rem;
+        font-weight: 500;
+        font-family: monospace;
+    }
+
+    /* Pulsing animation for recording button */
+    @keyframes pulse {
+        0% {
+            box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
+        }
+        70% {
+            box-shadow: 0 0 0 10px rgba(220, 53, 69, 0);
+        }
+        100% {
+            box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+        }
+    }
+
+    /* Tab styling */
+    .nav-tabs .nav-link {
+        color: #6c757d;
+    }
+
+    .nav-tabs .nav-link.active {
+        color: #212529;
+        font-weight: 500;
+    }
+
+    /* Audio player styling */
+    audio {
+        border-radius: 8px;
+        max-width: 100%;
+    }
 </style>
 @endsection
 
@@ -121,7 +232,7 @@
             </div>
             
             <div>
-                <button type="submit" class="btn bg-apple-blue text-white d-inline-flex align-items-center">
+                <button type="submit" class="btn btn-primary bg-apple-blue text-white d-inline-flex align-items-center">
                     <i class="bi bi-save me-2"></i>
                     Update Article
                 </button>
@@ -180,7 +291,7 @@
                                 {{ __('Content') }}
                                 <span class="text-danger">*</span>
                             </label>
-                            <div id="editor" style="max-height: 750px; overflow-y: auto; min-height: 200px">
+                            <div id="editor" style="max-height: 750px; overflow-y: auto; min-height: 200px;">
                                 {!! old('content', $article->content) !!}
                             </div>
                             <input type="hidden" id="content" name="content" value="{{ old('content', $article->content) }}">
@@ -401,7 +512,7 @@
                         <hr class="my-4">
                         
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn bg-apple-blue text-white d-flex align-items-center justify-content-center">
+                            <button type="submit" class="btn btn-primary bg-apple-blue text-white d-flex align-items-center justify-content-center">
                                 <i class="bi bi-save me-2"></i>
                                 Update Article
                             </button>
