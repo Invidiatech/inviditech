@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use App\Models\Seo\SeoBlog;
 
 class Tag extends Model
 {
@@ -42,7 +43,7 @@ class Tag extends Model
      */
     public function articles()
     {
-        return $this->belongsToMany(Article::class);
+        return $this->belongsToMany(\App\Models\Seo\SeoBlog::class, 'seo_blog_tag', 'tag_id', 'seo_blog_id');
     }
 
     /**
@@ -53,5 +54,13 @@ class Tag extends Model
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    /**
+     * Get articles count for this tag
+     */
+    public function getArticlesCountAttribute()
+    {
+        return $this->articles()->where('status', 'published')->count();
     }
 }

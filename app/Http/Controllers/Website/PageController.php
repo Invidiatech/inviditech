@@ -3,29 +3,43 @@ namespace App\Http\Controllers\Website;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use App\Models\Article;
+use App\Models\Seo\SeoBlog;
 use App\Models\Category;
 use App\Models\Tag;
 use App\Models\Like;
 use App\Models\BookMark;
 use App\Models\Follow;
 use Illuminate\Support\Facades\Auth;
+ 
 class PageController extends Controller
 {
     /**
      * Display the home page.
      */
-    public function home(): View
-    {
-        // Get the latest 3 published articles
-        $latestArticles = Article::with(['category', 'tags'])
-            ->where('status', 'published')
-            ->orderBy('created_at', 'desc')
-            ->take(3)
-            ->get();
-        
-        return view('website.pages.home', compact('latestArticles'));
+  public function home(): View
+{
+    // Get published blogs with their relationships
+    $blogs = SeoBlog::with(['category', 'tags'])
+        ->where('status', 'published')
+        ->where(function ($query) {
+            $query->whereNull('publish_date')
+                  ->orWhere('publish_date', '<=', now());
+        })
+        ->latest('publish_date')
+        ->paginate(15);
+    
+    // Get categories that have published articles
+    $categories = Category::whereHas('seoBlogs', function ($query) {
+        $query->where('status', 'published')
+              ->where(function ($q) {
+                  $q->whereNull('publish_date')
+                    ->orWhere('publish_date', '<=', now());
+              });
+    })->get();
+    
+    return view('website.pages.home', compact('blogs', 'categories'));
 }
+
     public function about()
     {
         return view('website.pages.about');
@@ -40,14 +54,15 @@ class PageController extends Controller
     {
         return view('website.pages.hire-us');
     }
+
     public function articles(Request $request)
     {
-         $categorySlug = $request->query('category');
+        $categorySlug = $request->query('category');
         $tagSlug = $request->query('tag');
         $search = $request->query('search');
         
-        // Base query
-        $articlesQuery = Article::with(['category', 'tags', 'user'])
+        // Base query - using SeoBlog instead of Article
+        $articlesQuery = SeoBlog::with(['category', 'tags'])
             ->where('status', 'published')
             ->orderBy('created_at', 'desc');
         
@@ -74,8 +89,8 @@ class PageController extends Controller
             });
         }
         
-        // Get featured articles
-        $featuredArticle = Article::where('is_featured', true)
+        // Get featured articles - using SeoBlog
+        $featuredArticle = SeoBlog::where('is_featured', true)
             ->where('status', 'published')
             ->with(['category', 'tags'])
             ->latest()
@@ -84,20 +99,20 @@ class PageController extends Controller
         // Get paginated articles
         $articles = $articlesQuery->paginate(6);
         
-        // Get trending articles (most viewed)
-        $trendingArticles = Article::where('status', 'published')
+        // Get trending articles (most viewed) - using SeoBlog
+        $trendingArticles = SeoBlog::where('status', 'published')
             ->orderBy('views_count', 'desc')
             ->limit(4)
             ->get();
             
-        // Get all categories with count
+        // Get all categories with count - updated to use seo_blogs relationship
         $categories = Category::withCount(['articles' => function($query) {
                 $query->where('status', 'published');
             }])
             ->orderBy('articles_count', 'desc')
             ->get();
             
-        // Get popular tags
+        // Get popular tags - updated to use seo_blogs relationship
         $popularTags = Tag::withCount(['articles' => function($query) {
                 $query->where('status', 'published');
             }])
@@ -116,30 +131,30 @@ class PageController extends Controller
             'search'
         ));
     }
+
     public function show($slug)
     {
-        $article = Article::where('slug', $slug)
+        // Using SeoBlog instead of Article
+        $article = SeoBlog::where('slug', $slug)
             ->where('status', 'published')
-            ->with(['category', 'tags', 'user', 'comments' => function($query) {
+           ->with(['category', 'tags', 'comments' => function($query) {
                 $query->where('is_approved', true)
                     ->whereNull('parent_id')
                     ->with(['user', 'replies.user']);
             }])
             ->firstOrFail();
-        
-        // Increment view count - fix the method name and remove extra space
+         // Increment view count
         $article->increment('views_count');
  
-        // Get related articles
-        $relatedArticles = Article::where('id', '!=', $article->id)
+        // Get related articles - using SeoBlog
+        $relatedArticles = SeoBlog::where('id', '!=', $article->id)
             ->where('status', 'published')
             ->where(function($query) use ($article) {
-                $query->where('category_id', $article->category_id)
+                $query->where('category', $article->category) // Updated field name
                     ->orWhereHas('tags', function($query) use ($article) {
                         $query->whereIn('tags.id', $article->tags->pluck('id'));
                     });
             })
-            ->with(['user'])
             ->take(3)
             ->get();
         
@@ -147,21 +162,21 @@ class PageController extends Controller
         $userLiked = false;
         $userBookmarked = false;
         $userFollowing = false;
-        $likesCount = Like::where('article_id', $article->id)->count();
+        $likesCount = Like::where('seo_blog_id', $article->id)->count();
         
         if (Auth::check()) {
             $user = Auth::user();
             
             $userLiked = Like::where('user_id', $user->id)
-                ->where('article_id', $article->id)
+                ->where('seo_blog_id', $article->id)
                 ->exists();
                 
             $userBookmarked = Bookmark::where('user_id', $user->id)
-                ->where('article_id', $article->id)
+                ->where('seo_blog_id', $article->id)
                 ->exists();
                 
             $userFollowing = Follow::where('follower_id', $user->id)
-                ->where('following_id', $article->user_id)
+                ->where('following_id', $article->created_by) // Updated field
                 ->exists();
         }
         
@@ -174,6 +189,7 @@ class PageController extends Controller
             'likesCount'
         ));
     }
+
     /**
      * Display the tutorials page with Laravel focus.
      */
@@ -191,16 +207,16 @@ class PageController extends Controller
             'deployment'
         ])->orderBy('name')->get();
         
-        // Get featured/popular tutorials
-        $popularTutorials = Article::with('category')
+        // Get featured/popular tutorials - using SeoBlog
+        $popularTutorials = SeoBlog::with('category')
             ->where('status', 'published')
-             ->latest('published_at')
+            ->latest('publish_date') // Updated field name
             ->take(2)
             ->get();
-            // dd($popularTutorials);
-        $latestTutorials = Article::with('category')
+
+        $latestTutorials = SeoBlog::with('category')
             ->where('status', 'published')
-            ->latest('published_at')
+            ->latest('publish_date') // Updated field name
             ->take(5)
             ->get();
         
@@ -209,21 +225,20 @@ class PageController extends Controller
         $activeCategory = null;
         if ($topic) {
             $activeCategory = Category::where('slug', $topic)->first();
-             if ($activeCategory) {
+            if ($activeCategory) {
                 $activeTopic = $topic;
-                 // Update queries to filter by the selected category
-                $popularTutorials = Article::with('category')
+                // Update queries to filter by the selected category
+                $popularTutorials = SeoBlog::with('category')
                     ->where('status', 'published')
-                    ->where('category_id', $activeCategory->id)
-                    ->where('is_featured', false)
-                    ->latest('published_at')
+                    ->where('category', $activeCategory->id) // Updated field name
+                    ->latest('publish_date')
                     ->take(2)
                     ->get();
                     
-                $latestTutorials = Article::with('category')
+                $latestTutorials = SeoBlog::with('category')
                     ->where('status', 'published')
-                    ->where('category_id', $activeCategory->id)
-                    ->latest('published_at')
+                    ->where('category', $activeCategory->id) // Updated field name
+                    ->latest('publish_date')
                     ->take(5)
                     ->get();
             }
@@ -237,6 +252,7 @@ class PageController extends Controller
             'activeCategory' => $activeCategory
         ]);
     }
+
     /**
      * Display the Laravel references page.
      */
@@ -266,17 +282,6 @@ class PageController extends Controller
      */
     public function blog(): View
     {
-        // When you have a database, load Laravel-focused blog posts here
-        /* 
-        $articles = Article::where('category_id', 1) // Assuming 1 is Laravel category
-            ->orderBy('published_at', 'desc')
-            ->paginate(10);
-        
-        return view('pages.blog', [
-            'articles' => $articles
-        ]);
-        */
-        
         return view('website.pages.blog');
     }
 
@@ -285,18 +290,21 @@ class PageController extends Controller
      */
     public function blogPost(string $slug): View
     {
-         $article = Article::with(['category', 'tags', 'user'])
+        // Using SeoBlog instead of Article
+        $article = SeoBlog::with(['category', 'tags'])
                     ->where('slug', $slug)
                     ->where('status', 'published')
                     ->firstOrFail();
-         // Increment the view count
-        $article->incrementViews();        
-        // Get related articles
-        $relatedArticles = Article::with('category')
+        
+        // Increment the view count
+        $article->increment('views_count'); // Updated method
+        
+        // Get related articles - using SeoBlog
+        $relatedArticles = SeoBlog::with('category')
                     ->where('id', '!=', $article->id)
-                    ->where('category_id', $article->category_id)
+                    ->where('category', $article->category) // Updated field name
                     ->where('status', 'published')
-                    ->latest('published_at')
+                    ->latest('publish_date')
                     ->take(3)
                     ->get();
         

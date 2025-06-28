@@ -1,22 +1,19 @@
 <?php
-namespace App\Models;
+ namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Like extends Model
 {
-    use HasFactory;
-
-    protected $fillable = ['user_id', 'article_id'];
+    protected $fillable = ['user_id', 'seo_blog_id'];
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function article()
+    public function seoBlog()
     {
-        return $this->belongsTo(Article::class);
+        return $this->belongsTo(\App\Models\Seo\SeoBlog::class, 'seo_blog_id');
     }
 }

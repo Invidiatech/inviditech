@@ -1,0 +1,181 @@
+/* Product Form CSS Styles */
+
+/* Image container fixes */
+.upload-area {
+    overflow: hidden;
+    position: relative;
+    transition: all 0.3s ease;
+    min-height: 150px;
+}
+
+.upload-area:hover {
+    background-color: #f8f9fa !important;
+}
+
+/* Main image preview container */
+#main-image-preview-container, 
+.variant-image-preview-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-height: 150px;
+    width: 100%;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+/* Main image preview styling */
+#mainImagePreview,
+.variant-image-preview {
+    max-height: 150px;
+    max-width: 100%;
+    object-fit: contain;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Gallery preview container */
+#gallery-preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+/* Individual gallery preview */
+.gallery-preview {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    display: inline-block;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.gallery-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Remove button for gallery images */
+.gallery-preview .remove-img {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background-color: #dc3545;
+    color: white;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.gallery-preview .remove-img:hover {
+    background-color: #bb2d3b;
+}
+
+/* Card and container styles to prevent overflow */
+.card-body {
+    overflow-x: hidden;
+}
+
+/* Variant rows */
+.variant-row {
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+/* Variant image area */
+.variant-image-area {
+    min-height: 150px;
+    transition: all 0.3s ease;
+}
+
+/* Responsive adjustments for small screens */
+@media (max-width: 768px) {
+    .gallery-preview {
+        width: 60px;
+        height: 60px;
+    }
+    
+    #main-image-preview-container, 
+    .variant-image-preview-container {
+        max-height: 120px;
+    }
+    
+    #mainImagePreview,
+    .variant-image-preview {
+        max-height: 120px;
+    }
+    
+    .upload-area {
+        min-height: 120px;
+    }
+}
+
+/* Fix for CKEditor container */
+.ck-editor__editable {
+    min-height: 200px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* Override for fixing drag and drop areas */
+#mainImageDrop, #galleryImagesDrop {
+    min-height: 150px !important;
+}
+
+/* Add this CSS to your stylesheet */
+
+/* Container for gallery previews */
+#gallery-preview-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 15px;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/* Individual gallery preview item */
+.gallery-preview {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 5px;
+}
+
+.gallery-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Remove button styling */
+.remove-img {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #dc3545;
+}
+
+.remove-img:hover {
+  background-color: rgba(255, 255, 255, 1);
+}

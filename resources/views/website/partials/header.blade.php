@@ -31,10 +31,10 @@
     <!-- Right Side - Auth Links -->
     <ul class="navbar-nav">
         @guest
-            <li class="nav-item">
+            <li class="nav-item" style="display: none;">
                 <a class="nav-link" href="{{ route('login') }}">Login</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" style="display: none;">
                 <a class="nav-link" href="{{ route('register') }}">Register</a>
             </li>
         @else

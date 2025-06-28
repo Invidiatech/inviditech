@@ -136,14 +136,14 @@
                         {!! $article->content !!}
                     </article>
 
-                    <!-- Article Tags -->
+                    {{-- Article Tags 
                     <div class="article-tags">
                         <a href="{{ route('articles', ['category' => $article->category->slug]) }}" class="article-tag">{{ $article->category->name }}</a>
                         @foreach($article->tags as $tag)
                             <a href="{{ route('articles', ['tag' => $tag->slug]) }}" class="article-tag">{{ $tag->name }}</a>
                         @endforeach
                     </div>
-
+                    --}}
                     <!-- Article Share -->
                     <div class="article-share">
                         <span class="article-share-title">Share this article:</span>

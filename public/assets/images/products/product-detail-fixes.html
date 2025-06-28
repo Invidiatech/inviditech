@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mounjaro Weight Loss - Your Journey To Success</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts - Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom CSS */
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        /* Navigation */
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 0;
+        }
+        
+        .navbar-brand img {
+            height: 40px;
+        }
+        
+        .nav-link {
+            color: #333;
+            font-weight: 500;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: #45c6b9;
+        }
+        
+        .btn-login {
+            background-color: transparent;
+            border: 1px solid #45c6b9;
+            color: #45c6b9;
+            border-radius: 30px;
+            padding: 8px 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-login:hover {
+            background-color: #45c6b9;
+            color: white;
+        }
+        
+        /* Product Detail Page Styles */
+        .product-detail {
+            padding: 80px 0;
+        }
+        
+        .product-detail-header {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .product-detail-header h1 {
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+        
+        .product-images {
+            position: relative;
+            margin-bottom: 30px;
+        }
+        
+        .product-slider-main {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        .product-slider-main img {
+            width: 100%;
+            height: auto;
+            cursor: zoom-in;
+        }
+        
+        .product-slider-nav {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .product-thumbnail {
+            width: 80px;
+            height: 80px;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 5px;
+            transition: all 0.2s ease;
+        }
+        
+        .product-thumbnail.active {
+            border-color: #45c6b9;
+        }
+        
+        .product-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .product-slider-arrows {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+            padding: 0 10px;
+        }
+        
+        .slider-arrow {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            pointer-events: auto;
+            transition: all 0.3s ease;
+            color: #333;
+            z-index: 10;
+        }
+        
+        .slider-arrow:hover {
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .product-price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #45c6b9;
+            margin-bottom: 20px;
+        }
+        
+        .product-rating {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .product-rating .stars {
+            color: #ffc107;
+            margin-right: 10px;
+        }
+        
+        .product-description {
+            margin-bottom: 30px;
+            line-height: 1.7;
+        }
+        
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .quantity-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f5f5f5;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .quantity-btn:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .quantity-input {
+            width: 50px;
+            height: 40px;
+            border: none;
+            border-left: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .btn-consultation {
+            background-color: #45c6b9;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-consultation:hover {
+            background-color: #38b0a4;
+        }
+        
+        .product-options {
+            margin: 30px 0;
+        }
+        
+        .product-options table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .product-options th {
+            background-color: #f9f9f9;
+            font-weight: 600;
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .product-options td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .social-share {
+            display: flex;
+            align-items: center;
+            margin-top: 30px;
+        }
+        
+        .social-share span {
+            margin-right: 15px;
+            font-weight: 500;
+        }
+        
+        .social-share a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            background-color: #f5f5f5;
+            color: #555;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .social-share a:hover {
+            background-color: #45c6b9;
+            color: white;
+        }
+        
+        .delivery-partner {
+            text-align: right;
+        }
+        
+        .delivery-partner p {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .delivery-partner img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        /* Zoom Effect */
+        .zoom-container {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .zoom-lens {
+            position: absolute;
+            border: 1px solid #d4d4d4;
+            background-color: rgba(255, 255, 255, 0.3);
+            cursor: crosshair;
+            display: none;
+        }
+        
+        .zoom-result {
+            position: absolute;
+            right: -350px;
+            top: 0;
+            width: 300px;
+            height: 300px;
+            border: 1px solid #d4d4d4;
+            background-repeat: no-repeat;
+            display: none;
+            z-index: 100;
+            background-color: white;
+        }
+        
+        /* Product Cards */
+        .product-card {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+            position: relative;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .product-info {
+            padding: 20px;
+        }
+        
+        .product-info h4 {
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .product-info .price {
+            color: #45c6b9;
+            font-weight: 700;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover .price {
+            transform: translateY(-10px);
+            opacity: 0.8;
+        }
+        
+        .product-card .btn-learn-more {
+            position: absolute;
+            bottom: -50px;
+            left: 0;
+            right: 0;
+            margin: 0 20px;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover .btn-learn-more {
+            bottom: 20px;
+            opacity: 1;
+        }
+        
+        .btn-primary {
+            background-color: #45c6b9;
+            border: none;
+            border-radius: 30px;
+            padding: 12px 30px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(69, 198, 185, 0.3);
+        }
+        
+        .btn-primary:hover {
+            background-color: #38b0a4;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(69, 198, 185, 0.4);
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title h2 {
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 3px;
+            background-color: #45c6b9;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 991px) {
+            .product-description {
+                margin-top: 30px;
+            }
+            
+            .delivery-partner {
+                text-align: left;
+                margin-top: 20px;
+            }
+            
+            .zoom-result {
+                display: none !important;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .product-detail-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .product-price {
+                font-size: 1.5rem;
+            }
+            
+            .product-thumbnail {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .quantity-control {
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="/api/placeholder/200/80" alt="Mounjaro Weight Loss Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About us</a>
+                    </li>
+                </ul>
+                <a href="#" class="btn btn-login ms-3">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Product Detail Section -->
+    <section class="product-detail">
+        <div class="container">
+            <div class="product-detail-header">
+                <h1>Mounjaro Weight Loss Injection (Tirzepatide) KwikPen</h1>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="product-images">
+                        <div class="product-slider-main zoom-container">
+                            <img src="02.png" alt="Mounjaro Weight Loss Injection" id="currentImage">
+                            <div class="zoom-lens"></div>
+                            <div class="zoom-result"></div>
+                            <div class="product-slider-arrows">
+                                <div class="slider-arrow prev-arrow">
+                                    <i class="fas fa-chevron-left"></i>
+                                </div>
+                                <div class="slider-arrow next-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-slider-nav">
+                            <div class="product-thumbnail active" data-index="0">
+                                <img src="03.png" alt="Mounjaro 1">
+                            </div>
+                            <div class="product-thumbnail" data-index="1">
+                                <img src="04.png" alt="Mounjaro 2">
+                            </div>
+                            <div class="product-thumbnail" data-index="2">
+                                <img src="05.png" alt="Mounjaro 3">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="product-info-detail">
+                        <div class="product-price">$188.00</div>
+                        <div class="product-rating">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <span>11 reviews</span>
+                        </div>
+                        <div class="product-description">
+                            <p>Mounjaro is an injectable medication that contains the active ingredient tirzepatide. It has recently been approved for weight loss and weight management in the UK by the Medicines and Health Products Regulation Agency (MHRA) and is available to buy from Online Pharmacy AU.</p>
+                        </div>
+                        <div class="d-flex align-items-center mt-4 mb-4">
+                            <div class="quantity-control">
+                                <button class="quantity-btn" id="decreaseQuantity">-</button>
+                                <input type="text" value="2" class="quantity-input" id="quantity">
+                                <button class="quantity-btn" id="increaseQuantity">+</button>
+                            </div>
+                            <button class="btn btn-consultation ms-3" id="consultationBtn">Consultation</button>
+                        </div>
+                        <div class="product-options">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Type</th>
+                                        <th>Package size</th>
+                                        <th>Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Weight Loss</td>
+                                        <td>1 Week - Single Pen (Half Unit Needles)</td>
+                                        <td>$104.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Weight Loss</td>
+                                        <td>2.5Mg - Includes One Pen and Four Needles</td>
+                                        <td>$188.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Weight Loss</td>
+                                        <td>2.5Mg - Includes One Pen and Four Needles</td>
+                                        <td>$188.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Weight Loss</td>
+                                        <td>2.5Mg - Includes One Pen and Four Needles</td>
+                                        <td>$188.00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="social-share">
+                                    <span>Share:</span>
+                                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                    <a href="#"><i class="fab fa-twitter"></i></a>
+                                    <a href="#"><i class="fab fa-instagram"></i></a>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="delivery-partner">
+                                    <p>Delivery partner</p>
+                                    <img src="Royal_Mail_(3) 1.png" alt="Royal Mail" class="img-fluid">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="product-tabs mt-5">
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <button class="nav-link active" id="nav-description-tab" data-bs-toggle="tab" data-bs-target="#nav-description" type="button" role="tab" aria-controls="nav-description" aria-selected="true">Description</button>
+                        <button class="nav-link" id="nav-reviews-tab" data-bs-toggle="tab" data-bs-target="#nav-reviews" type="button" role="tab" aria-controls="nav-reviews" aria-selected="false">Reviews (11)</button>
+                    </div>
+                </nav>
+                <div class="tab-content mt-4" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-description" role="tabpanel" aria-labelledby="nav-description-tab">
+                        <p>Mounjaro is an injectable medication that contains the active ingredient tirzepatide. It has recently been approved for weight loss and weight management in the UK by the Medicines and Health Products Regulation Agency (MHRA) and is available to buy from Online Pharmacy AU.</p>
+                        <p>To be eligible for Mounjaro for weight loss:</p>
+                        <ul>
+                            <li>You must have a body mass index (BMI) of 30 kg/m2 or more (obese), or at least 27 kg/m2 (overweight) and have a risk factor to a health condition that is affected by weight. Taking Mounjaro alongside a diet and exercise plan has been proven to help people lose around 22.5% of their initial body weight by week 72 of treatment, at a maximum dose of 15 mg.</li>
+                            <li>It is appropriate for people who have a BMI of 30 or more, as well as those who have weight-related issues. To get the most out of Mounjaro, it should be used in conjunction with a nutritious diet and frequent exercise.</li>
+                        </ul>
+                    </div>
+                    <div class="tab-pane fade" id="nav-reviews" role="tabpanel" aria-labelledby="nav-reviews-tab">
+                        <div class="review">
+                            <div class="review-header">
+                                <h5>John Smith</h5>
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <p class="text-muted">January 15, 2025</p>
+                            </div>
+                            <p>I've been using Mounjaro for 3 months now and I've already lost 15kg! The side effects were minimal for me, just some nausea for the first week. Highly recommended if you're looking for significant weight loss.</p>
+                        </div>
+                        <hr>
+                        <div class="review">
+                            <div class="review-header">
+                                <h5>Sarah Johnson</h5>
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </div>
+                                <p class="text-muted">December 22, 2024</p>
+                            </div>
+                            <p>Great product but a bit pricey. I've seen good results after 2 months but experienced some digestive issues initially. They got better over time though.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="related-products mt-5">
+                <div class="section-title">
+                    <h2>Related Products</h2>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="product-card">
+                            <img src="06.png" alt="Mounjaro Weight Loss Injection">
+                            <div class="product-info">
+                                <h4>Mounjaro Weight Loss Injection (Tirzepatide) KwikPen</h4>
+                                <div class="price">$182.00</div>
+                            </div>
+                            <a href="#" class="btn btn-primary w-100 btn-learn-more">Learn More</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="product-card">
+                            <img src="07.png" alt="Mounjaro Weight Loss Injection">
+                            <div class="product-info">
+                                <h4>Mounjaro Weight Loss Injection (Tirzepatide) KwikPen</h4>
+                                <div class="price">$182.00</div>
+                            </div>
+                            <a href="#" class="btn btn-primary w-100 btn-learn-more">Learn More</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="product-card">
+                            <img src="07.png" alt="Mounjaro Weight Loss Injection">
+                            <div class="product-info">
+                                <h4>Mounjaro Weight Loss Injection (Tirzepatide) KwikPen</h4>
+                                <div class="price">$182.00</div>
+                            </div>
+                            <a href="#" class="btn btn-primary w-100 btn-learn-more">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        // Wait for the document to be fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize all functionality
+    initializeScripts();
+});
+
+function initializeScripts() {
+    // Image slider functionality
+    let currentSlide = 0;
+    const slides = [
+        '02.png',
+        '03.png',
+        '04.png',
+        '05.png'
+    ];
+    
+    // Change slide when thumbnail is clicked
+    document.querySelectorAll('.product-thumbnail').forEach(function(thumbnail) {
+        thumbnail.addEventListener('click', function() {
+            currentSlide = parseInt(this.getAttribute('data-index'));
+            updateSlider();
+            
+            // Remove active class from all thumbnails
+            document.querySelectorAll('.product-thumbnail').forEach(function(thumb) {
+                thumb.classList.remove('active');
+            });
+            
+            // Add active class to clicked thumbnail
+            this.classList.add('active');
+        });
+    });
+    
+    // Next slide button
+    document.querySelector('.next-arrow').addEventListener('click', function() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        updateSlider();
+        updateThumbnailActive();
+    });
+    
+    // Previous slide button
+    document.querySelector('.prev-arrow').addEventListener('click', function() {
+        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+        updateSlider();
+        updateThumbnailActive();
+    });
+    
+    function updateSlider() {
+        document.getElementById('currentImage').src = slides[currentSlide];
+    }
+    
+    function updateThumbnailActive() {
+        document.querySelectorAll('.product-thumbnail').forEach(function(thumb) {
+            thumb.classList.remove('active');
+        });
+        
+        // Find the thumbnail with the matching index and add active class
+        const activeThumb = document.querySelector(`.product-thumbnail[data-index="${currentSlide}"]`);
+        if (activeThumb) {
+            activeThumb.classList.add('active');
+        }
+    }
+    
+    // Image zoom functionality
+    const zoomContainer = document.querySelector('.zoom-container');
+    const zoomLens = document.querySelector('.zoom-lens');
+    const zoomResult = document.querySelector('.zoom-result');
+    const img = document.getElementById('currentImage');
+    
+    let cx, cy;
+    
+    function calculateRatio() {
+        // Calculate the ratio between result div and lens
+        cx = zoomResult.offsetWidth / zoomLens.offsetWidth;
+        cy = zoomResult.offsetHeight / zoomLens.offsetHeight;
+    }
+    
+    // Initialize zoom on image load
+    img.addEventListener('load', function() {
+        // Set lens size (25% of image)
+        const lensWidth = img.offsetWidth / 4;
+        const lensHeight = img.offsetHeight / 4;
+        zoomLens.style.width = lensWidth + 'px';
+        zoomLens.style.height = lensHeight + 'px';
+        
+        calculateRatio();
+    });
+    
+    // Show zoom elements on mouse enter
+    zoomContainer.addEventListener('mouseenter', function() {
+        zoomLens.style.display = 'block';
+        zoomResult.style.display = 'block';
+        
+        // Set background image for result
+        zoomResult.style.backgroundImage = `url('${img.src}')`;
+        zoomResult.style.backgroundSize = (img.offsetWidth * cx) + 'px ' + (img.offsetHeight * cy) + 'px';
+    });
+    
+    // Hide zoom elements on mouse leave
+    zoomContainer.addEventListener('mouseleave', function() {
+        zoomLens.style.display = 'none';
+        zoomResult.style.display = 'none';
+    });
+    
+    // Move lens with mouse
+    zoomContainer.addEventListener('mousemove', function(e) {
+        e.preventDefault();
+        
+        // Get cursor position
+        let pos = getCursorPos(e);
+        
+        // Calculate position of lens
+        let x = pos.x - (zoomLens.offsetWidth / 2);
+        let y = pos.y - (zoomLens.offsetHeight / 2);
+        
+        // Prevent lens from being positioned outside the image
+        if (x > img.width - zoomLens.offsetWidth) {x = img.width - zoomLens.offsetWidth;}
+        if (x < 0) {x = 0;}
+        if (y > img.height - zoomLens.offsetHeight) {y = img.height - zoomLens.offsetHeight;}
+        if (y < 0) {y = 0;}
+        
+        // Set the position of the lens
+        zoomLens.style.left = x + "px";
+        zoomLens.style.top = y + "px";
+        
+        // Display what the lens "sees" in the result div
+        zoomResult.style.backgroundPosition = "-" + (x * cx) + "px -" + (y * cy) + "px";
+    });
+    
+    function getCursorPos(e) {
+        let a, x = 0, y = 0;
+        e = e || window.event;
+        
+        // Get the x and y positions of the image
+        a = img.getBoundingClientRect();
+        
+        // Calculate the cursor's x and y coordinates, relative to the image
+        x = e.pageX - a.left - window.pageXOffset;
+        y = e.pageY - a.top - window.pageYOffset;
+        
+        return {x : x, y : y};
+    }
+    
+    // Quantity buttons functionality
+    const quantityInput = document.getElementById('quantity');
+    const decreaseBtn = document.getElementById('decreaseQuantity');
+    const increaseBtn = document.getElementById('increaseQuantity');
+    
+    decreaseBtn.addEventListener('click', function() {
+        let value = parseInt(quantityInput.value);
+        if (value > 1) {
+            quantityInput.value = value - 1;
+        }
+    });
+    
+    increaseBtn.addEventListener('click', function() {
+        let value = parseInt(quantityInput.value);
+        quantityInput.value = value + 1;
+    });
+}
+    </script>
