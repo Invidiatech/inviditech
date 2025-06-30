@@ -9,122 +9,7 @@
             <div class="row">
             @auth
 @endauth
-<style>
-   /* Import professional monospace fonts */
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap');
 
-/* Dark Theme for ql-syntax code blocks */
-.ql-syntax {
-    font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Consolas', monospace !important;
-    font-size: 14px;
-    line-height: 1.6;
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-    color: #e2e8f0;
-    padding: 24px 28px;
-    border-radius: 12px;
-    border: 1px solid #334155;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    position: relative;
-    overflow-x: auto;
-    font-weight: 400;
-    letter-spacing: 0.025em;
-    transition: all 0.3s ease;
-    margin: 16px 0;
-    white-space: pre;
-    word-wrap: break-word;
-}
-
-/* Top accent bar */
-.ql-syntax::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, #3b82f6, #8b5cf6, #06b6d4);
-    border-radius: 12px 12px 0 0;
-}
-
-/* Syntax highlighting colors for dark theme */
-.ql-syntax .comment {
-    color: #64748b;
-    font-style: italic;
-}
-
-.ql-syntax .keyword {
-    color: #f472b6;
-    font-weight: 500;
-}
-
-.ql-syntax .string {
-    color: #34d399;
-}
-
-.ql-syntax .function {
-    color: #60a5fa;
-    font-weight: 500;
-}
-
-.ql-syntax .variable {
-    color: #fbbf24;
-}
-
-.ql-syntax .operator {
-    color: #f97316;
-}
-
-.ql-syntax .number {
-    color: #a78bfa;
-}
-
-.ql-syntax .property {
-    color: #38bdf8;
-}
-
-/* Hover effect */
-.ql-syntax:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
-    border-color: #475569;
-}
-
-/* Enhanced scrollbar for dark theme */
-.ql-syntax::-webkit-scrollbar {
-    height: 8px;
-}
-
-.ql-syntax::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
-}
-
-.ql-syntax::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 4px;
-}
-
-.ql-syntax::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.5);
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .ql-syntax {
-        font-size: 13px;
-        padding: 16px 20px;
-        border-radius: 8px;
-    }
-}
-
-@media (max-width: 480px) {
-    .ql-syntax {
-        font-size: 12px;
-        padding: 12px 16px;
-        margin: 12px 0;
-    }
-}
-</style>
 <!-- Article Tools (Left Sidebar) -->
 <div class="col-lg-1 d-none d-lg-block article-tools-container">
     <div class="article-tools">
@@ -178,7 +63,22 @@
             </div>
         </div>
         
-  
+        <div class="article-tool-item" 
+             data-bs-toggle="tooltip" 
+             data-bs-placement="right" 
+             title="Download PDF" 
+             id="downloadPdf">
+            <i class="fas fa-file-pdf"></i>
+        </div>
+        
+        <div class="article-tool-item" 
+             data-bs-toggle="tooltip" 
+             data-bs-placement="right" 
+             title="Dark Mode" 
+             id="darkModeToggle">
+            <i class="fas fa-moon"></i>
+        </div>
+        
         @if($article->user_id != auth()->id())
         <div class="article-tool-item follow-button @if($userFollowing) active @endif" 
              data-user-id="{{ $article->user_id }}" 
@@ -194,7 +94,7 @@
                 <!-- Article Content -->
                 <div class="col-lg-7 animate animate-delay-1">
                  <!-- Audio Player -->
-<div class="audio-player mb-4 d-none">
+<div class="audio-player mb-4">
     <div class="audio-player-header">
         <h4 class="audio-player-title">Listen to this article</h4>
         <div class="audio-player-controls">
@@ -263,14 +163,14 @@
 
 <!-- Enhanced Author Bio with TikTok-style Follow Button -->
 <div class="article-author">
-    <img src="{{ asset('assets/profile/Muhammad Nawaz.JPG') }}" alt="Muhammad Nawaz" class="article-author-img">
+    <img src="{{ asset('assets/profile-gallery/Muhamm-Nawaz.png') }}" alt="Muhammad Nawaz" class="article-author-img">
     <div class="article-author-info">
         <div class="author-header">
             <div>
                 <h4 class="article-author-name">Muhammad Nawaz</h4>
                 <p class="article-author-position">Full Stack Web Developer</p>
                 <p class="author-stats">
-                    <span class="author-followers d-none"><i class="fas fa-user-friends"></i> {{ $userFollowing ?? 0 }} Followers</span>
+                    <span class="author-followers"><i class="fas fa-user-friends"></i> {{ $userFollowing ?? 0 }} Followers</span>
                     <!-- <span class="author-articles"><i class="fas fa-file-alt"></i> {{ $articleCount ?? 0 }} Articles</span> -->
                 </p>
             </div>
@@ -281,7 +181,7 @@
                 <span>@if($userFollowing) Following @else Follow @endif</span>
             </button>
             @elseif(!auth()->check())
-            <a class="d-none" href="{{ route('login') }}" class="author-follow-btn">
+            <a href="{{ route('login') }}" class="author-follow-btn">
                 <i class="far fa-user-circle"></i>
                 <span>Login to Follow</span>
             </a>

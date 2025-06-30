@@ -565,3 +565,29 @@ body {
     transform: translateX(0);
     opacity: 0;
 }
+   .ql-syntax.modern-dark {
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 15px;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: #e2e8f0;
+            padding: 24px 28px;
+            border-radius: 12px;
+            border: 1px solid #475569;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            position: relative;
+            overflow-x: auto;
+            font-weight: 400;
+            letter-spacing: 0.025em;
+        }
+
+        .ql-syntax.modern-dark::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #06b6d4);
+            border-radius: 12px 12px 0 0;
+        }
