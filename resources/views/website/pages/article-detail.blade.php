@@ -263,7 +263,7 @@
 
 <!-- Enhanced Author Bio with TikTok-style Follow Button -->
 <div class="article-author">
-    <img  Muhammad Nawaz.jpg alt="Muhammad Nawaz" class="article-author-img">
+    <img  src="{{ asset('assets/profile/Muhammad Nawaz.jpg') }}" alt="Muhammad Nawaz" class="article-author-img">
     <div class="article-author-info">
         <div class="author-header">
             <div>
