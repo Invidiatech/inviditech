@@ -20,7 +20,7 @@
             <div class="row align-items-center">
                 <div class="col-lg-5 animate">
                     <div class="about-img">
-                    <img src="{{ asset('assets/profile/Muhammad Nawaz.JPG') }}"  alt="Muhammad Nawaz" class="img-fluid rounded">
+                    <img src="{{ asset('assets/profile/Muhammad Nawaz.jpg') }}"  alt="Muhammad Nawaz" class="img-fluid rounded">
                     </div>
                 </div>
                 <div class="col-lg-7 animate">
