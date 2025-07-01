@@ -1,4 +1,4 @@
-@extends('website.layouts.app')
+@extends('website.layouts.app'v)
 @section('title', 'About Us - InvidiaTech')
 @section('content')   
     <!-- Page Header -->
@@ -20,6 +20,7 @@
             <div class="row align-items-center">
                 <div class="col-lg-5 animate">
                     <div class="about-img">
+
                     <img src="{{ asset('assets/profile/Muhammad Nawaz.JPG') }}" alt="Muhammad Nawaz" class="img-fluid rounded">
                     </div>
                 </div>
