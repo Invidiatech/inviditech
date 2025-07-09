@@ -1,19 +1,9 @@
 @extends('website.layouts.app')
 @section('title', $article->title . ' - InvidiaTech')
-     <link rel="stylesheet" href="{{ asset('frontend/css/article-detail.css') }}">
 
 @section('content')    
-     <!-- Main Content -->
-     <main class="py-5" style="margin-top:60px">
-        <div class="container">
-            <div class="row">
-            @auth
-@endauth
 <style>
-   /* Import professional monospace fonts */
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap');
-
-/* Dark Theme for ql-syntax code blocks */
+/* Code Block Styling */
 .ql-syntax {
     font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Consolas', monospace !important;
     font-size: 14px;
@@ -34,7 +24,6 @@
     word-wrap: break-word;
 }
 
-/* Top accent bar */
 .ql-syntax::before {
     content: '';
     position: absolute;
@@ -46,1059 +35,737 @@
     border-radius: 12px 12px 0 0;
 }
 
-/* Syntax highlighting colors for dark theme */
-.ql-syntax .comment {
-    color: #64748b;
-    font-style: italic;
-}
-
-.ql-syntax .keyword {
-    color: #f472b6;
-    font-weight: 500;
-}
-
-.ql-syntax .string {
-    color: #34d399;
-}
-
-.ql-syntax .function {
-    color: #60a5fa;
-    font-weight: 500;
-}
-
-.ql-syntax .variable {
-    color: #fbbf24;
-}
-
-.ql-syntax .operator {
-    color: #f97316;
-}
-
-.ql-syntax .number {
-    color: #a78bfa;
-}
-
-.ql-syntax .property {
-    color: #38bdf8;
-}
-
-/* Hover effect */
 .ql-syntax:hover {
     transform: translateY(-2px);
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
     border-color: #475569;
 }
 
-/* Enhanced scrollbar for dark theme */
-.ql-syntax::-webkit-scrollbar {
-    height: 8px;
+/* Article Image Styling */
+.article-featured-image {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
-.ql-syntax::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.2);
+/* Article Meta */
+.article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Article Tags */
+.article-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.article-tag {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    background: #e3f2fd;
+    color: #1976d2;
+    text-decoration: none;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+}
+
+.article-tag:hover {
+    background: #1976d2;
+    color: white;
+    transform: translateY(-1px);
+}
+
+/* TOC Enhancements */
+.article-toc {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 1.5rem;
+    position: sticky;
+    top: 100px;
+    max-height: calc(100vh - 150px);
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e9ecef;
+    z-index: 10;
+}
+
+.article-toc-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e9ecef;
+    color: #495057;
+}
+
+.article-toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.toc-item {
+    margin-bottom: 0.3rem;
+}
+
+.toc-item a {
+    color: #495057;
+    text-decoration: none;
+    display: block;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    border-left: 3px solid transparent;
+}
+
+.toc-item a:hover,
+.toc-item a.active {
+    background-color: #e3f2fd;
+    color: #1976d2;
+    border-left-color: #1976d2;
+    transform: translateX(2px);
+}
+
+.toc-item.toc-h1 a { font-weight: 600; font-size: 1rem; }
+.toc-item.toc-h2 a { padding-left: 1rem; }
+.toc-item.toc-h3 a { padding-left: 1.5rem; }
+.toc-item.toc-h4 a { padding-left: 2rem; }
+.toc-item.toc-h5 a { padding-left: 2.5rem; }
+.toc-item.toc-h6 a { padding-left: 3rem; }
+
+/* Heading Enhancement */
+.article-content h1, 
+.article-content h2, 
+.article-content h3, 
+.article-content h4, 
+.article-content h5, 
+.article-content h6 {
+    position: relative;
+    scroll-margin-top: 120px;
+    transition: all 0.3s ease;
     border-radius: 4px;
+    padding: 0.5rem 0;
 }
 
-.ql-syntax::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.3);
+.heading-highlighted {
+    background: linear-gradient(90deg, rgba(25, 118, 210, 0.1) 0%, transparent 100%);
+    padding-left: 1rem !important;
+    border-left: 4px solid #1976d2;
+    animation: highlight-fade 3s ease-out;
+}
+
+@keyframes highlight-fade {
+    0% { background-color: rgba(25, 118, 210, 0.2); }
+    100% { background-color: transparent; }
+}
+
+/* Article Tools */
+.article-tools-container {
+    position: sticky;
+    top: 100px;
+    height: fit-content;
+}
+
+.article-tools {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background: white;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e9ecef;
+}
+
+.article-tool-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.75rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #6c757d;
+    position: relative;
+}
+
+.article-tool-item:hover {
+    background: #f8f9fa;
+    color: #495057;
+    transform: translateY(-2px);
+}
+
+.article-tool-item.active {
+    color: #1976d2;
+    background: #e3f2fd;
+}
+
+.tool-count {
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    font-weight: 500;
+}
+
+/* Share Menu */
+.share-menu {
+    position: absolute;
+    left: 100%;
+    top: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    padding: 0.5rem;
+    display: none;
+    flex-direction: column;
+    gap: 0.5rem;
+    z-index: 1000;
+    margin-left: 0.5rem;
+}
+
+.share-menu a {
+    padding: 0.5rem;
     border-radius: 4px;
+    color: #6c757d;
+    transition: all 0.3s ease;
 }
 
-.ql-syntax::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.5);
+.share-menu a:hover {
+    background: #f8f9fa;
+    color: #495057;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .ql-syntax {
-        font-size: 13px;
-        padding: 16px 20px;
+/* Progress Indicator */
+.reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background: linear-gradient(90deg, #1976d2, #42a5f5);
+    z-index: 9999;
+    transition: width 0.3s ease;
+}
+
+/* Mobile Responsive */
+@media (max-width: 991.98px) {
+    .article-toc {
+        position: relative;
+        top: 0;
+        max-height: none;
+        margin-bottom: 2rem;
+    }
+    
+    .article-tools-container {
+        position: relative;
+        top: 0;
+    }
+    
+    .article-tools {
+        flex-direction: row;
+        justify-content: center;
+        margin-bottom: 2rem;
+    }
+    
+    .article-featured-image {
+        height: 250px;
+    }
+}
+
+@media (max-width: 576px) {
+    .article-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .article-featured-image {
+        height: 200px;
         border-radius: 8px;
     }
 }
-
-@media (max-width: 480px) {
-    .ql-syntax {
-        font-size: 12px;
-        padding: 12px 16px;
-        margin: 12px 0;
-    }
-}
 </style>
-<!-- Article Tools (Left Sidebar) -->
-<div class="col-lg-1 d-none d-lg-block article-tools-container">
-    <div class="article-tools">
-        <div class="article-tool-item like-button @if($userLiked) active @endif" 
-             data-article-id="{{ $article->id }}" 
-             data-bs-toggle="tooltip" 
-             data-bs-placement="right" 
-             title="@if($userLiked) Unlike @else Like @endif"
-             id="likeButton">
-            <i class="@if($userLiked) fas @else far @endif fa-heart"></i>
-            <span class="tool-count" id="likeCount">{{ $likesCount }}</span>
-        </div>
-        
-        <div class="article-tool-item" 
-             data-bs-toggle="tooltip" 
-             data-bs-placement="right" 
-             title="Comment"
-             onclick="scrollToComments()">
-            <i class="far fa-comment"></i>
-            <span class="tool-count">{{ $article->comments->count() }}</span>
-        </div>
-        
-        <div class="article-tool-item bookmark-button @if($userBookmarked) active @endif" 
-             data-article-id="{{ $article->id }}" 
-             data-bs-toggle="tooltip" 
-             data-bs-placement="right" 
-             title="@if($userBookmarked) Remove Bookmark @else Bookmark @endif"
-             id="bookmarkButton">
-            <i class="@if($userBookmarked) fas @else far @endif fa-bookmark"></i>
-        </div>
-        
-        <div class="article-tool-item" 
-             data-bs-toggle="tooltip" 
-             data-bs-placement="right" 
-             title="Share"
-             onclick="toggleShareMenu()">
-            <i class="fas fa-share-alt"></i>
-            <div class="share-menu" id="shareMenu">
-                <a href="https://twitter.com/intent/tweet?url={{ urlencode(url()->current()) }}&text={{ urlencode($article->title) }}" target="_blank">
-                    <i class="fab fa-twitter"></i>
-                </a>
-                <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}" target="_blank">
-                    <i class="fab fa-facebook-f"></i>
-                </a>
-                <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ urlencode(url()->current()) }}&title={{ urlencode($article->title) }}" target="_blank">
-                    <i class="fab fa-linkedin-in"></i>
-                </a>
-                <a href="#" onclick="copyArticleLink(event)">
-                    <i class="fas fa-link"></i>
-                </a>
-            </div>
-        </div>
-        
-  
-        @if($article->user_id != auth()->id())
-        <div class="article-tool-item follow-button @if($userFollowing) active @endif" 
-             data-user-id="{{ $article->user_id }}" 
-             data-bs-toggle="tooltip" 
-             data-bs-placement="right" 
-             title="@if($userFollowing) Unfollow @else Follow @endif Author"
-             id="followButton">
-            <i class="@if($userFollowing) fas @else far @endif fa-user-circle"></i>
-        </div>
-        @endif
-    </div>
-</div>
-                <!-- Article Content -->
-                <div class="col-lg-7 animate animate-delay-1">
-                 <!-- Audio Player -->
-<div class="audio-player mb-4 d-none">
-    <div class="audio-player-header">
-        <h4 class="audio-player-title">Listen to this article</h4>
-        <div class="audio-player-controls">
-            <button class="audio-player-btn" title="Speed">
-                <i class="fas fa-tachometer-alt"></i> 1.0x
-            </button>
-            <button class="audio-player-btn" title="Volume">
-                <i class="fas fa-volume-up"></i>
-            </button>
-        </div>
-    </div>
 
-    <!-- 🔊 Actual Audio Element -->
-    <audio id="audio-player" preload="metadata" controls style="width: 100%; display: none;">
-        <source src="{{ asset('storage/audio/kEh7LWlpSVKYDPB1JqIhHKLoNQezU1I420AYGlR0.webm') }}" type="audio/webm">
-        Your browser does not support the audio element.
-    </audio>
+<!-- Reading Progress Bar -->
+<div class="reading-progress" id="readingProgress"></div>
 
-    <div class="d-flex align-items-center mb-3">
-        <button class="audio-player-btn-play" onclick="document.getElementById('audio-player').play()">
-            <i class="fas fa-play"></i>
-        </button>
-        <div class="w-100">
-            <div class="audio-player-progress">
-                <div class="audio-player-progress-fill"></div>
-                <div class="audio-player-progress-handle"></div>
+<!-- Main Content -->
+<main class="py-5" style="margin-top:60px">
+    <div class="container">
+        <div class="row">
+            <!-- Article Tools (Left Sidebar) -->
+            <div class="col-lg-1 d-none d-lg-block article-tools-container d-none">
+                <div class="article-tools d-none">
+                    <div class="article-tool-item like-button @if($userLiked ?? false) active @endif" 
+                         data-article-id="{{ $article->id }}" 
+                         data-bs-toggle="tooltip" 
+                         data-bs-placement="right" 
+                         title="@if($userLiked ?? false) Unlike @else Like @endif"
+                         id="likeButton">
+                        <i class="@if($userLiked ?? false) fas @else far @endif fa-heart"></i>
+                        <span class="tool-count" id="likeCount">{{ $likesCount ?? 0 }}</span>
+                    </div>
+                    
+                    <div class="article-tool-item" 
+                         data-bs-toggle="tooltip" 
+                         data-bs-placement="right" 
+                         title="Comment"
+                         onclick="scrollToComments()">
+                        <i class="far fa-comment"></i>
+                        <span class="tool-count">{{ $article->comments->count() ?? 0 }}</span>
+                    </div>
+                    
+                    <div class="article-tool-item bookmark-button @if($userBookmarked ?? false) active @endif" 
+                         data-article-id="{{ $article->id }}" 
+                         data-bs-toggle="tooltip" 
+                         data-bs-placement="right" 
+                         title="@if($userBookmarked ?? false) Remove Bookmark @else Bookmark @endif"
+                         id="bookmarkButton">
+                        <i class="@if($userBookmarked ?? false) fas @else far @endif fa-bookmark"></i>
+                    </div>
+                    
+                    <div class="article-tool-item" 
+                         data-bs-toggle="tooltip" 
+                         data-bs-placement="right" 
+                         title="Share"
+                         onclick="toggleShareMenu()">
+                        <i class="fas fa-share-alt"></i>
+                        <div class="share-menu" id="shareMenu">
+                            <a href="https://twitter.com/intent/tweet?url={{ urlencode(url()->current()) }}&text={{ urlencode($article->title) }}" target="_blank">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}" target="_blank">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ urlencode(url()->current()) }}&title={{ urlencode($article->title) }}" target="_blank">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a href="#" onclick="copyArticleLink(event)">
+                                <i class="fas fa-link"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="audio-player-time">
-                <span>00:00</span>
-                <span>{{ $article->reading_time ?? '00:00' }}</span>
-            </div>
-        </div>
-    </div>
-</div>
+
+            <!-- Article Content -->
+            <div class="col-lg-7 animate animate-delay-1">
+                <!-- Article Header -->
+                <article class="article-content">
+                    <h1 class="article-title mb-4">{{ $article->title }}</h1>
+                    
+                    <!-- Article Meta Information -->
+                    <div class="article-meta">
+                        <div class="meta-item">
+                            <i class="far fa-calendar"></i>
+                            <span>{{ $article->created_at->format('F d, Y') }}</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="far fa-clock"></i>
+                            <span>{{ $article->reading_time ?? 5 }} min read</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="far fa-eye"></i>
+                            <span>{{ number_format($article->views_count ?? 0) }} views</span>
+                        </div>
+                        @if($article->category && is_object($article->category))
+                        <div class="meta-item">
+                            <i class="far fa-folder"></i>
+                            <span>{{ $article->category->name }}</span>
+                        </div>
+                        @endif
+                    </div>
+
+                    <!-- Featured Image -->
+                    @if($article->featured_image)
+                    <div class="mb-4">
+                        <img src="{{ asset('storage/' . $article->featured_image) }}" 
+                             alt="{{ $article->featured_image_alt ?? $article->title }}" 
+                             class="article-featured-image">
+                    </div>
+                    @endif
 
                     <!-- Article Content -->
-                    <article class="article-content">
-                    <h1 class="article-title">{{ $article->title }}</h1>
+                    <div class="article-body">
                         {!! $article->content !!}
-                    </article>
-
-                    {{-- Article Tags 
-                    <div class="article-tags">
-                        <a href="{{ route('articles', ['category' => $article->category->slug]) }}" class="article-tag">{{ $article->category->name }}</a>
-                        @foreach($article->tags as $tag)
-                            <a href="{{ route('articles', ['tag' => $tag->slug]) }}" class="article-tag">{{ $tag->name }}</a>
-                        @endforeach
                     </div>
-                    --}}
-                    <!-- Article Share -->
-                    <div class="article-share">
-                        <span class="article-share-title">Share this article:</span>
-                        <a href="https://twitter.com/intent/tweet?url={{ urlencode(url()->current()) }}&text={{ urlencode($article->title) }}" class="article-share-link twitter" title="Share on Twitter" target="_blank">
-                            <i class="fab fa-twitter"></i>
+                </article>
+
+                <!-- Article Tags -->
+                @if($article->tags && $article->tags->count() > 0)
+                <div class="article-tags mt-4">
+                    @foreach($article->tags as $tag)
+                        <a href="{{ route('articles', ['tag' => $tag->slug]) }}" class="article-tag">
+                            {{ $tag->name }}
                         </a>
-                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}" class="article-share-link facebook" title="Share on Facebook" target="_blank">
-                            <i class="fab fa-facebook-f"></i>
+                    @endforeach
+                </div>
+                @endif
+
+                <!-- Article Share -->
+                <div class="article-share mt-4 p-3 border rounded">
+                    <span class="article-share-title fw-bold">Share this article:</span>
+                    <div class="mt-2">
+                        <a href="https://twitter.com/intent/tweet?url={{ urlencode(url()->current()) }}&text={{ urlencode($article->title) }}" class="btn btn-outline-primary btn-sm me-2" title="Share on Twitter" target="_blank">
+                            <i class="fab fa-twitter"></i> Twitter
                         </a>
-                        <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ urlencode(url()->current()) }}&title={{ urlencode($article->title) }}" class="article-share-link linkedin" title="Share on LinkedIn" target="_blank">
-                            <i class="fab fa-linkedin-in"></i>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}" class="btn btn-outline-primary btn-sm me-2" title="Share on Facebook" target="_blank">
+                            <i class="fab fa-facebook-f"></i> Facebook
                         </a>
-                        <a href="#" class="article-share-link" title="Copy link" id="copyArticleLink" data-clipboard-text="{{ url()->current() }}">
-                            <i class="fas fa-link"></i>
+                        <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ urlencode(url()->current()) }}&title={{ urlencode($article->title) }}" class="btn btn-outline-primary btn-sm me-2" title="Share on LinkedIn" target="_blank">
+                            <i class="fab fa-linkedin-in"></i> LinkedIn
                         </a>
+                        <button class="btn btn-outline-secondary btn-sm" title="Copy link" id="copyArticleLink" data-clipboard-text="{{ url()->current() }}">
+                            <i class="fas fa-link"></i> Copy Link
+                        </button>
                     </div>
+                </div>
 
-<!-- Enhanced Author Bio with TikTok-style Follow Button -->
-<div class="article-author">
-    <img  src="{{ asset('assets/profile/Muhammad Nawaz.jpg') }}" alt="Muhammad Nawaz" class="article-author-img">
-    <div class="article-author-info">
-        <div class="author-header">
-            <div>
-                <h4 class="article-author-name">Muhammad Nawaz</h4>
-                <p class="article-author-position">Full Stack Web Developer</p>
-                <p class="author-stats">
-                    <span class="author-followers d-none"><i class="fas fa-user-friends"></i> {{ $userFollowing ?? 0 }} Followers</span>
-                    <!-- <span class="author-articles"><i class="fas fa-file-alt"></i> {{ $articleCount ?? 0 }} Articles</span> -->
-                </p>
-            </div>
-            @if(auth()->check() && auth()->id() != $article->user_id)
-            <button class="author-follow-btn follow-button @if($userFollowing) active @endif" 
-                   data-user-id="{{ $article->user_id }}">
-                <i class="@if($userFollowing) fas @else far @endif fa-user-circle"></i>
-                <span>@if($userFollowing) Following @else Follow @endif</span>
-            </button>
-            @elseif(!auth()->check())
-            <a class="d-none" href="{{ route('login') }}" class="author-follow-btn">
-                <i class="far fa-user-circle"></i>
-                <span>Login to Follow</span>
-            </a>
-            @endif
-        </div>
-        <p class="article-author-bio">Welcome to Invidiatech, a freelance-based development studio founded in 2020. I specialize in PHP, Laravel, WordPress, Shopify, HTML, CSS, Bootstrap, and JavaScript. I transform business challenges into efficient digital experiences with dedicated personal attention on every project.</p>
-        <div class="article-author-social">
-            <a href="https://www.facebook.com/Muhammad.Nawaz.Dev/" class="article-author-social-link facebook" title="Follow on Facebook" target="_blank">
-                <i class="fab fa-facebook-f"></i>
-            </a>
-            <a href="https://www.linkedin.com/in/muhammad-nawaz-43a354201/" class="article-author-social-link linkedin" title="Connect on LinkedIn" target="_blank">
-                <i class="fab fa-linkedin-in"></i>
-            </a>
-            <a href="https://github.com/nawazfdev" class="article-author-social-link github" title="Follow on GitHub" target="_blank">
-                <i class="fab fa-github"></i>
-            </a>
-            <a href="https://invidiatech.com" class="article-author-social-link website" title="Visit Website" target="_blank">
-                <i class="fas fa-globe"></i>
-            </a>
-        </div>
-    </div>
-</div>
+                <!-- Author Bio -->
+                <div class="article-author mt-5 p-4 border rounded">
+                    <div class="d-flex">
+                        <img src="{{ asset('assets/profile/Muhammad Nawaz.jpg') }}" alt="Muhammad Nawaz" class="rounded-circle me-3" style="width: 80px; height: 80px; object-fit: cover;">
+                        <div class="flex-grow-1">
+                            <h5 class="mb-1">Muhammad Nawaz</h5>
+                            <p class="text-muted mb-2">Full Stack Web Developer</p>
+                            <p class="mb-3">Welcome to Invidiatech, a freelance-based development studio founded in 2020. I specialize in PHP, Laravel, WordPress, Shopify, HTML, CSS, Bootstrap, and JavaScript.</p>
+                            <div class="d-flex gap-2">
+                                <a href="https://www.facebook.com/Muhammad.Nawaz.Dev/" class="btn btn-outline-primary btn-sm" target="_blank">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="https://www.linkedin.com/in/muhammad-nawaz-43a354201/" class="btn btn-outline-primary btn-sm" target="_blank">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                                <a href="https://github.com/nawazfdev" class="btn btn-outline-dark btn-sm" target="_blank">
+                                    <i class="fab fa-github"></i>
+                                </a>
+                                <a href="https://invidiatech.com" class="btn btn-outline-success btn-sm" target="_blank">
+                                    <i class="fas fa-globe"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                    <!-- Related Articles -->
-                    @if(count($relatedArticles) > 0)
-                    <div class="related-articles">
-                        <h3 class="related-articles-title">Related Articles</h3>
+                <!-- Related Articles -->
+                @if(isset($relatedArticles) && count($relatedArticles) > 0)
+                <div class="related-articles mt-5">
+                    <h3 class="mb-4">Related Articles</h3>
+                    <div class="row">
                         @foreach($relatedArticles as $relatedArticle)
-                        <div class="related-article">
-                            @if($relatedArticle->featured_image)
-                                <img src="{{ asset('storage/' . $relatedArticle->featured_image) }}" 
-                                     alt="{{ $relatedArticle->featured_image_alt ?? $relatedArticle->title }}" 
-                                     class="related-article-img">
-                            @else
-                                <img src="/api/placeholder/100/100" alt="{{ $relatedArticle->title }}" class="related-article-img">
-                            @endif
-                            <div>
-                                <a href="{{ route('article.show', $relatedArticle->slug) }}" class="related-article-title">{{ $relatedArticle->title }}</a>
-                                <div class="related-article-meta">
-                                    <span><i class="far fa-user me-1"></i> {{ $relatedArticle->user->name }}</span>
-                                    <span class="ms-2"><i class="far fa-calendar me-1"></i> {{ $relatedArticle->created_at->format('F d, Y') }}</span>
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100">
+                                @if($relatedArticle->featured_image)
+                                    <img src="{{ asset('storage/' . $relatedArticle->featured_image) }}" 
+                                         alt="{{ $relatedArticle->featured_image_alt ?? $relatedArticle->title }}" 
+                                         class="card-img-top" style="height: 150px; object-fit: cover;">
+                                @endif
+                                <div class="card-body">
+                                    <h6 class="card-title">
+                                        <a href="{{ route('article.show', $relatedArticle->slug) }}" class="text-decoration-none">
+                                            {{ $relatedArticle->title }}
+                                        </a>
+                                    </h6>
+                                    <small class="text-muted">
+                                        <i class="far fa-calendar me-1"></i> {{ $relatedArticle->created_at->format('M d, Y') }}
+                                    </small>
                                 </div>
                             </div>
                         </div>
                         @endforeach
                     </div>
-                    @endif
-
-                  <!-- Comments Section -->
-<div class="comments-section mt-5" id="comments">
-    <h3 class="mb-4">Comments ({{ $article->comments->count() }})</h3>
-    
-    <!-- Comment Form -->
-    @auth
-    <div class="comment-form mb-5">
-        <div class="mb-3">
-            <textarea class="form-control" id="commentTextarea" rows="4" placeholder="Add a comment..."></textarea>
-        </div>
-        <div class="d-flex justify-content-between align-items-center">
-            <div class="text-muted">Please be respectful and constructive in your comments.</div>
-            <button class="btn btn-accent-custom" id="submitComment" data-article-id="{{ $article->id }}">Post Comment</button>
-        </div>
-    </div>
-    @else
-    <div class="alert alert-info mb-4">
-        <i class="fas fa-info-circle me-2"></i> <a href="{{ route('login') }}">Log in</a> to add your comment.
-    </div>
-    @endauth
-    
-    <!-- Comment List -->
-    <div class="comment-list" id="commentList">
-        @forelse($article->comments->where('parent_id', null) as $comment)
-            @include('website.pages.components.comment', ['comment' => $comment, 'article' => $article])
-        @empty
-            <div class="alert alert-info" id="noCommentsMessage">
-                No comments yet. Be the first to comment!
-            </div>
-        @endforelse
-    </div>
-</div>
                 </div>
+                @endif
 
-                <!-- Sidebar (Table of Contents) -->
-                <div class="col-lg-4 animate animate-delay-2">
-                    <div class="article-toc">
-                        <h3 class="article-toc-title">Table of Contents</h3>
-                        <ul class="article-toc-list">
-                            <!-- Dynamic TOC will be injected here -->
-                        </ul>
+                <!-- Comments Section -->
+                <div class="comments-section mt-5" id="comments">
+                    <h3 class="mb-4">Comments ({{ $article->comments->count() ?? 0 }})</h3>
+                    
+                    @auth
+                    <div class="comment-form mb-5">
+                        <div class="mb-3">
+                            <textarea class="form-control" id="commentTextarea" rows="4" placeholder="Add a comment..."></textarea>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="text-muted">Please be respectful and constructive in your comments.</div>
+                            <button class="btn btn-primary" id="submitComment" data-article-id="{{ $article->id }}">Post Comment</button>
+                        </div>
+                    </div>
+                    @else
+                    <div class="alert alert-info mb-4">
+                        <i class="fas fa-info-circle me-2"></i> <a href="{{ route('login') }}">Log in</a> to add your comment.
+                    </div>
+                    @endauth
+                    
+                    <div class="comment-list" id="commentList">
+                        @if(isset($article->comments) && $article->comments->count() > 0)
+                            @foreach($article->comments->where('parent_id', null) as $comment)
+                                @include('website.pages.components.comment', ['comment' => $comment, 'article' => $article])
+                            @endforeach
+                        @else
+                            <div class="alert alert-info" id="noCommentsMessage">
+                                No comments yet. Be the first to comment!
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
-        </div>
-    </main>
 
- <script>
-document.addEventListener('DOMContentLoaded', () => {
-  // Process code blocks
-  enhanceCodeBlocks();
-  
-  // Generate table of contents
-  generateTableOfContents();
-  
-  // Initialize other functionality
-  initializeArticleTools();
+            <!-- Sidebar (Table of Contents) -->
+            <div class="col-lg-4 animate animate-delay-2">
+                <div class="article-toc">
+                    <h3 class="article-toc-title">
+                        <i class="fas fa-list me-2"></i>Table of Contents
+                    </h3>
+                    <ul class="article-toc-list" id="tocList">
+                        <!-- Dynamic TOC will be injected here -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize all features
+    generateTableOfContents();
+    initializeReadingProgress();
+    initializeScrollSpy();
+    initializeShareFunctionality();
+    
+    // Initialize tooltips if Bootstrap is available
+    if (typeof bootstrap !== 'undefined') {
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+    }
 });
 
 /**
- * Enhance code blocks with language detection, copy buttons, and line numbers
- */
-function enhanceCodeBlocks() {
-  // Find all code blocks (both standalone and in containers)
-  const standaloneBlocks = document.querySelectorAll('.ql-code-block:not(.ql-code-block-container .ql-code-block)');
-  
-  // Process standalone blocks - wrap them in containers
-  standaloneBlocks.forEach(block => {
-    // Skip empty blocks
-    if (!block.textContent.trim()) return;
-    
-    // Create container
-    const container = document.createElement('div');
-    container.className = 'ql-code-block-container';
-    
-    // Replace the block with the container
-    const parent = block.parentNode;
-    parent.insertBefore(container, block);
-    container.appendChild(block);
-  });
-  
-  // Find all containers now (both pre-existing and newly created)
-  const codeContainers = document.querySelectorAll('.ql-code-block-container');
-  
-  codeContainers.forEach(container => {
-    const codeBlock = container.querySelector('.ql-code-block');
-    if (!codeBlock) return;
-    
-    // Get language from data attribute or detect it
-    let language = codeBlock.getAttribute('data-language') || detectLanguage(codeBlock.textContent);
-    
-    // Add language label
-    const languageLabel = document.createElement('span');
-    languageLabel.className = `code-language-label lang-${language}`;
-    languageLabel.textContent = language;
-    container.appendChild(languageLabel);
-    
-    // Create the copy button with icon
-    const copyButton = document.createElement('button');
-    copyButton.className = 'copy-btn';
-    copyButton.innerHTML = '<i class="far fa-copy"></i> Copy';
-    container.appendChild(copyButton);
-    
-    // Add line numbers
-    addLineNumbers(codeBlock);
-    
-    // Add syntax highlighting classes
-    applySyntaxHighlighting(codeBlock, language);
-    
-    // Copy functionality
-    copyButton.addEventListener('click', () => {
-      const code = codeBlock.innerText;
-      if (!code) return;
-      
-      navigator.clipboard.writeText(code).then(() => {
-        copyButton.innerHTML = '<i class="fas fa-check"></i> Copied!';
-        copyButton.classList.add('copied');
-        
-        setTimeout(() => {
-          copyButton.innerHTML = '<i class="far fa-copy"></i> Copy';
-          copyButton.classList.remove('copied');
-        }, 2000);
-      });
-    });
-  });
-}
-
- 
-function addLineNumbers(codeBlock) {
-  if (!codeBlock) return;
-  
-  // Add the line numbers class
-  codeBlock.classList.add('with-line-numbers');
-  
-  // Split content by lines and wrap each in a div
-  const content = codeBlock.innerHTML;
-  const lines = content.split('\n');
-  
-  // Create HTML with line number divs
-  let wrappedContent = '';
-  lines.forEach(line => {
-    wrappedContent += `<div>${line}</div>`;
-  });
-  
-  codeBlock.innerHTML = wrappedContent;
-}
-
-/**
- * Apply basic syntax highlighting classes
- */
-function applySyntaxHighlighting(codeBlock, language) {
-  if (!codeBlock || !language) return;
-  
-  // Only apply for specific languages
-  if (!['javascript', 'php', 'html', 'css', 'sql', 'python'].includes(language)) return;
-  
-  // Get all text nodes
-  const walker = document.createTreeWalker(
-    codeBlock,
-    NodeFilter.SHOW_TEXT,
-    null,
-    false
-  );
-  
-  const nodes = [];
-  let node;
-  while (node = walker.nextNode()) {
-    nodes.push(node);
-  }
-  
-  // Apply highlighting patterns based on language
-  nodes.forEach(node => {
-    let html = node.textContent;
-    
-    // Language-specific patterns
-    if (language === 'javascript') {
-      html = html
-        .replace(/\b(var|let|const|function|return|if|else|for|while|switch|case|break|continue|new|this|class|extends|import|export|default|try|catch|throw|async|await)\b/g, '<span class="keyword">$1</span>')
-        .replace(/\b(console)\b/g, '<span class="property">$1</span>')
-        .replace(/("[^"]*"|'[^']*'|`[^`]*`)/g, '<span class="string">$1</span>')
-        .replace(/\b(\d+)\b/g, '<span class="number">$1</span>')
-        .replace(/\/\/.*|\/\*[\s\S]*?\*\//g, '<span class="comment">$&</span>');
-    }
-    
-    else if (language === 'php') {
-      html = html
-        .replace(/\b(function|return|if|else|foreach|for|while|switch|case|break|continue|new|class|extends|implements|public|private|protected|static|echo|print|include|require|namespace|use)\b/g, '<span class="keyword">$1</span>')
-        .replace(/(\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)/g, '<span class="variable">$1</span>')
-        .replace(/("[^"]*"|'[^']*')/g, '<span class="string">$1</span>')
-        .replace(/\b(\d+)\b/g, '<span class="number">$1</span>')
-        .replace(/\/\/.*|\/\*[\s\S]*?\*\//g, '<span class="comment">$&</span>');
-    }
-    
-    // Replace the text node with the highlighted HTML
-    if (html !== node.textContent) {
-      const span = document.createElement('span');
-      span.innerHTML = html;
-      node.parentNode.replaceChild(span, node);
-    }
-  });
-}
-
-/**
- * Generate table of contents from article headings
+ * Generate Table of Contents
  */
 function generateTableOfContents() {
-  const article = document.querySelector('.article-content');
-  const tocList = document.querySelector('.article-toc-list');
-  
-  if (!article || !tocList) return;
-  
-  // Find all headings
-  const headings = article.querySelectorAll('h1, h2, h3, h4, h5, h6');
-  
-  if (headings.length === 0) {
-    // Hide TOC if no headings
-    const tocContainer = document.querySelector('.article-toc');
-    if (tocContainer) tocContainer.style.display = 'none';
-    return;
-  }
-  
-  // Clear existing TOC items
-  tocList.innerHTML = '';
-  
-  // Process each heading
-  headings.forEach((heading, index) => {
-    // Create id if not exists
-    if (!heading.id) {
-      heading.id = 'heading-' + index;
+    const article = document.querySelector('.article-body');
+    const tocList = document.getElementById('tocList');
+    
+    if (!article || !tocList) return;
+    
+    const headings = article.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    
+    if (headings.length === 0) {
+        document.querySelector('.article-toc').style.display = 'none';
+        return;
     }
     
-    // Create TOC item
-    const tocItem = document.createElement('li');
-    tocItem.className = `toc-item toc-${heading.tagName.toLowerCase()}`;
+    // Clear existing TOC
+    tocList.innerHTML = '';
     
-    // Indent based on heading level
-    const headingLevel = parseInt(heading.tagName.substring(1));
-    tocItem.style.paddingLeft = ((headingLevel - 1) * 12) + 'px';
-    
-    // Create link
-    const tocLink = document.createElement('a');
-    tocLink.href = '#' + heading.id;
-    tocLink.textContent = heading.textContent;
-    tocItem.appendChild(tocLink);
-    
-    // Add to TOC
-    tocList.appendChild(tocItem);
-    
-    // Add click handler for smooth scrolling
-    tocLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      
-      // Smooth scroll to heading
-      heading.scrollIntoView({ behavior: 'smooth' });
-      
-      // Update URL without jumping
-      history.pushState(null, null, '#' + heading.id);
-      
-      // Highlight heading
-      heading.classList.add('highlight-heading');
-      setTimeout(() => {
-        heading.classList.remove('highlight-heading');
-      }, 2000);
-    });
-  });
-}
-
-/**
- * Initialize article tools and interactive elements
- */
-function initializeArticleTools() {
-  // Initialize copy article link
-  const copyLinkBtn = document.getElementById('copyArticleLink');
-  if (copyLinkBtn) {
-    copyLinkBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const url = copyLinkBtn.getAttribute('data-clipboard-text');
-      
-      navigator.clipboard.writeText(url).then(() => {
-        showToast('Link copied to clipboard!');
-      });
-    });
-  }
-  
-  // Initialize dark mode toggle
-  const darkModeToggle = document.getElementById('darkModeToggle');
-  if (darkModeToggle) {
-    // Check local storage for preference
-    const darkMode = localStorage.getItem('darkMode') === 'enabled';
-    if (darkMode) {
-      document.body.classList.add('dark-mode');
-      darkModeToggle.querySelector('i').className = 'fas fa-sun';
-    }
-    
-    // Toggle dark mode
-    darkModeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark-mode');
-      
-      // Update icon
-      const isDarkMode = document.body.classList.contains('dark-mode');
-      darkModeToggle.querySelector('i').className = isDarkMode ? 'fas fa-sun' : 'fas fa-moon';
-      
-      // Save preference
-      localStorage.setItem('darkMode', isDarkMode ? 'enabled' : 'disabled');
-    });
-  }
-  
-  // Initialize PDF download
-  const downloadPdfBtn = document.getElementById('downloadPdfBtn');
-  const downloadPdfIcon = document.getElementById('downloadPdf');
-  
-  const handlePdfDownload = () => {
-    showToast('Preparing PDF download...', 'info');
-    
-    // Here you would implement actual PDF generation
-    // For example using a library like html2pdf.js or a server-side endpoint
-    
-    // Simulated delay for demo purposes
-    setTimeout(() => {
-      showToast('PDF downloaded successfully!', 'success');
-    }, 2000);
-  };
-  
-  if (downloadPdfBtn) downloadPdfBtn.addEventListener('click', handlePdfDownload);
-  if (downloadPdfIcon) downloadPdfIcon.addEventListener('click', handlePdfDownload);
-  
-  // Initialize tooltips if Bootstrap is available
-  if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
-    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-    [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
-  }
-  
-  // Add estimated reading time
-  addReadingTime();
-}
-
-/**
- * Show toast notification
- */
-function showToast(message, type = 'success') {
-  // Create toast container if not exists
-  let toastContainer = document.querySelector('.toast-container');
-  if (!toastContainer) {
-    toastContainer = document.createElement('div');
-    toastContainer.className = 'toast-container';
-    document.body.appendChild(toastContainer);
-  }
-  
-  // Create toast
-  const toast = document.createElement('div');
-  toast.className = `toast toast-${type}`;
-  toast.innerHTML = `
-    <div class="toast-icon">
-      <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
-    </div>
-    <div class="toast-content">${message}</div>
-    <button class="toast-close">×</button>
-  `;
-  
-  // Close button
-  toast.querySelector('.toast-close').addEventListener('click', () => {
-    toast.classList.remove('show');
-    setTimeout(() => toast.remove(), 300);
-  });
-  
-  // Add to container
-  toastContainer.appendChild(toast);
-  
-  // Show toast
-  setTimeout(() => toast.classList.add('show'), 10);
-  
-  // Auto hide after 3 seconds
-  setTimeout(() => {
-    toast.classList.remove('show');
-    setTimeout(() => toast.remove(), 300);
-  }, 3000);
-}
-
-/**
- * Add estimated reading time to article
- */
-function addReadingTime() {
-  const article = document.querySelector('.article-content');
-  if (!article) return;
-  
-  // Count words (rough estimate)
-  const text = article.textContent || article.innerText;
-  const wordCount = text.trim().split(/\s+/).length;
-  
-  // Calculate reading time (average reading speed: 200 words per minute)
-  const readingTimeMinutes = Math.ceil(wordCount / 200);
-  
-  // Create reading time element
-  const readingTime = document.createElement('div');
-  readingTime.className = 'article-reading-time';
-  readingTime.innerHTML = `<i class="far fa-clock me-1"></i> ${readingTimeMinutes} min read`;
-  
-  // Find where to insert it (after title)
-  const title = article.querySelector('h1');
-  if (title && title.nextSibling) {
-    article.insertBefore(readingTime, title.nextSibling);
-  } else {
-    article.insertBefore(readingTime, article.firstChild);
-  }
-}
-</script>
-
-<!-- Additional CSS for new features -->
-<style>
-/* Toast notifications */
-.toast-container {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 9999;
-}
-
-.toast {
-  display: flex;
-  align-items: center;
-  background: white;
-  border-left: 4px solid #3498db;
-  border-radius: 4px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  margin-top: 10px;
-  max-width: 350px;
-  opacity: 0;
-  overflow: hidden;
-  padding: 12px 15px;
-  transform: translateY(10px);
-  transition: all 0.3s ease;
-}
-
-.toast.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.toast-success { border-left-color: #2ecc71; }
-.toast-error { border-left-color: #e74c3c; }
-.toast-info { border-left-color: #3498db; }
-
-.toast-icon {
-  margin-right: 10px;
-  font-size: 1.25rem;
-}
-
-.toast-success .toast-icon { color: #2ecc71; }
-.toast-error .toast-icon { color: #e74c3c; }
-.toast-info .toast-icon { color: #3498db; }
-
-.toast-content {
-  flex: 1;
-}
-
-.toast-close {
-  background: transparent;
-  border: none;
-  color: #999;
-  cursor: pointer;
-  font-size: 18px;
-  padding: 0 5px;
-}
-
-/* Heading highlight animation */
-.highlight-heading {
-  animation: highlight-pulse 2s ease-out;
-}
-
-@keyframes highlight-pulse {
-  0%, 100% { background-color: transparent; }
-  20% { background-color: rgba(255, 193, 7, 0.2); }
-}
-
-/* TOC styling */
-.article-toc {
-  background-color: #f8f9fa;
-  border-radius: 10px;
-  padding: 1.5rem;
-  position: sticky;
-  top: 2rem;
-  max-height: calc(100vh - 4rem);
-  overflow-y: auto;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  border: 1px solid #eee;
-}
-
-.article-toc-title {
-  font-size: 1.25rem;
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid #e9ecef;
-}
-
-.article-toc-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.toc-item {
-  margin-bottom: 0.5rem;
-  font-size: 0.95rem;
-}
-
-.toc-item a {
-  color: #495057;
-  text-decoration: none;
-  display: block;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  transition: all 0.2s ease;
-}
-
-.toc-item a:hover {
-  background-color: #e9ecef;
-  color: #212529;
-}
-
-.toc-h1 { font-weight: bold; }
-.toc-h2 { padding-left: 0.75rem; }
-.toc-h3 { padding-left: 1.5rem; }
-.toc-h4 { padding-left: 2.25rem; }
-.toc-h5 { padding-left: 3rem; }
-.toc-h6 { padding-left: 3.75rem; }
-
-/* Reading time indicator */
-.article-reading-time {
-  color: #6c757d;
-  font-size: 0.9rem;
-  margin-bottom: 1.5rem;
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
-  background-color: #f8f9fa;
-  border-radius: 4px;
-}
-
-/* Dark mode adjustments */
-body.dark-mode .article-toc {
-  background-color: #2a2a2a;
-  border-color: #333;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-}
-
-body.dark-mode .article-toc-title {
-  border-bottom-color: #444;
-}
-
-body.dark-mode .toc-item a {
-  color: #e9ecef;
-}
-
-body.dark-mode .toc-item a:hover {
-  background-color: #333;
-  color: #fff;
-}
-
-body.dark-mode .article-reading-time {
-  background-color: #2a2a2a;
-  color: #adb5bd;
-}
-
-body.dark-mode .toast {
-  background-color: #2a2a2a;
-  color: #f8f9fa;
-}
-
-/* Responsive adjustments */
-@media (max-width: 991.98px) {
-  .article-toc {
-    position: relative;
-    top: 0;
-    max-height: none;
-    margin-bottom: 2rem;
-  }
-}
-</style>
-<script>
-// Audio Player Implementation
-document.addEventListener('DOMContentLoaded', function() {
-    // Get elements
-    const audioElement = document.getElementById('audio-player');
-    if (!audioElement) return;
-
-    const playButton = document.querySelector('.audio-player-btn-play');
-    const playIcon = playButton.querySelector('i');
-    const progressBar = document.querySelector('.audio-player-progress');
-    const progressFill = document.querySelector('.audio-player-progress-fill');
-    const progressHandle = document.querySelector('.audio-player-progress-handle');
-    const timeDisplay = document.querySelector('.audio-player-time');
-    const currentTime = timeDisplay.querySelectorAll('span')[0];
-    const durationTime = timeDisplay.querySelectorAll('span')[1];
-    const speedButton = document.querySelector('.audio-player-btn[title="Speed"]');
-    const speedText = speedButton.innerHTML.trim(); // Store original text
-    const volumeButton = document.querySelector('.audio-player-btn[title="Volume"]');
-    const volumeIcon = volumeButton.querySelector('i');
-
-    // Variables
-    let isDragging = false;
-    let playbackRates = [0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0];
-    let currentRateIndex = 2; // Default to 1.0x
-    let isMuted = false;
-    let previousVolume = 1;
-
-    // ===== FUNCTIONS =====
-
-    // Format time in seconds to MM:SS
-    function formatTime(seconds) {
-        if (isNaN(seconds) || !isFinite(seconds)) return "00:00";
-        const mins = Math.floor(seconds / 60);
-        const secs = Math.floor(seconds % 60);
-        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-    }
-
-    // Update progress bar and time
-    function updateProgress() {
-        if (!isDragging && audioElement.duration) {
-            const percent = (audioElement.currentTime / audioElement.duration) * 100;
-            progressFill.style.width = `${percent}%`;
-            progressHandle.style.left = `${percent}%`;
-            currentTime.textContent = formatTime(audioElement.currentTime);
+    headings.forEach((heading, index) => {
+        // Create unique ID if not exists
+        if (!heading.id) {
+            heading.id = 'heading-' + index;
         }
-    }
+        
+        // Create TOC item
+        const tocItem = document.createElement('li');
+        tocItem.className = `toc-item toc-${heading.tagName.toLowerCase()}`;
+        
+        const tocLink = document.createElement('a');
+        tocLink.href = '#' + heading.id;
+        tocLink.textContent = heading.textContent;
+        tocLink.className = 'toc-link';
+        
+        tocItem.appendChild(tocLink);
+        tocList.appendChild(tocItem);
+        
+        // Add click handler
+        tocLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Remove previous highlights
+            document.querySelectorAll('.heading-highlighted').forEach(el => {
+                el.classList.remove('heading-highlighted');
+            });
+            
+            // Scroll to heading with offset
+            const targetPosition = heading.offsetTop - 120;
+            window.scrollTo({
+                top: targetPosition,
+                behavior: 'smooth'
+            });
+            
+            // Highlight the heading
+            heading.classList.add('heading-highlighted');
+            
+            // Update URL without jumping
+            history.pushState(null, null, '#' + heading.id);
+            
+            // Update active TOC link
+            updateActiveTocLink(tocLink);
+        });
+    });
+}
 
-    // Toggle play/pause
-    function togglePlay() {
-        if (audioElement.paused) {
-            const playPromise = audioElement.play();
-            if (playPromise !== undefined) {
-                playPromise.then(() => {
-                    playIcon.classList.remove('fa-play');
-                    playIcon.classList.add('fa-pause');
-                }).catch(error => {
-                    console.error('Error playing audio:', error);
-                });
+/**
+ * Initialize Reading Progress Bar
+ */
+function initializeReadingProgress() {
+    const progressBar = document.getElementById('readingProgress');
+    if (!progressBar) return;
+    
+    window.addEventListener('scroll', function() {
+        const article = document.querySelector('.article-body');
+        if (!article) return;
+        
+        const articleStart = article.offsetTop;
+        const articleHeight = article.offsetHeight;
+        const windowHeight = window.innerHeight;
+        const scrollTop = window.pageYOffset;
+        
+        const articleEnd = articleStart + articleHeight - windowHeight;
+        const progress = Math.max(0, Math.min(100, ((scrollTop - articleStart + 100) / (articleEnd - articleStart + 100)) * 100));
+        
+        progressBar.style.width = progress + '%';
+    });
+}
+
+/**
+ * Initialize Scroll Spy for TOC
+ */
+function initializeScrollSpy() {
+    const headings = document.querySelectorAll('.article-body h1, .article-body h2, .article-body h3, .article-body h4, .article-body h5, .article-body h6');
+    const tocLinks = document.querySelectorAll('.toc-link');
+    
+    if (headings.length === 0 || tocLinks.length === 0) return;
+    
+    window.addEventListener('scroll', function() {
+        let currentHeading = null;
+        
+        headings.forEach(heading => {
+            const rect = heading.getBoundingClientRect();
+            if (rect.top <= 150 && rect.bottom >= 150) {
+                currentHeading = heading;
             }
-        } else {
-            audioElement.pause();
-            playIcon.classList.remove('fa-pause');
-            playIcon.classList.add('fa-play');
+        });
+        
+        if (currentHeading) {
+            const activeLink = document.querySelector(`.toc-link[href="#${currentHeading.id}"]`);
+            updateActiveTocLink(activeLink);
         }
-    }
+    });
+}
 
-    // Update when audio ends
-    function onEnded() {
-        playIcon.classList.remove('fa-pause');
-        playIcon.classList.add('fa-play');
-        progressFill.style.width = '0%';
-        progressHandle.style.left = '0%';
-        audioElement.currentTime = 0;
-    }
-
-    // Seek in the audio when clicking progress bar
-    function seekAudio(e) {
-        const rect = progressBar.getBoundingClientRect();
-        const pos = (e.clientX - rect.left) / rect.width;
-        if (audioElement.duration) {
-            audioElement.currentTime = pos * audioElement.duration;
-        }
-    }
-
-    // Start dragging progress handle
-    function startDrag(e) {
-        isDragging = true;
-        document.body.classList.add('no-select'); // Prevent text selection
-    }
-
-    // Drag progress handle
-    function drag(e) {
-        if (!isDragging) return;
-        
-        // Get mouse position
-        let clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
-        
-        const rect = progressBar.getBoundingClientRect();
-        let pos = (clientX - rect.left) / rect.width;
-        pos = Math.max(0, Math.min(1, pos)); // Clamp between 0 and 1
-        
-        // Update UI
-        progressFill.style.width = `${pos * 100}%`;
-        progressHandle.style.left = `${pos * 100}%`;
-        
-        // Update time display
-        if (audioElement.duration) {
-            currentTime.textContent = formatTime(pos * audioElement.duration);
-        }
-    }
-
-    // End dragging and set position
-    function endDrag(e) {
-        if (!isDragging) return;
-        
-        // Get final position
-        let clientX = e.type.includes('touch') ? e.changedTouches[0].clientX : e.clientX;
-        
-        const rect = progressBar.getBoundingClientRect();
-        let pos = (clientX - rect.left) / rect.width;
-        pos = Math.max(0, Math.min(1, pos)); // Clamp between 0 and 1
-        
-        // Set audio position
-        if (audioElement.duration) {
-            audioElement.currentTime = pos * audioElement.duration;
-        }
-        
-        // End drag state
-        isDragging = false;
-        document.body.classList.remove('no-select');
-    }
-
-    // Change playback speed
-    function changeSpeed() {
-        currentRateIndex = (currentRateIndex + 1) % playbackRates.length;
-        const rate = playbackRates[currentRateIndex];
-        audioElement.playbackRate = rate;
-        speedButton.innerHTML = `<i class="fas fa-tachometer-alt"></i> ${rate.toFixed(1)}x`;
-    }
-
-    // Toggle mute
-    function toggleMute() {
-        if (audioElement.volume > 0 && !isMuted) {
-            previousVolume = audioElement.volume;
-            audioElement.volume = 0;
-            isMuted = true;
-            volumeIcon.classList.remove('fa-volume-up');
-            volumeIcon.classList.add('fa-volume-mute');
-        } else {
-            audioElement.volume = previousVolume;
-            isMuted = false;
-            volumeIcon.classList.remove('fa-volume-mute');
-            volumeIcon.classList.add('fa-volume-up');
-        }
-    }
-
-    // Update duration display when metadata is loaded
-    function updateDuration() {
-        if (audioElement.duration && !isNaN(audioElement.duration)) {
-            durationTime.textContent = formatTime(audioElement.duration);
-        }
-    }
-
-    // ===== EVENT LISTENERS =====
-
-    // Audio events
-    audioElement.addEventListener('timeupdate', updateProgress);
-    audioElement.addEventListener('ended', onEnded);
-    audioElement.addEventListener('loadedmetadata', updateDuration);
-    audioElement.addEventListener('durationchange', updateDuration);
-
-    // UI controls
-    playButton.addEventListener('click', togglePlay);
-    progressBar.addEventListener('click', seekAudio);
-    speedButton.addEventListener('click', changeSpeed);
-    volumeButton.addEventListener('click', toggleMute);
-
-    // Progress handle drag events
-    progressHandle.addEventListener('mousedown', startDrag);
-    document.addEventListener('mousemove', drag);
-    document.addEventListener('mouseup', endDrag);
-
-    // Touch events for mobile
-    progressHandle.addEventListener('touchstart', startDrag);
-    document.addEventListener('touchmove', drag);
-    document.addEventListener('touchend', endDrag);
-
-    // Replace the default onclick handler with our toggle function
-    playButton.removeAttribute('onclick');
+/**
+ * Update Active TOC Link
+ */
+function updateActiveTocLink(activeLink) {
+    // Remove active class from all links
+    document.querySelectorAll('.toc-link').forEach(link => {
+        link.classList.remove('active');
+    });
     
-    // Initialize duration display if available
-    updateDuration();
+    // Add active class to current link
+    if (activeLink) {
+        activeLink.classList.add('active');
+    }
+}
+
+/**
+ * Initialize Share Functionality
+ */
+function initializeShareFunctionality() {
+    // Copy link functionality
+    const copyLinkBtn = document.getElementById('copyArticleLink');
+    if (copyLinkBtn) {
+        copyLinkBtn.addEventListener('click', function() {
+            const url = this.getAttribute('data-clipboard-text');
+            
+            navigator.clipboard.writeText(url).then(function() {
+                // Show success feedback
+                const originalText = copyLinkBtn.innerHTML;
+                copyLinkBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                copyLinkBtn.classList.add('btn-success');
+                
+                setTimeout(function() {
+                    copyLinkBtn.innerHTML = originalText;
+                    copyLinkBtn.classList.remove('btn-success');
+                }, 2000);
+            }).catch(function() {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = url;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                alert('Link copied to clipboard!');
+            });
+        });
+    }
+}
+
+/**
+ * Toggle Share Menu
+ */
+function toggleShareMenu() {
+    const shareMenu = document.getElementById('shareMenu');
+    if (shareMenu) {
+        shareMenu.style.display = shareMenu.style.display === 'flex' ? 'none' : 'flex';
+    }
+}
+
+/**
+ * Copy Article Link
+ */
+function copyArticleLink(event) {
+    event.preventDefault();
+    const url = window.location.href;
+    
+    navigator.clipboard.writeText(url).then(function() {
+        alert('Link copied to clipboard!');
+    });
+}
+
+/**
+ * Scroll to Comments
+ */
+function scrollToComments() {
+    const commentsSection = document.getElementById('comments');
+    if (commentsSection) {
+        commentsSection.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+// Close share menu when clicking outside
+document.addEventListener('click', function(event) {
+    const shareMenu = document.getElementById('shareMenu');
+    const shareButton = event.target.closest('[onclick="toggleShareMenu()"]');
+    
+    if (shareMenu && !shareButton && !shareMenu.contains(event.target)) {
+        shareMenu.style.display = 'none';
+    }
 });
 </script>
+
 @endsection

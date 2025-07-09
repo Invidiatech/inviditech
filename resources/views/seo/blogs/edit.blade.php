@@ -1,5 +1,7 @@
 @extends('layouts.seo')
 @section('seo-content')
+      <!-- quill css -->
+    <link rel="stylesheet" href="{{ asset('assets/css/quill.snow.css') }}">
      <div class="page-content">
         <!-- Breadcrumb -->
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
@@ -97,8 +99,10 @@
                             <!-- Content Editor -->
                             <div class="mb-3">
                                 <label for="content" class="form-label">Content <span class="text-danger">*</span></label>
-                                <textarea class="form-control @error('content') is-invalid @enderror"
-                                          id="content" name="content" rows="15">{{ old('content', $blog->content) }}</textarea>
+                                <!-- Create the editor container -->
+                                <div id="editor-container" style="height: 400px;">{{ old('content', $blog->content) }}</div>
+                                <!-- Hidden input to store the HTML content -->
+                                <input type="hidden" id="content" name="content" value="{{ old('content', $blog->content) }}">
                                 <div class="form-text">
                                     Word count: <span id="word-count">0</span> |
                                     Reading time: <span id="reading-time">{{ $blog->reading_time ?? 0 }}</span> minutes
@@ -192,17 +196,6 @@
                                 @enderror
                             </div>
 
-                            <!-- Featured Post -->
-                            <div class="mb-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="is_featured" name="is_featured" value="1" {{ old('is_featured', $blog->is_featured) ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="is_featured">
-                                        Featured Post
-                                    </label>
-                                </div>
-                                <div class="form-text">Mark as featured post for homepage</div>
-                            </div>
-
                             <!-- Canonical URL -->
                             <div class="mb-3">
                                 <label for="canonical_url" class="form-label">Canonical URL</label>
@@ -285,6 +278,17 @@
                                 @error('published_at')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
+                            </div>
+
+                            <!-- Featured Post -->
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="is_featured" name="is_featured" value="1" {{ old('is_featured', $blog->is_featured) ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="is_featured">
+                                        Featured Post
+                                    </label>
+                                </div>
+                                <div class="form-text">Mark as featured post for homepage</div>
                             </div>
 
                             <!-- Last Updated Info -->
@@ -537,42 +541,49 @@
 </div>
 
 <!-- Scripts -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+<!-- Include Quill -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    // Initialize CKEditor
-    ClassicEditor
-        .create(document.querySelector('#content'), {
+    // Initialize Quill on the container
+    const quill = new Quill('#editor-container', {
+        theme: 'snow',
+        modules: {
             toolbar: [
-                'heading', '|', 'bold', 'italic', 'underline', '|',
-                'bulletedList', 'numberedList', '|',
-                'link', 'blockQuote', '|',
-                'undo', 'redo'
-            ],
-            removePlugins: ['CKFinderUploadAdapter', 'CKFinder']
-        })
-        .then(editor => {
-            const wordCountElement = document.getElementById('word-count');
-            const readingTimeElement = document.getElementById('reading-time');
+                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                [{ 'font': [] }],
+                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                [{ 'align': [] }],
+                [{ 'script': 'sub' }, { 'script': 'super' }],
+                [{ 'indent': '-1' }, { 'indent': '+1' }],
+                [{ 'direction': 'rtl' }],
+                [{ 'color': [] }, { 'background': [] }],
+                ['link', 'image', 'video', 'formula']
+            ]
+        },
+        placeholder: 'Write your content here...',
+        bounds: '#editor-container'
+    });
 
-            const updateStats = () => {
-                const html = editor.getData();
-                const text = html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
-                const wordCount = text.length > 0 ? text.split(' ').length : 0;
-                const readingTime = Math.ceil(wordCount / 200);
+    // Set initial content if there's any
+    quill.root.innerHTML = document.getElementById('content').value;
 
-                wordCountElement.textContent = wordCount;
-                readingTimeElement.textContent = readingTime;
-            };
+    // Update hidden input on text change
+    quill.on('text-change', function () {
+        document.getElementById('content').value = quill.root.innerHTML;
+        
+        // Update word count and reading time
+        const text = quill.getText().trim();
+        const wordCount = text ? text.split(/\s+/).length : 0;
+        document.getElementById('word-count').textContent = wordCount;
+        document.getElementById('reading-time').textContent = Math.ceil(wordCount / 200); // 200 words per minute
+    });
 
-            editor.model.document.on('change:data', updateStats);
-            updateStats();
-        })
-        .catch(error => {
-            console.error('Error initializing CKEditor:', error);
-        });
+    // Trigger initial word count calculation
+    quill.emitter.emit('text-change');
 
     // Tags Management
     let selectedTags = [];
@@ -796,7 +807,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // SEO Analysis
     function performSeoAnalysis() {
         const title = document.getElementById('title')?.value || '';
-        const content = document.querySelector('#content')?.value || '';
+        const content = quill.getText() || '';
         const metaDesc = document.getElementById('meta_description')?.value || '';
         const focusKeyword = document.getElementById('focus_keyword')?.value || '';
 
@@ -824,7 +835,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // Content length check (20 points)
-        const text = content.replace(/<[^>]*>/g, '').trim();
+        const text = content.trim();
         const wordCount = text.split(/\s+/).filter(word => word.length > 0).length;
         if (wordCount >= 300) {
             score += 20;

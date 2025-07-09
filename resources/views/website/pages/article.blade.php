@@ -62,10 +62,14 @@
                                     <div class="col-md-6">
                                         <div class="p-4">
                                             <div class="mb-2">
-                                                <span class="article-tag tag-{{ strtolower($featuredArticle->category->slug) }}">{{ $featuredArticle->category->name }}</span>
-                                                @foreach($featuredArticle->tags as $tag)
-                                                    <span class="article-tag tag-{{ strtolower($tag->slug) }}">{{ $tag->name }}</span>
-                                                @endforeach
+                                                @if($featuredArticle->category && is_object($featuredArticle->category))
+                                                    <span class="article-tag tag-{{ strtolower($featuredArticle->category->slug ?? 'default') }}">{{ $featuredArticle->category->name }}</span>
+                                                @endif
+                                                @if($featuredArticle->tags)
+                                                    @foreach($featuredArticle->tags as $tag)
+                                                        <span class="article-tag tag-{{ strtolower($tag->slug ?? 'default') }}">{{ $tag->name }}</span>
+                                                    @endforeach
+                                                @endif
                                             </div>
                                             <h3 class="mb-3">{{ $featuredArticle->title }}</h3>
                                             <p class="text-muted mb-3">{{ $featuredArticle->excerpt }}</p>
@@ -94,22 +98,26 @@
                                     @endif
                                     <div class="p-4">
                                         <div class="mb-2">
-                                            <a href="{{ route('articles', ['category' => $article->category->slug]) }}" 
-                                               class="article-tag tag-{{ strtolower($article->category->slug) }}">
-                                                {{ $article->category->name }}
-                                            </a>
-                                            @foreach($article->tags->take(2) as $tag)
-                                                <a href="{{ route('articles', ['tag' => $tag->slug]) }}" 
-                                                   class="article-tag tag-{{ strtolower($tag->slug) }}">
-                                                    {{ $tag->name }}
+                                            @if($article->category && is_object($article->category))
+                                                <a href="{{ route('articles', ['category' => $article->category->slug]) }}" 
+                                                   class="article-tag tag-{{ strtolower($article->category->slug ?? 'default') }}">
+                                                    {{ $article->category->name }}
                                                 </a>
-                                            @endforeach
+                                            @endif
+                                            @if($article->tags)
+                                                @foreach($article->tags->take(2) as $tag)
+                                                    <a href="{{ route('articles', ['tag' => $tag->slug ?? '#']) }}" 
+                                                       class="article-tag tag-{{ strtolower($tag->slug ?? 'default') }}">
+                                                        {{ $tag->name }}
+                                                    </a>
+                                                @endforeach
+                                            @endif
                                         </div>
                                         <h5 class="mb-3">{{ $article->title }}</h5>
                                         <p class="text-muted mb-3">{{ Str::limit($article->excerpt, 100) }}</p>
                                         <div class="d-flex justify-content-between align-items-center mb-3">
                                             <small class="text-muted"><i class="far fa-clock me-1"></i> {{ $article->created_at->format('F d, Y') }}</small>
-                                            <small class="text-muted"><i class="far fa-eye me-1"></i> {{ number_format($article->views_count) }}</small>
+                                            <small class="text-muted"><i class="far fa-eye me-1"></i> {{ number_format($article->views_count ?? 0) }}</small>
                                         </div>
                                         <a href="{{ route('article.show', $article->slug) }}" class="text-accent-custom fw-bold">Read more <i class="fas fa-arrow-right ms-1"></i></a>
                                     </div>
@@ -123,6 +131,13 @@
                             </div>
                         @endforelse
                     </div>
+
+                    <!-- Pagination -->
+                    @if($articles->hasPages())
+                        <div class="d-flex justify-content-center mt-5">
+                            {{ $articles->withQueryString()->links() }}
+                        </div>
+                    @endif
                    
                 </div>
                 
@@ -166,7 +181,7 @@
                                                class="text-decoration-none text-primary-custom">
                                                 {{ $category->name }}
                                             </a>
-                                            <span class="badge bg-accent-custom rounded-pill">{{ $category->articles_count }}</span>
+                                            <span class="badge bg-accent-custom rounded-pill">{{ $category->seo_blogs_count ?? $category->articles_count ?? 0 }}</span>
                                         </li>
                                     @endforeach
                                 </ul>
@@ -213,7 +228,7 @@
                                 <div class="d-flex flex-wrap">
                                     @foreach($popularTags as $tag)
                                         <a href="{{ route('articles', ['tag' => $tag->slug]) }}" 
-                                           class="article-tag tag-{{ strtolower($tag->slug) }} m-1">
+                                           class="article-tag tag-{{ strtolower($tag->slug ?? 'default') }} m-1">
                                             {{ $tag->name }}
                                         </a>
                                     @endforeach
