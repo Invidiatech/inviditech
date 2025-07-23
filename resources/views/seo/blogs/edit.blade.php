@@ -920,5 +920,108 @@ document.addEventListener('DOMContentLoaded', function () {
     performSeoAnalysis();
 });
 </script>
+<script>
+// Add this JavaScript to your blog create/edit page
+document.addEventListener("DOMContentLoaded", function () {
+    // Auto Generate Schema functionality
+    document.getElementById('generate-schema').addEventListener('click', function() {
+        const title = document.getElementById('title').value;
+        const content = document.getElementById('content').value;
+        const excerpt = document.getElementById('excerpt').value;
+        const metaDescription = document.getElementById('meta_description').value;
+        const featuredImageInput = document.getElementById('featured_image');
+        const categorySelect = document.getElementById('category');
+        
+        if (!title || !content) {
+            alert('Please fill in title and content first');
+            return;
+        }
 
+        // Get current URL for the blog post
+        const baseUrl = window.location.origin;
+        const slug = document.getElementById('slug').value || title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+        const articleUrl = `${baseUrl}/blog/${slug}`;
+        
+        // Get category name
+        const categoryName = categorySelect.options[categorySelect.selectedIndex]?.text || 'Technology';
+        
+        // Calculate reading time
+        const wordCount = content.replace(/<[^>]*>/g, '').split(/\s+/).length;
+        const readingTime = Math.ceil(wordCount / 200);
+        
+        // Get featured image URL if uploaded
+        let imageUrl = `${baseUrl}/assets/website/images/default-blog.jpg`; // Default image
+        if (featuredImageInput.files[0]) {
+            // In a real scenario, you'd upload the image first and get the URL
+            imageUrl = `${baseUrl}/storage/seo/blogs/featured/${featuredImageInput.files[0].name}`;
+        }
+        
+        // Generate JSON-LD Schema
+        const schema = {
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            "headline": title,
+            "description": metaDescription || excerpt || content.replace(/<[^>]*>/g, '').substring(0, 160),
+            "image": [imageUrl],
+            "author": {
+                "@type": "Person",
+                "name": "InvidiaTech",
+                "url": baseUrl
+            },
+            "publisher": {
+                "@type": "Organization",
+                "name": "InvidiaTech",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": `${baseUrl}/assets/website/images/logo.png`
+                }
+            },
+            "datePublished": new Date().toISOString(),
+            "dateModified": new Date().toISOString(),
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": articleUrl
+            },
+            "articleSection": categoryName,
+            "wordCount": wordCount,
+            "timeRequired": `PT${readingTime}M`,
+            "inLanguage": "en-US",
+            "url": articleUrl,
+            "keywords": document.getElementById('focus_keyword').value || title,
+            "articleBody": content.replace(/<[^>]*>/g, '').substring(0, 500) + "..."
+        };
+        
+        // Pretty format the JSON and insert into textarea
+        document.getElementById('schema_markup').value = JSON.stringify(schema, null, 2);
+        
+        // Show success message
+        const button = this;
+        const originalText = button.innerHTML;
+        button.innerHTML = '<i class="bx bx-check me-1"></i>Schema Generated!';
+        button.classList.remove('btn-outline-secondary');
+        button.classList.add('btn-success');
+        
+        setTimeout(() => {
+            button.innerHTML = originalText;
+            button.classList.remove('btn-success');
+            button.classList.add('btn-outline-secondary');
+        }, 2000);
+    });
+    
+    // Auto-update schema when key fields change
+    const fieldsToWatch = ['title', 'meta_description', 'excerpt', 'focus_keyword'];
+    fieldsToWatch.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.addEventListener('blur', function() {
+                const schemaField = document.getElementById('schema_markup');
+                if (schemaField.value) {
+                    // Auto-regenerate if schema already exists
+                    document.getElementById('generate-schema').click();
+                }
+            });
+        }
+    });
+});
+</script>
 @endsection

@@ -23,7 +23,7 @@ class SeoBlog extends Model
         'og_image', 'twitter_title', 'twitter_description', 'twitter_image', 'schema_markup',
         'featured_image', 'featured_image_alt', 'status', 'publish_date',
         'category', 'created_by', 'is_indexed', 'is_featured', 'seo_score',
-        'seo_analysis', 'reading_time', 'readability_score', 'views_count'
+        'seo_analysis', 'reading_time', 'readability_score', 'views_count', 'devto_id','devto_url','devto_published_at'
     ];
 
     protected $casts = [

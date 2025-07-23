@@ -11,7 +11,34 @@
     <link href="{{ asset('assets/css/icons.css') }}" rel="stylesheet">
     <!-- Auth CSS -->
     <link href="{{ asset('assets/css/auth/login.css') }}" rel="stylesheet">
-    <title>Seo Login</title>
+    <style>
+        :root {
+            --primary-color: #044168;
+        }
+        .left-panel {
+            background-color: var(--primary-color);
+        }
+        .login-btn {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        .login-btn:hover {
+            background-color: #033454;
+            border-color: #033454;
+        }
+        .forgot-link {
+            color: var(--primary-color);
+        }
+        .forgot-link:hover {
+            color: #033454;
+        }
+        .alert-info-custom {
+            background-color: rgba(4, 65, 104, 0.1);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+    </style>
+    <title>InvidiaTech Login</title>
 </head>
 
 <body>
@@ -19,16 +46,16 @@
         <!-- Left panel - Branding -->
         <div class="left-panel">
             <div class="left-content">
-            <img src="{{ asset('assets/images/avatars/logo.png') }}" alt="Logo" class="brand-logo">
-                <h1>Welcome Seo!</h1>
-                <p>Log in to access your seo dashboard and manage your patients. We're committed to providing you with the best tools for patient care.</p>
+                <img src="{{ asset('assets/logo/lnvidiatech.png') }}" alt="InvidiaTech Logo" class="brand-logo">
+                <h1>Welcome to InvidiaTech!</h1>
+                <p>Log in to access your dashboard and manage your patients. We're committed to providing you with the best tools for patient care.</p>
             </div>
         </div>
 
         <!-- Right panel - Login form -->
         <div class="right-panel">
             <div class="login-header">
-                <h2>Seo Login</h2>
+                <h2>InvidiaTech Login</h2>
                 <p>Please enter your credentials to continue</p>
             </div>
 

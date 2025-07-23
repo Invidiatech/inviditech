@@ -16,29 +16,29 @@ class PageController extends Controller
     /**
      * Display the home page.
      */
-  public function home(): View
-{
-    // Get published blogs with their relationships
-    $blogs = SeoBlog::with(['category', 'tags'])
-        ->where('status', 'published')
-        ->where(function ($query) {
-            $query->whereNull('publish_date')
-                  ->orWhere('publish_date', '<=', now());
-        })
-        ->latest('publish_date')
-        ->paginate(15);
-    
-    // Get categories that have published articles
-    $categories = Category::whereHas('seoBlogs', function ($query) {
-        $query->where('status', 'published')
-              ->where(function ($q) {
-                  $q->whereNull('publish_date')
-                    ->orWhere('publish_date', '<=', now());
-              });
-    })->get();
-    
-    return view('website.pages.home', compact('blogs', 'categories'));
-}
+    public function home(): View
+    {
+        // Get published blogs with their relationships
+        $blogs = SeoBlog::with(['category', 'tags'])
+            ->where('status', 'published')
+            ->where(function ($query) {
+                $query->whereNull('publish_date')
+                      ->orWhere('publish_date', '<=', now());
+            })
+            ->latest('publish_date')
+            ->paginate(15);
+        
+        // Get categories that have published articles
+        $categories = Category::whereHas('seoBlogs', function ($query) {
+            $query->where('status', 'published')
+                  ->where(function ($q) {
+                      $q->whereNull('publish_date')
+                        ->orWhere('publish_date', '<=', now());
+                  });
+        })->get();
+        
+        return view('website.pages.home', compact('blogs', 'categories'));
+    }
 
     public function about()
     {
@@ -143,6 +143,7 @@ class PageController extends Controller
                     ->with(['user', 'replies.user']);
             }])
             ->firstOrFail();
+            
          // Increment view count
         $article->increment('views_count');
  
@@ -180,6 +181,7 @@ class PageController extends Controller
                 ->exists();
         }
         
+        // Pass the article to the view for SEO meta tags
         return view('website.pages.article-detail', compact(
             'article', 
             'relatedArticles',
@@ -282,7 +284,17 @@ class PageController extends Controller
      */
     public function blog(): View
     {
-        return view('website.pages.blog');
+        // Get published blogs for the blog page
+        $blogs = SeoBlog::with(['category', 'tags'])
+            ->where('status', 'published')
+            ->where(function ($query) {
+                $query->whereNull('publish_date')
+                      ->orWhere('publish_date', '<=', now());
+            })
+            ->latest('publish_date')
+            ->paginate(12);
+            
+        return view('website.pages.blog', compact('blogs'));
     }
 
     /**
@@ -308,7 +320,8 @@ class PageController extends Controller
                     ->take(3)
                     ->get();
         
-        return view('website.pages.article', [
+        // Pass the article to the view for SEO meta tags
+        return view('website.pages.article-detail', [
             'article' => $article,
             'relatedArticles' => $relatedArticles,
         ]);

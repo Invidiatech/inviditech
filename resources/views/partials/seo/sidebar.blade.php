@@ -64,21 +64,17 @@
         </li>
         @endcan
         <!-- Collections Management -->
-        @can('View Collection', auth('seo')->user())
-        <li>
+         <li>
     <a href="#" class="has-arrow">
         <div class="parent-icon"><i class="bx bx-category"></i></div>
         <div class="menu-title">Categories</div>
     </a>
     <ul>
         <li><a href="{{ route('seo.categories.index') }}"><i class="bx bx-right-arrow-alt"></i>All Categories</a></li>
-        @can('Create Collection', auth('seo')->user())
-        <li><a href="{{ route('seo.categories.create') }}"><i class="bx bx-right-arrow-alt"></i>Add Category</a></li>
-        @endcan
-    </ul>
+         <li><a href="{{ route('seo.categories.create') }}"><i class="bx bx-right-arrow-alt"></i>Add Category</a></li>
+     </ul>
 </li>
-        @endcan
-
+ 
        <!-- Schema Markup -->
 @can('View Schema Markup', auth('seo')->user())
 <li class="{{ request()->routeIs('seo.schema.*') ? 'mm-active' : '' }}">
