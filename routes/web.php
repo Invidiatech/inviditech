@@ -24,6 +24,11 @@ Route::get('/run-migrate', function (Request $request) {
     return 'Migration executed successfully.';
 });
 Route::get('/blog-post-image-generator', [ImageGeneratorController::class, 'index'])->name('image.index');
+use App\Http\Controllers\CatalogController;
+Route::get('/coalationtech-task', [CatalogController::class,'index']);
+Route::get('/fetch', [CatalogController::class,'fetch']);
+Route::post('/store', [CatalogController::class,'store']);
+Route::post('/update', [CatalogController::class,'update']);
 require __DIR__.'/auth.php';
 require __DIR__.'/website.php';
 require __DIR__.'/seo.php';
