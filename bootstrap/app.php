@@ -16,6 +16,12 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'seo.guest' => \App\Http\Middleware\RedirectIfSeoAuthenticated::class,
+            'track.analytics' => \App\Http\Middleware\TrackAnalytics::class,
+        ]);
+        
+        // Add analytics tracking to web routes
+        $middleware->web(append: [
+            \App\Http\Middleware\TrackAnalytics::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

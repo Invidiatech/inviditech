@@ -49,7 +49,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex flex-column align-items-center text-center">
-                                <img src="{{ asset('assets/images/avatars/logo.png') }}" alt="seo" class="rounded-circle p-1 bg-primary" width="110">
+                                <img src="{{ asset('assets/logo/lnvidiatech.png') }}" alt="seo" class="rounded-circle p-1 bg-primary" width="110">
 
                             </div>
                             <hr class="my-4" />

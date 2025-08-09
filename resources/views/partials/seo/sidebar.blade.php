@@ -1,7 +1,7 @@
 <div class="sidebar-wrapper" data-simplebar="true">
     <div class="sidebar-header">
         <div>
-            <img src="{{ asset('assets/images/avatars/logo.png') }}" class="logo-icon" alt="logo icon">
+            <img src="{{ asset('assets/logo/lnvidiatech.png') }}" class="logo-icon" alt="logo icon">
         </div>
         @auth('seo')
         <div>

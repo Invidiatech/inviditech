@@ -27,6 +27,7 @@ Route::prefix('seo')->name('seo.')->group(function () {
     Route::middleware('auth:seo')->group(function () {
         // Dashboard
             Route::get('/dashboard', [DashbordController::class, 'index'])->name('dashboard');
+            Route::get('/analytics', [DashbordController::class, 'analytics'])->name('analytics');
 
       // Products Management - Add this section
         Route::controller(ProductController::class)->prefix('products')->name('products.')->group(function () {
