@@ -7,6 +7,13 @@
 
     <title>@yield('title') - {{ config('app.name', 'InvidiaTech') }}</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('assets/logo/invidia-fav-icon.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('assets/logo/invidia-fav-icon.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/logo/invidia-fav-icon.png') }}">
+    <link rel="icon" sizes="32x32" type="image/png" href="{{ asset('assets/logo/invidia-fav-icon.png') }}">
+    <link rel="icon" sizes="16x16" type="image/png" href="{{ asset('assets/logo/invidia-fav-icon.png') }}">
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

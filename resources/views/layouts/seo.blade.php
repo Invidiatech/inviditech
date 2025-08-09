@@ -4,7 +4,11 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
- <link rel="icon" href="{{ asset('assets/images/avatars/apple-touch-icon.png') }}" type="image/png">
+ <link rel="icon" type="image/png" href="{{ asset('assets/logo/invidia-fav-icon.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('assets/logo/invidia-fav-icon.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/logo/invidia-fav-icon.png') }}">
+    <link rel="icon" sizes="32x32" type="image/png" href="{{ asset('assets/logo/invidia-fav-icon.png') }}">
+    <link rel="icon" sizes="16x16" type="image/png" href="{{ asset('assets/logo/invidia-fav-icon.png') }}">
     <!-- Plugins CSS -->
     <link href="{{ asset('assets/plugins/vectormap/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet"/>
     <link href="{{ asset('assets/plugins/simplebar/css/simplebar.css') }}" rel="stylesheet" />

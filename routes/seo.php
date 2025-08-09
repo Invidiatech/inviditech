@@ -7,7 +7,7 @@ use App\Http\Controllers\Seo\DashbordController;
 use App\Http\Controllers\Seo\ProfileController;
 use App\Http\Controllers\Seo\PageController;
 use App\Http\Controllers\Seo\BlogController;
-use App\Http\Controllers\Seo\CollectionController;
+// use App\Http\Controllers\Seo\CollectionController;
 use App\Http\Controllers\Seo\ProductController;
 use App\Http\Controllers\Seo\CategoryController;
 use App\Http\Controllers\Seo\SchemaMarkupController;
@@ -82,7 +82,8 @@ Route::controller(CategoryController::class)->prefix('categories')->name('catego
     Route::post('/preview-seo', 'previewSeo')->name('preview-seo')->middleware('can:Create Blogs,seo');
 });
 
-        // Collections Management
+        // Collections Management - Commented out until controller is created
+        /*
         Route::controller(CollectionController::class)->prefix('collections')->name('collections.')->group(function () {
             Route::get('/', 'index')->name('index')->middleware('can:View Collection,seo');
             Route::get('/categories', 'categories')->name('categories')->middleware('can:View Collection,seo');
@@ -93,6 +94,7 @@ Route::controller(CategoryController::class)->prefix('categories')->name('catego
             Route::put('/{collection}', 'update')->name('update')->middleware('can:Edit Collection,seo');
             Route::delete('/{collection}', 'destroy')->name('destroy')->middleware('can:Delete Collection,seo');
         });
+        */
 
         // Schema Markup
         Route::controller(SchemaMarkupController::class)->prefix('schema')->name('schema.')->group(function () {
@@ -128,7 +130,6 @@ Route::controller(CategoryController::class)->prefix('categories')->name('catego
             Route::get('/', 'index')->name('index')->middleware('can:View Robots,seo');
             Route::put('/', 'update')->name('update')->middleware('can:Edit Robots,seo');
             Route::post('/validate', 'validate')->name('validate')->middleware('can:View Robots,seo');
-           Route::post('/{sitemap}/status', 'updateStatus')->name('status')->middleware('can:Edit Sitemap,seo');
         });
 
         // Redirect Manager

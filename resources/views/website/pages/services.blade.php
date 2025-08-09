@@ -496,7 +496,7 @@
                         </div>
                         <div class="col-lg-5 text-lg-end text-center">
                             <div class="d-flex flex-column flex-sm-row justify-content-center justify-content-lg-end gap-3">
-                                <a href="hire-us.html" class="btn btn-primary btn-lg rounded-pill px-4 shadow-sm">Hire Us Now</a>
+                                <a href="https://www.fiverr.com/muhammadnawa564" target="_blank" class="btn btn-primary btn-lg rounded-pill px-4 shadow-sm">Hire Us Now</a>
                                 <a href="contact.html" class="btn btn-outline-primary btn-lg rounded-pill px-4">Contact Us</a>
                             </div>
                         </div>

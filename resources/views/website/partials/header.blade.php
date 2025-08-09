@@ -12,7 +12,7 @@
         <!-- Mobile Menu Toggle -->
         <div class="d-flex align-items-center order-lg-3">
             <!-- Hire Us Button (visible on all screens) -->
-            <a class="btn btn-primary-custom rounded-pill px-4 me-3" href="https://www.fiverr.com/sellers/muhammadnawa564/" target="_blank">
+            <a class="btn btn-primary-custom rounded-pill px-4 me-3" href="https://www.fiverr.com/muhammadnawa564" target="_blank">
                 <i class="fas fa-handshake me-2"></i>
                 <span class="d-none d-sm-inline">Hire Us</span>
                 <span class="d-inline d-sm-none">Hire</span>

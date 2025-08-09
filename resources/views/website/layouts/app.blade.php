@@ -8,13 +8,21 @@
     <title>
         @if(isset($article))
             {{ $article->meta_title ?: $article->title }} - InvidiaTech
+        @elseif(View::hasSection('title'))
+            @yield('title') - InvidiaTech
         @else
             @yield('title', 'InvidiaTech - Professional Technical Solutions')
         @endif
     </title>
     
     <!-- Meta Description -->
-    <meta name="description" content="@if(isset($article)){{ $article->meta_description ?: ($article->excerpt ?: Str::limit(strip_tags($article->content), 160)) }}@else{{ 'Professional technical solutions and development services' }}@endif">
+    <meta name="description" content="@if(isset($article)){{ $article->meta_description ?: ($article->excerpt ?: Str::limit(strip_tags($article->content), 160)) }}@elseif(View::hasSection('meta_description'))@yield('meta_description')@else{{ 'Professional technical solutions and development services' }}@endif">
+    
+    <!-- Author and Publisher -->
+    @if(isset($article))
+    <meta name="author" content="InvidiaTech">
+    <meta name="publisher" content="InvidiaTech">
+    @endif
     
     <!-- Meta Keywords -->
     @if(isset($article) && $article->focus_keyword)
@@ -68,6 +76,11 @@
     <meta property="article:published_time" content="{{ $article->publish_date ? $article->publish_date->toISOString() : $article->created_at->toISOString() }}">
     <meta property="article:modified_time" content="{{ $article->updated_at->toISOString() }}">
     <meta property="article:author" content="InvidiaTech">
+    <meta property="article:section" content="{{ (is_object($article->category) ? $article->category->name : 'Technology') }}">
+    @if($article->reading_time)
+    <meta name="twitter:label1" content="Reading time">
+    <meta name="twitter:data1" content="{{ $article->reading_time }} min read">
+    @endif
      @if($article->tags->count())
     @foreach($article->tags as $tag)
     <meta property="article:tag" content="{{ $tag->name }}">
@@ -76,10 +89,21 @@
     @endif
     
     <!-- Schema.org JSON-LD -->
-    @if(isset($article) && $article->schema_markup)
-    <script type="application/ld+json">
-    {!! $article->schema_markup !!}
-    </script>
+    @if(isset($article))
+        @if($article->schema_markup)
+        <script type="application/ld+json">
+        {!! $article->schema_markup !!}
+        </script>
+        @else
+        <script type="application/ld+json">
+        {!! App\Helpers\SeoHelper::generateArticleSchema($article) !!}
+        </script>
+        @endif
+    @else
+        <!-- Website Schema -->
+        <script type="application/ld+json">
+        {!! App\Helpers\SeoHelper::generateWebsiteSchema() !!}
+        </script>
     @endif
     
     <!-- Additional structured data for breadcrumbs -->
@@ -109,8 +133,12 @@
     @endif
     
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('assets/logo/invidia-fav-icon.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('assets/logo/invidia-fav-icon.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/logo/invidia-fav-icon.png') }}">
+    <link rel="icon" sizes="32x32" type="image/png" href="{{ asset('assets/logo/invidia-fav-icon.png') }}">
+    <link rel="icon" sizes="16x16" type="image/png" href="{{ asset('assets/logo/invidia-fav-icon.png') }}">
+    <link rel="manifest" href="{{ asset('site.webmanifest') }}">
     
     <!-- CSS Files -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
@@ -127,6 +155,24 @@
     
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    
+    <!-- Additional SEO Meta Tags -->
+    <meta name="theme-color" content="#3b82f6">
+    <meta name="msapplication-TileColor" content="#3b82f6">
+    <meta name="msapplication-TileImage" content="{{ asset('assets/logo/invidia-fav-icon.png') }}">
+    <meta name="application-name" content="InvidiaTech">
+    <meta name="apple-mobile-web-app-title" content="InvidiaTech">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    
+    <!-- Preconnect to external domains for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- DNS prefetch for better performance -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
     
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':

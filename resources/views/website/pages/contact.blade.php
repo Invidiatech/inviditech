@@ -197,7 +197,7 @@
                 <div class="col-lg-8 text-white animate">
                     <h2 class="fw-bold mb-4">Ready to Start Your Project?</h2>
                     <p class="lead mb-5">Skip the form and get in touch with us directly to discuss your project requirements</p>
-                    <a href="hire-us.html" class="btn btn-accent-custom btn-lg rounded-pill px-5">Hire Us Now</a>
+                    <a href="https://www.fiverr.com/muhammadnawa564" target="_blank" class="btn btn-accent-custom btn-lg rounded-pill px-5">Hire Us Now</a>
                 </div>
             </div>
         </div>

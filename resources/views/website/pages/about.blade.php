@@ -197,7 +197,7 @@
                     <h2 class="fw-bold mb-4">Ready to Start Your Project?</h2>
                     <p class="lead mb-4">Let's discuss how I can help bring your ideas to life with the perfect solution</p>
                     <div class="d-flex justify-content-center gap-3">
-                        <a href="hire-us.html" class="btn btn-accent-custom px-4">Hire Me Now</a>
+                        <a href="https://www.fiverr.com/muhammadnawa564" target="_blank" class="btn btn-accent-custom px-4">Hire Me Now</a>
                         <a href="contact.html" class="btn btn-outline-light px-4">Contact Me</a>
                     </div>
                 </div>

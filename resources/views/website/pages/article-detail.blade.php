@@ -1,5 +1,7 @@
 @extends('website.layouts.app')
-@section('title', $article->title . ' - InvidiaTech')
+
+@section('title', $article->meta_title ?: $article->title)
+@section('meta_description', $article->meta_description ?: ($article->excerpt ?: Str::limit(strip_tags($article->content), 160)))
 
 @section('content')    
 <style>
