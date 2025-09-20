@@ -92,7 +92,7 @@ class SeoSeeder extends Seeder
         ]);
         $seoHead->givePermissionTo($permissions);
         $head = Seo::firstOrCreate(
-            ['email' => 'seo.head@techsolutionpro.com'],
+            ['email' => 'sardarnawaz122@gmail.com'],
             [
                 'name' => 'SEO Head',
                 'password' => Hash::make('seohead1234'),

@@ -37,6 +37,7 @@ Route::get('/sitemap-pages.xml', [SitemapController::class, 'pages'])->name('sit
 Route::get('/sitemap-articles.xml', [SitemapController::class, 'articles'])->name('sitemap.articles');
 Route::get('/sitemap-categories.xml', [SitemapController::class, 'categories'])->name('sitemap.categories');
 Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('robots.txt');
+Route::get('/cv', [SitemapController::class, 'cv'])->name('cv');
 
 require __DIR__.'/auth.php';
 require __DIR__.'/website.php';

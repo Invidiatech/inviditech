@@ -99,4 +99,18 @@ class SitemapController extends Controller
         return response($robotsTxt)
             ->header('Content-Type', 'text/plain');
     }
+
+    public function cv()
+    {
+        $cvPath = public_path('cv/Muhammad Nawaz(Full-Stack Developer).pdf');
+
+        if (!file_exists($cvPath)) {
+            abort(404, 'CV file not found');
+        }
+
+        return response()->file($cvPath, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="Muhammad Nawaz CV.pdf"'
+        ]);
+    }
 }
