@@ -5,17 +5,17 @@
         <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}">
             <div class="brand-logo">
                 <span class="brand-main text-primary-custom fw-bold">INVIDIA</span><span class="brand-accent text-accent-custom fw-bold">TECH</span>
-                <div class="brand-tagline">World-Class IT Solutions</div>
+                <div class="brand-tagline">Knowledge & Learning Platform</div>
             </div>
         </a>
 
         <!-- Mobile Menu Toggle -->
         <div class="d-flex align-items-center order-lg-3">
-            <!-- Hire Us Button (visible on all screens) -->
-            <a class="btn btn-primary-custom rounded-pill px-4 me-3" href="https://www.fiverr.com/muhammadnawa564" target="_blank">
-                <i class="fas fa-handshake me-2"></i>
-                <span class="d-none d-sm-inline">Hire Us</span>
-                <span class="d-inline d-sm-none">Hire</span>
+            <!-- Connect Button (visible on all screens) -->
+            <a class="btn btn-primary-custom rounded-pill px-4 me-3" href="{{ route('contact') }}">
+                <i class="fas fa-envelope me-2"></i>
+                <span class="d-none d-sm-inline">Connect</span>
+                <span class="d-inline d-sm-none">Connect</span>
             </a>
             
             <!-- Mobile Toggle Button -->
@@ -40,20 +40,20 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('services') ? 'active' : '' }}" href="{{ route('services') }}">
-                        <i class="fas fa-cogs nav-icon"></i>
-                        <span>Services</span>
+                    <a class="nav-link {{ request()->routeIs('articles') || request()->routeIs('article.show') ? 'active' : '' }}" href="{{ route('articles') }}">
+                        <i class="fas fa-book-open nav-icon"></i>
+                        <span>Articles</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('articles') || request()->routeIs('article.show') ? 'active' : '' }}" href="{{ route('articles') }}">
+                    <a class="nav-link {{ request()->routeIs('tutorials') ? 'active' : '' }}" href="#">
                         <i class="fas fa-graduation-cap nav-icon"></i>
                         <span>Tutorials</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">
-                        <i class="fas fa-users nav-icon"></i>
+                        <i class="fas fa-user nav-icon"></i>
                         <span>About</span>
                     </a>
                 </li>
@@ -117,16 +117,16 @@
                 <li class="nav-divider"></li>
                 <li class="nav-item">
                     <div class="mobile-social-links">
-                        <a href="https://www.facebook.com/Muhammad.Nawaz.Dev/" target="_blank" class="social-link">
+                        <a href="https://www.facebook.com/Muhammad.Nawaz.Dev/" target="_blank" class="social-link" title="Facebook">
                             <i class="fab fa-facebook-f"></i>
                         </a>
-                        <a href="https://www.linkedin.com/in/muhammad-nawaz-43a354201/" target="_blank" class="social-link">
+                        <a href="https://www.linkedin.com/in/muhammad-nawaz-43a354201/" target="_blank" class="social-link" title="LinkedIn">
                             <i class="fab fa-linkedin-in"></i>
                         </a>
-                        <a href="https://github.com/nawazfdev" target="_blank" class="social-link">
+                        <a href="https://github.com/nawazfdev" target="_blank" class="social-link" title="GitHub">
                             <i class="fab fa-github"></i>
                         </a>
-                        <a href="https://invidiatech.com" target="_blank" class="social-link">
+                        <a href="https://invidiatech.com" target="_blank" class="social-link" title="Website">
                             <i class="fas fa-globe"></i>
                         </a>
                     </div>

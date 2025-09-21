@@ -24,6 +24,7 @@
                 <div class="menu-title">Dashboard</div>
             </a>
         </li>
+
         <!-- Pages Management -->
         @can('View Pages', auth('seo')->user())
         <li class=" {{ request()->routeIs('seo.pages.*') ? 'mm-active' : '' }}">
@@ -46,7 +47,7 @@
 
         <!-- Blogs Management -->
         @can('View Blogs', auth('seo')->user())
-        <li class="" class="{{ request()->routeIs('seo.blogs.*') ? 'mm-active' : '' }}">
+        <li class="{{ request()->routeIs('seo.blogs.*') ? 'mm-active' : '' }}">
             <a href="javascript:;" class="has-arrow">
                 <div class="parent-icon">
                     <i class="bx bx-edit"></i>
@@ -63,70 +64,97 @@
             </ul>
         </li>
         @endcan
-        <!-- Collections Management -->
-         <li>
-    <a href="#" class="has-arrow">
-        <div class="parent-icon"><i class="bx bx-category"></i></div>
-        <div class="menu-title">Categories</div>
-    </a>
-    <ul>
-        <li><a href="{{ route('seo.categories.index') }}"><i class="bx bx-right-arrow-alt"></i>All Categories</a></li>
-         <li><a href="{{ route('seo.categories.create') }}"><i class="bx bx-right-arrow-alt"></i>Add Category</a></li>
-     </ul>
-</li>
+
+        <!-- Categories Management -->
+        <li class="{{ request()->routeIs('seo.categories.*') ? 'mm-active' : '' }}">
+            <a href="javascript:;" class="has-arrow">
+                <div class="parent-icon"><i class="bx bx-category"></i></div>
+                <div class="menu-title">Categories</div>
+            </a>
+            <ul class="mm-collapse {{ request()->routeIs('seo.categories.*') ? 'mm-show' : '' }}">
+                <li><a href="{{ route('seo.categories.index') }}"><i class="bx bx-right-arrow-alt"></i>All Categories</a></li>
+                <li><a href="{{ route('seo.categories.create') }}"><i class="bx bx-right-arrow-alt"></i>Add Category</a></li>
+            </ul>
+        </li>
+
+        <!-- Contact Management -->
+        <li class="{{ request()->routeIs('seo.contacts.*') ? 'mm-active' : '' }}">
+            <a href="javascript:;" class="has-arrow">
+                <div class="parent-icon"><i class="bx bx-envelope"></i></div>
+                <div class="menu-title">
+                    Contacts
+                    @php
+                        $unreadCount = \App\Models\Contact::unread()->count();
+                    @endphp
+                    @if($unreadCount > 0)
+                        <span class="badge bg-warning rounded-pill ms-2">{{ $unreadCount }}</span>
+                    @endif
+                </div>
+            </a>
+            <ul class="mm-collapse {{ request()->routeIs('seo.contacts.*') ? 'mm-show' : '' }}">
+                <li><a href="{{ route('seo.contacts.index') }}"><i class="bx bx-right-arrow-alt"></i>All Contacts</a></li>
+                <li><a href="{{ route('seo.contacts.index', ['status' => 'unread']) }}"><i class="bx bx-right-arrow-alt"></i>Unread Messages
+                    @if($unreadCount > 0)
+                        <span class="badge bg-warning rounded-pill ms-2">{{ $unreadCount }}</span>
+                    @endif
+                </a></li>
+                <li><a href="{{ route('seo.contacts.index', ['status' => 'replied']) }}"><i class="bx bx-right-arrow-alt"></i>Replied</a></li>
+                <li><a href="{{ route('seo.contacts.index', ['status' => 'archived']) }}"><i class="bx bx-right-arrow-alt"></i>Archived</a></li>
+            </ul>
+        </li>
  
-       <!-- Schema Markup -->
-@can('View Schema Markup', auth('seo')->user())
-<li class="{{ request()->routeIs('seo.schema.*') ? 'mm-active' : '' }}">
-    <a href="javascript:;" class="has-arrow">
-        <div class="parent-icon">
-            <i class="bx bx-file-blank"></i>
-        </div>
-        <div class="menu-title">Schema</div>
-    </a>
-    <ul class="mm-collapse {{ request()->routeIs('seo.schema.*') ? 'mm-show' : '' }}">
+        <!-- Schema Markup -->
         @can('View Schema Markup', auth('seo')->user())
-        <li>
-            <a href="{{ route('seo.schema.index') }}">
-                <i class="bx bx-code-alt"></i> Schema Markup
+        <li class="{{ request()->routeIs('seo.schema.*') ? 'mm-active' : '' }}">
+            <a href="javascript:;" class="has-arrow">
+                <div class="parent-icon">
+                    <i class="bx bx-file-blank"></i>
+                </div>
+                <div class="menu-title">Schema</div>
             </a>
+            <ul class="mm-collapse {{ request()->routeIs('seo.schema.*') ? 'mm-show' : '' }}">
+                @can('View Schema Markup', auth('seo')->user())
+                <li>
+                    <a href="{{ route('seo.schema.index') }}">
+                        <i class="bx bx-code-alt"></i> Schema Markup
+                    </a>
+                </li>
+                @endcan
+
+                @can('Create Schema Markup', auth('seo')->user())
+                <li>
+                    <a href="{{ route('seo.schema.create') }}">
+                        <i class="bx bx-plus"></i> Create Schema
+                    </a>
+                </li>
+                @endcan
+            </ul>
         </li>
         @endcan
 
-        @can('Create Schema Markup', auth('seo')->user())
-        <li>
-            <a href="{{ route('seo.schema.create') }}">
-                <i class="bx bx-plus"></i> Create Schema
+        <!-- Sitemap Dropdown -->
+        @can('View Sitemap', auth('seo')->user())
+        <li class="has-arrow {{ request()->routeIs('seo.sitemap.*') ? 'mm-active' : '' }}">
+            <a href="javascript:void(0);">
+                <div class="parent-icon">
+                    <i class="bx bx-sitemap"></i>
+                </div>
+                <div class="menu-title">Sitemap</div>
             </a>
+            <ul class="{{ request()->routeIs('seo.sitemap.*') ? 'mm-show' : '' }}">
+                <li class="{{ request()->routeIs('seo.sitemap.index') ? 'active' : '' }}">
+                    <a href="{{ route('seo.sitemap.index') }}">
+                        <i class="bx bx-right-arrow-alt"></i>View Sitemaps
+                    </a>
+                </li>
+                <li class="{{ request()->routeIs('seo.sitemap.create') ? 'active' : '' }}">
+                    <a href="{{ route('seo.sitemap.create') }}">
+                        <i class="bx bx-right-arrow-alt"></i>Create Sitemap
+                    </a>
+                </li>
+            </ul>
         </li>
         @endcan
-    </ul>
-</li>
-@endcan
-      <!-- Sitemap Dropdown -->
-@can('View Sitemap', auth('seo')->user())
-<li class="has-arrow {{ request()->routeIs('seo.sitemap.*') ? 'mm-active' : '' }}">
-    <a href="javascript:void(0);">
-        <div class="parent-icon">
-            <i class="bx bx-sitemap"></i>
-        </div>
-        <div class="menu-title">Sitemap</div>
-    </a>
-    <ul class="{{ request()->routeIs('seo.sitemap.*') ? 'mm-show' : '' }}">
-        <li class="{{ request()->routeIs('seo.sitemap.index') ? 'active' : '' }}">
-            <a href="{{ route('seo.sitemap.index') }}">
-                <i class="bx bx-right-arrow-alt"></i>View Sitemaps
-            </a>
-        </li>
-        <li class="{{ request()->routeIs('seo.sitemap.create') ? 'active' : '' }}">
-            <a href="{{ route('seo.sitemap.create') }}">
-                <i class="bx bx-right-arrow-alt"></i>Create Sitemap
-            </a>
-        </li>
-    </ul>
-</li>
-@endcan
-
 
         <!-- Robots.txt -->
         @can('View Robots', auth('seo')->user())

@@ -82,8 +82,19 @@ Route::controller(CategoryController::class)->prefix('categories')->name('catego
      Route::post('/{blog}/analyze-seo', 'analyzeSeo')->name('analyze-seo')->middleware('can:Edit Blogs,seo');
     Route::post('/preview-seo', 'previewSeo')->name('preview-seo')->middleware('can:Create Blogs,seo');
 });
-
-        // Collections Management - Commented out until controller is created
+Route::resource('contacts', \App\Http\Controllers\Seo\ContactController::class)
+        ->only(['index', 'show', 'destroy']);
+    
+    // AJAX routes for contact management
+    Route::post('contacts/{contact}/status', [\App\Http\Controllers\Seo\ContactController::class, 'updateStatus'])
+        ->name('contacts.update-status');
+    
+    Route::post('contacts/{contact}/notes', [\App\Http\Controllers\Seo\ContactController::class, 'updateNotes'])
+        ->name('contacts.update-notes');
+    
+    Route::post('contacts/bulk-action', [\App\Http\Controllers\Seo\ContactController::class, 'bulkAction'])
+        ->name('contacts.bulk-action');
+         // Collections Management - Commented out until controller is created
         /*
         Route::controller(CollectionController::class)->prefix('collections')->name('collections.')->group(function () {
             Route::get('/', 'index')->name('index')->middleware('can:View Collection,seo');

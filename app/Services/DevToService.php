@@ -191,7 +191,7 @@ class DevToService
      */
     private function prepareBlogData(SeoBlog $blog)
     {
-        // Convert HTML content to Markdown (basic conversion)
+        // Convert HTML content to Markdown with better formatting
         $bodyMarkdown = $this->convertHtmlToMarkdown($blog->content);
 
         // Prepare tags array
@@ -229,58 +229,82 @@ class DevToService
     }
 
     /**
-     * Basic HTML to Markdown conversion
+     * Improved HTML to Markdown conversion with better formatting
      */
     private function convertHtmlToMarkdown($html)
     {
-        // Remove HTML tags and convert some basic formatting
-        $markdown = $html;
+        // Clean up the HTML first
+        $html = trim($html);
         
-        // Convert headers
-        $markdown = preg_replace('/<h1[^>]*>(.*?)<\/h1>/i', '# $1', $markdown);
-        $markdown = preg_replace('/<h2[^>]*>(.*?)<\/h2>/i', '## $1', $markdown);
-        $markdown = preg_replace('/<h3[^>]*>(.*?)<\/h3>/i', '### $1', $markdown);
-        $markdown = preg_replace('/<h4[^>]*>(.*?)<\/h4>/i', '#### $1', $markdown);
-        $markdown = preg_replace('/<h5[^>]*>(.*?)<\/h5>/i', '##### $1', $markdown);
-        $markdown = preg_replace('/<h6[^>]*>(.*?)<\/h6>/i', '###### $1', $markdown);
+        // Preserve line breaks temporarily
+        $html = str_replace(["\r\n", "\r"], "\n", $html);
+        
+        // Convert headers with proper spacing
+        $html = preg_replace('/<h1[^>]*>(.*?)<\/h1>/is', "\n# $1\n\n", $html);
+        $html = preg_replace('/<h2[^>]*>(.*?)<\/h2>/is', "\n## $1\n\n", $html);
+        $html = preg_replace('/<h3[^>]*>(.*?)<\/h3>/is', "\n### $1\n\n", $html);
+        $html = preg_replace('/<h4[^>]*>(.*?)<\/h4>/is', "\n#### $1\n\n", $html);
+        $html = preg_replace('/<h5[^>]*>(.*?)<\/h5>/is', "\n##### $1\n\n", $html);
+        $html = preg_replace('/<h6[^>]*>(.*?)<\/h6>/is', "\n###### $1\n\n", $html);
         
         // Convert bold and italic
-        $markdown = preg_replace('/<(strong|b)[^>]*>(.*?)<\/(strong|b)>/i', '**$2**', $markdown);
-        $markdown = preg_replace('/<(em|i)[^>]*>(.*?)<\/(em|i)>/i', '*$2*', $markdown);
+        $html = preg_replace('/<(strong|b)[^>]*>(.*?)<\/(strong|b)>/is', '**$2**', $html);
+        $html = preg_replace('/<(em|i)[^>]*>(.*?)<\/(em|i)>/is', '*$2*', $html);
         
         // Convert links
-        $markdown = preg_replace('/<a[^>]*href=["\']([^"\']*)["\'][^>]*>(.*?)<\/a>/i', '[$2]($1)', $markdown);
+        $html = preg_replace('/<a[^>]*href=["\']([^"\']*)["\'][^>]*>(.*?)<\/a>/is', '[$2]($1)', $html);
         
-        // Convert images
-        $markdown = preg_replace('/<img[^>]*src=["\']([^"\']*)["\'][^>]*alt=["\']([^"\']*)["\'][^>]*>/i', '![$2]($1)', $markdown);
-        $markdown = preg_replace('/<img[^>]*alt=["\']([^"\']*)["\'][^>]*src=["\']([^"\']*)["\'][^>]*>/i', '![$1]($2)', $markdown);
-        $markdown = preg_replace('/<img[^>]*src=["\']([^"\']*)["\'][^>]*>/i', '![]($1)', $markdown);
+        // Convert images with better formatting
+        $html = preg_replace('/<img[^>]*src=["\']([^"\']*)["\'][^>]*alt=["\']([^"\']*)["\'][^>]*\/?>/is', "\n![$2]($1)\n", $html);
+        $html = preg_replace('/<img[^>]*alt=["\']([^"\']*)["\'][^>]*src=["\']([^"\']*)["\'][^>]*\/?>/is', "\n![$1]($2)\n", $html);
+        $html = preg_replace('/<img[^>]*src=["\']([^"\']*)["\'][^>]*\/?>/is', "\n![]($1)\n", $html);
         
-        // Convert code blocks
-        $markdown = preg_replace('/<pre[^>]*><code[^>]*>(.*?)<\/code><\/pre>/is', '```$1```', $markdown);
-        $markdown = preg_replace('/<code[^>]*>(.*?)<\/code>/i', '`$1`', $markdown);
+        // Convert code blocks (preserve formatting)
+        $html = preg_replace_callback('/<pre[^>]*><code[^>]*class=["\']language-([^"\']*)["\'][^>]*>(.*?)<\/code><\/pre>/is', function($matches) {
+            return "\n```" . $matches[1] . "\n" . html_entity_decode($matches[2]) . "\n```\n\n";
+        }, $html);
+        $html = preg_replace('/<pre[^>]*><code[^>]*>(.*?)<\/code><\/pre>/is', "\n```\n$1\n```\n\n", $html);
+        $html = preg_replace('/<code[^>]*>(.*?)<\/code>/is', '`$1`', $html);
         
-        // Convert lists
-        $markdown = preg_replace('/<ul[^>]*>/i', '', $markdown);
-        $markdown = preg_replace('/<\/ul>/i', '', $markdown);
-        $markdown = preg_replace('/<ol[^>]*>/i', '', $markdown);
-        $markdown = preg_replace('/<\/ol>/i', '', $markdown);
-        $markdown = preg_replace('/<li[^>]*>(.*?)<\/li>/i', '- $1', $markdown);
+        // Convert blockquotes
+        $html = preg_replace('/<blockquote[^>]*>(.*?)<\/blockquote>/is', "\n> $1\n\n", $html);
         
-        // Convert paragraphs
-        $markdown = preg_replace('/<p[^>]*>(.*?)<\/p>/i', '$1' . "\n\n", $markdown);
+        // Convert lists with proper formatting
+        $html = preg_replace('/<ul[^>]*>/i', "\n", $html);
+        $html = preg_replace('/<\/ul>/i', "\n", $html);
+        $html = preg_replace('/<ol[^>]*>/i', "\n", $html);
+        $html = preg_replace('/<\/ol>/i', "\n", $html);
+        
+        // Convert list items
+        $html = preg_replace('/<li[^>]*>(.*?)<\/li>/is', "- $1\n", $html);
+        
+        // Convert paragraphs with proper spacing
+        $html = preg_replace('/<p[^>]*>(.*?)<\/p>/is', "$1\n\n", $html);
         
         // Convert line breaks
-        $markdown = preg_replace('/<br[^>]*>/i', "\n", $markdown);
+        $html = preg_replace('/<br[^>]*\/?>/i', "\n", $html);
+        
+        // Convert horizontal rules
+        $html = preg_replace('/<hr[^>]*\/?>/i', "\n---\n\n", $html);
+        
+        // Handle divs (convert to paragraphs)
+        $html = preg_replace('/<div[^>]*>(.*?)<\/div>/is', "$1\n\n", $html);
         
         // Remove remaining HTML tags
-        $markdown = strip_tags($markdown);
+        $html = strip_tags($html);
         
-        // Clean up extra whitespace
-        $markdown = preg_replace('/\n{3,}/', "\n\n", $markdown);
-        $markdown = trim($markdown);
+        // Decode HTML entities
+        $html = html_entity_decode($html, ENT_QUOTES | ENT_HTML5, 'UTF-8');
         
-        return $markdown;
+        // Clean up whitespace and formatting
+        $html = preg_replace('/\n{3,}/', "\n\n", $html); // Remove excessive line breaks
+        $html = preg_replace('/[ \t]+/', ' ', $html); // Remove excessive spaces
+        $html = preg_replace('/\n /', "\n", $html); // Remove leading spaces after line breaks
+        
+        // Trim and ensure proper ending
+        $html = trim($html);
+        
+        return $html;
     }
 
     /**

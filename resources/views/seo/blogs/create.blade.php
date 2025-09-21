@@ -271,17 +271,14 @@
                 </div>
                 <div class="form-text">Mark as featured post for homepage</div>
             </div>
-
-            <!-- Dev.to Publishing Option -->
-            <div class="mb-3">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="publish_to_devto" name="publish_to_devto" value="1" {{ old('publish_to_devto') ? 'checked' : '' }}>
-                    <label class="form-check-label" for="publish_to_devto">
-                        <i class="fab fa-dev me-1"></i>Publish to Dev.to
-                    </label>
-                </div>
-                <div class="form-text">Automatically publish this blog to Dev.to when published</div>
-            </div>
+<!-- LinkedIn Publishing Option -->
+<div class="form-check">
+    <input type="hidden" name="publish_to_linkedin" value="0">
+    <input type="checkbox" name="publish_to_linkedin" id="publish_to_linkedin" class="form-check-input" value="1" {{ old('publish_to_linkedin') ? 'checked' : '' }}>
+    <label for="publish_to_linkedin" class="form-check-label">
+        <i class="fab fa-linkedin me-1"></i>Publish to LinkedIn
+    </label>
+</div>
 
             <!-- Action Buttons -->
             <div class="d-grid gap-2">

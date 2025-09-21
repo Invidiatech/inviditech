@@ -1,6 +1,8 @@
 <?php
 use App\Http\Controllers\Seo\ImageGeneratorController;
 use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\LinkedInDebugController;
+use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Http\Request;
@@ -30,7 +32,7 @@ Route::get('/coalationtech-task', [CatalogController::class,'index']);
 Route::get('/fetch', [CatalogController::class,'fetch']);
 Route::post('/store', [CatalogController::class,'store']);
 Route::post('/update', [CatalogController::class,'update']);
-
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 // SEO Routes
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap.index');
 Route::get('/sitemap-pages.xml', [SitemapController::class, 'pages'])->name('sitemap.pages');
@@ -38,7 +40,6 @@ Route::get('/sitemap-articles.xml', [SitemapController::class, 'articles'])->nam
 Route::get('/sitemap-categories.xml', [SitemapController::class, 'categories'])->name('sitemap.categories');
 Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('robots.txt');
 Route::get('/cv', [SitemapController::class, 'cv'])->name('cv');
-
 require __DIR__.'/auth.php';
 require __DIR__.'/website.php';
 require __DIR__.'/seo.php';

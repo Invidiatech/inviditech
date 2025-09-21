@@ -23,12 +23,47 @@ class TrackAnalytics
     {
         $response = $next($request);
 
+        // Skip analytics for LinkedIn OAuth routes and other long URLs
+        if ($this->shouldSkipTracking($request)) {
+            return $response;
+        }
+
         // Only track GET requests to avoid tracking form submissions, API calls, etc.
         if ($request->isMethod('GET') && !$request->ajax()) {
             $this->trackPageView($request);
         }
 
         return $response;
+    }
+
+    /**
+     * Determine if we should skip tracking for this request
+     */
+    protected function shouldSkipTracking(Request $request): bool
+    {
+        $url = $request->fullUrl();
+        
+        // Skip LinkedIn OAuth routes
+        if (str_contains($url, '/linkedin/')) {
+            return true;
+        }
+        
+        // Skip other OAuth/callback routes
+        if (str_contains($url, '/auth/') || str_contains($url, '/callback')) {
+            return true;
+        }
+        
+        // Skip admin/seo routes that might have long URLs
+        if (str_contains($url, '/seo/') || str_contains($url, '/admin/')) {
+            return true;
+        }
+        
+        // Skip if URL is too long (> 250 characters to be safe)
+        if (strlen($url) > 250) {
+            return true;
+        }
+        
+        return false;
     }
 
     /**

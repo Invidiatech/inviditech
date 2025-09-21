@@ -5,7 +5,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Seo\SeoBlog;
 use App\Models\Category;
 use App\Services\SeoAnalyzer;
-use App\Services\DevToService; // Add this import
+use App\Services\DevToService;
+use App\Services\LinkedInService; // Add LinkedIn service
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -17,7 +18,8 @@ use App\Models\Tag;
 class BlogController extends Controller
 {
     protected $seoAnalyzer;
-    protected $devToService; // Add this property
+    protected $devToService;
+    protected $linkedInService; // Add LinkedIn service property
 
     public function __construct()
     {
@@ -26,8 +28,9 @@ class BlogController extends Controller
             $this->seoAnalyzer = app('App\Services\SeoAnalyzer');
         }
         
-        // Initialize Dev.to service
+        // Initialize services
         $this->devToService = new DevToService();
+        $this->linkedInService = new LinkedInService();
     }
 
     /**
@@ -47,20 +50,21 @@ class BlogController extends Controller
             'tags' => 'nullable|string',
             'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'featured_image_alt' => 'nullable|string|max:255',
-            'meta_title' => 'nullable|string|min:30|max:60',
-            'meta_description' => 'nullable|string|min:120|max:160',
+            'meta_title' => 'nullable|string|min:30',
+            'meta_description' => 'nullable|string|min:120',
             'focus_keyword' => 'nullable|string|max:100',
             'canonical_url' => 'nullable|url|max:255',
-            'og_title' => 'nullable|string|max:60',
-            'og_description' => 'nullable|string|max:160',
+            'og_title' => 'nullable|string',
+            'og_description' => 'nullable|string',
             'og_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'twitter_title' => 'nullable|string|max:60',
             'twitter_description' => 'nullable|string|max:160',
             'schema_markup' => 'nullable|json',
             'status' => 'required|in:draft,published,scheduled',
-            'published_at' => 'nullable|date|required_if:status,scheduled',
+            'publish_date' => 'nullable|date|required_if:status,scheduled',
             'reading_time' => 'nullable|integer|min:1',
-            'publish_to_devto' => 'nullable|boolean' // Add this field
+            'publish_to_devto' => 'nullable|boolean',
+            'publish_to_linkedin' => 'nullable|boolean' // Add LinkedIn publishing option
         ], [
             // Custom error messages
             'meta_title.min' => 'The meta title should be at least 30 characters for better SEO.',
@@ -73,9 +77,10 @@ class BlogController extends Controller
         $tagsInput = $validated['tags'] ?? null;
         unset($validated['tags']); // Remove tags from validated data to prevent SQL error
         
-        // Store Dev.to publishing preference
+        // Store publishing preferences
         $publishToDevTo = $request->boolean('publish_to_devto', false);
-        unset($validated['publish_to_devto']); // Remove from validated data
+        $publishToLinkedIn = $request->boolean('publish_to_linkedin', false);
+        unset($validated['publish_to_devto'], $validated['publish_to_linkedin']);
 
         // Set created_by
         $validated['created_by'] = auth('seo')->id();
@@ -126,8 +131,8 @@ class BlogController extends Controller
             // Set publish date based on status
             if ($validated['status'] === 'published') {
                 $validated['publish_date'] = now();
-            } elseif ($validated['status'] === 'scheduled' && isset($validated['published_at'])) {
-                $validated['publish_date'] = $validated['published_at'];
+            } elseif ($validated['status'] === 'scheduled' && isset($validated['publish_date'])) {
+                // Keep the scheduled publish date
             }
 
             // Set default values for boolean fields
@@ -179,35 +184,46 @@ class BlogController extends Controller
                 }
             }
 
-            // Publish to Dev.to if requested and blog is published
-            $devToMessage = '';
-            if ($publishToDevTo && $validated['status'] === 'published') {
+            // Publishing to external platforms
+            $externalMessages = [];
+
+                               $devToResult = $this->devToService->publishBlog($blog);
+
+
+            // Publish to LinkedIn if requested and blog is published
+            if ($publishToLinkedIn && $validated['status'] === 'published') {
                 try {
-                    $devToResult = $this->devToService->publishBlog($blog);
-                    if ($devToResult['success']) {
-                        $devToMessage = ' Also published to Dev.to: ' . ($devToResult['devto_url'] ?? '');
-                        Log::info("Blog '{$blog->title}' published to Dev.to", [
+                    $linkedInResult = $this->linkedInService->publishBlog($blog);
+                    if ($linkedInResult['success']) {
+                        $externalMessages[] = 'Published to LinkedIn successfully';
+                        Log::info("Blog '{$blog->title}' published to LinkedIn", [
                             'blog_id' => $blog->id,
-                            'devto_url' => $devToResult['devto_url'] ?? null
+                            'linkedin_id' => $linkedInResult['linkedin_id'] ?? null
                         ]);
                     } else {
-                        $devToMessage = ' Note: Failed to publish to Dev.to - ' . $devToResult['message'];
-                        Log::warning("Failed to publish blog '{$blog->title}' to Dev.to", [
+                        $externalMessages[] = 'LinkedIn publishing failed: ' . $linkedInResult['message'];
+                        Log::warning("Failed to publish blog '{$blog->title}' to LinkedIn", [
                             'blog_id' => $blog->id,
-                            'error' => $devToResult['message']
+                            'error' => $linkedInResult['message']
                         ]);
                     }
-                } catch (\Exception $devToException) {
-                    $devToMessage = ' Note: Dev.to publishing failed - ' . $devToException->getMessage();
-                    Log::error("Exception publishing blog '{$blog->title}' to Dev.to", [
+                } catch (\Exception $linkedInException) {
+                    $externalMessages[] = 'LinkedIn publishing failed: ' . $linkedInException->getMessage();
+                    Log::error("Exception publishing blog '{$blog->title}' to LinkedIn", [
                         'blog_id' => $blog->id,
-                        'error' => $devToException->getMessage()
+                        'error' => $linkedInException->getMessage()
                     ]);
                 }
             }
 
+            // Combine all messages
+            $finalMessage = $successMessage;
+            if (!empty($externalMessages)) {
+                $finalMessage .= ' ' . implode(' ', $externalMessages);
+            }
+
             return redirect()->route('seo.blogs.index')
-                ->with('success', $successMessage . $devToMessage);
+                ->with('success', $finalMessage);
 
         } catch (\Exception $e) {
             Log::error('Error creating blog: ' . $e->getMessage());
@@ -244,22 +260,23 @@ class BlogController extends Controller
             'twitter_description' => 'nullable|string|max:160',
             'schema_markup' => 'nullable|json',
             'status' => 'required|in:draft,published,scheduled',
-            'published_at' => 'nullable|date',
+            'publish_date' => 'nullable|date',
             'reading_time' => 'nullable|integer|min:1',
             'is_indexed' => 'nullable|boolean',
             'is_featured' => 'nullable|boolean',
-            'update_devto' => 'nullable|boolean' // Add this field
+            'update_devto' => 'nullable|boolean',
+            'update_linkedin' => 'nullable|boolean' // Add LinkedIn update option
         ]);
 
-        // Store tags separately (not part of the blog table)
+        // Store tags and publishing preferences separately
         $tagsInput = $validated['tags'] ?? null;
-        unset($validated['tags']); // Remove tags from validated data to prevent SQL error
+        unset($validated['tags']);
         
-        // Store Dev.to update preference
         $updateDevTo = $request->boolean('update_devto', false);
-        unset($validated['update_devto']); // Remove from validated data
+        $updateLinkedIn = $request->boolean('update_linkedin', false);
+        unset($validated['update_devto'], $validated['update_linkedin']);
 
-        // Handle featured image upload
+        // Handle file uploads
         if ($request->hasFile('featured_image')) {
             if ($blog->featured_image) {
                 Storage::disk('public')->delete($blog->featured_image);
@@ -267,7 +284,6 @@ class BlogController extends Controller
             $validated['featured_image'] = $request->file('featured_image')->store('seo/blogs/featured', 'public');
         }
 
-        // Handle OG image upload
         if ($request->hasFile('og_image')) {
             if ($blog->og_image) {
                 Storage::disk('public')->delete($blog->og_image);
@@ -284,8 +300,8 @@ class BlogController extends Controller
         // Set publish date based on status changes
         if ($validated['status'] === 'published' && $blog->status !== 'published') {
             $validated['publish_date'] = now();
-        } elseif ($validated['status'] === 'scheduled' && isset($validated['published_at'])) {
-            $validated['publish_date'] = $validated['published_at'];
+        } elseif ($validated['status'] === 'scheduled' && isset($validated['publish_date'])) {
+            // Keep the scheduled publish date
         }
 
         // Set boolean values
@@ -318,7 +334,6 @@ class BlogController extends Controller
 
                 $blog->tags()->sync($tagIds);
             } else {
-                // If tags input is empty, detach all tags
                 $blog->tags()->detach();
             }
         }
@@ -338,26 +353,28 @@ class BlogController extends Controller
             }
         }
 
+        // Update external platforms
+        $externalMessages = [];
+
         // Update Dev.to if requested and blog is published
-        $devToMessage = '';
         if ($updateDevTo && $validated['status'] === 'published') {
             try {
                 $devToResult = $this->devToService->updateBlog($blog);
                 if ($devToResult['success']) {
-                    $devToMessage = ' Also updated on Dev.to.';
+                    $externalMessages[] = 'Updated on Dev.to';
                     Log::info("Blog '{$blog->title}' updated on Dev.to", [
                         'blog_id' => $blog->id,
                         'devto_id' => $blog->devto_id
                     ]);
                 } else {
-                    $devToMessage = ' Note: Failed to update on Dev.to - ' . $devToResult['message'];
+                    $externalMessages[] = 'Dev.to update failed: ' . $devToResult['message'];
                     Log::warning("Failed to update blog '{$blog->title}' on Dev.to", [
                         'blog_id' => $blog->id,
                         'error' => $devToResult['message']
                     ]);
                 }
             } catch (\Exception $devToException) {
-                $devToMessage = ' Note: Dev.to update failed - ' . $devToException->getMessage();
+                $externalMessages[] = 'Dev.to update failed: ' . $devToException->getMessage();
                 Log::error("Exception updating blog '{$blog->title}' on Dev.to", [
                     'blog_id' => $blog->id,
                     'error' => $devToException->getMessage()
@@ -365,11 +382,41 @@ class BlogController extends Controller
             }
         }
 
-        return redirect()->route('seo.blogs.index')
-            ->with('success', $successMessage . $devToMessage);
-    }
+        // Update LinkedIn if requested and blog is published
+        if ($updateLinkedIn && $validated['status'] === 'published') {
+            try {
+                $linkedInResult = $this->linkedInService->updateBlog($blog);
+                if ($linkedInResult['success']) {
+                    $externalMessages[] = 'Updated on LinkedIn';
+                    Log::info("Blog '{$blog->title}' updated on LinkedIn", [
+                        'blog_id' => $blog->id,
+                        'linkedin_id' => $blog->linkedin_id
+                    ]);
+                } else {
+                    $externalMessages[] = 'LinkedIn update failed: ' . $linkedInResult['message'];
+                    Log::warning("Failed to update blog '{$blog->title}' on LinkedIn", [
+                        'blog_id' => $blog->id,
+                        'error' => $linkedInResult['message']
+                    ]);
+                }
+            } catch (\Exception $linkedInException) {
+                $externalMessages[] = 'LinkedIn update failed: ' . $linkedInException->getMessage();
+                Log::error("Exception updating blog '{$blog->title}' on LinkedIn", [
+                    'blog_id' => $blog->id,
+                    'error' => $linkedInException->getMessage()
+                ]);
+            }
+        }
 
-    // ... (keep all other existing methods like index, show, edit, destroy, etc.)
+        // Combine all messages
+        $finalMessage = $successMessage;
+        if (!empty($externalMessages)) {
+            $finalMessage .= ' ' . implode(' ', $externalMessages);
+        }
+
+        return redirect()->route('seo.blogs.index')
+            ->with('success', $finalMessage);
+    }
 
     /**
      * Display a listing of blogs
@@ -419,7 +466,8 @@ class BlogController extends Controller
             'avg_seo_score' => round(SeoBlog::where('seo_score', '>', 0)->avg('seo_score') ?? 0),
             'blogs_missing_meta' => SeoBlog::whereNull('meta_description')->orWhere('meta_description', '')->count(),
             'blogs_missing_focus_keyword' => SeoBlog::whereNull('focus_keyword')->orWhere('focus_keyword', '')->count(),
-            'devto_published' => SeoBlog::whereNotNull('devto_id')->count(), // Add Dev.to stats
+            'devto_published' => SeoBlog::whereNotNull('devto_id')->count(),
+            'linkedin_published' => SeoBlog::whereNotNull('linkedin_id')->count(), // Add LinkedIn stats
         ];
          return view('seo.blogs.index', compact('blogs', 'categories', 'seoStats'));
     }
@@ -494,12 +542,20 @@ class BlogController extends Controller
     {
         $blog = SeoBlog::findOrFail($id);
         
-        // Unpublish from Dev.to if it exists there
+        // Unpublish from external platforms if they exist
         if ($blog->devto_id) {
             try {
                 $this->devToService->deleteBlog($blog);
             } catch (\Exception $e) {
                 Log::warning("Failed to unpublish blog from Dev.to during deletion: " . $e->getMessage());
+            }
+        }
+        
+        if ($blog->linkedin_id) {
+            try {
+                $this->linkedInService->deleteBlog($blog);
+            } catch (\Exception $e) {
+                Log::warning("Failed to delete blog from LinkedIn during deletion: " . $e->getMessage());
             }
         }
         
@@ -563,9 +619,11 @@ class BlogController extends Controller
         $newBlog->publish_date = null;
         $newBlog->seo_score = 0;
         $newBlog->seo_analysis = null;
-        $newBlog->devto_id = null; // Reset Dev.to data
+        $newBlog->devto_id = null;
         $newBlog->devto_url = null;
         $newBlog->devto_published_at = null;
+        $newBlog->linkedin_id = null; // Reset LinkedIn data
+        $newBlog->linkedin_published_at = null;
         $newBlog->save();
 
         // Copy tags
@@ -591,11 +649,39 @@ class BlogController extends Controller
 
         try {
             if ($blog->devto_id) {
-                // Update existing Dev.to article
                 $result = $this->devToService->updateBlog($blog);
             } else {
-                // Publish new Dev.to article
                 $result = $this->devToService->publishBlog($blog);
+            }
+
+            return response()->json($result);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Manually publish/update to LinkedIn (AJAX)
+     */
+    public function publishToLinkedIn(Request $request, $id)
+    {
+        $blog = SeoBlog::findOrFail($id);
+        
+        if ($blog->status !== 'published') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Blog must be published first'
+            ], 400);
+        }
+
+        try {
+            if ($blog->linkedin_id) {
+                $result = $this->linkedInService->updateBlog($blog);
+            } else {
+                $result = $this->linkedInService->publishBlog($blog);
             }
 
             return response()->json($result);
@@ -668,5 +754,41 @@ class BlogController extends Controller
                 'analysis' => ['error' => 'SEO analysis failed: ' . $e->getMessage()]
             ], 500);
         }
+    }
+
+    /**
+     * LinkedIn OAuth callback handling
+     */
+    public function linkedinCallback(Request $request)
+    {
+        $code = $request->get('code');
+        $redirectUri = route('seo.blogs.linkedin.callback');
+        
+        if ($code) {
+            $tokenData = $this->linkedInService->getAccessToken($code, $redirectUri);
+            
+            if ($tokenData && isset($tokenData['access_token'])) {
+                // Store the access token in your preferred way (database, config, etc.)
+                // For now, we'll just show it to the user
+                return redirect()->route('seo.blogs.index')
+                    ->with('success', 'LinkedIn connected successfully! Access token: ' . $tokenData['access_token']);
+            }
+        }
+        
+        return redirect()->route('seo.blogs.index')
+            ->with('error', 'Failed to connect to LinkedIn');
+    }
+
+    /**
+     * Generate LinkedIn auth URL
+     */
+    public function getLinkedInAuthUrl()
+    {
+        $redirectUri = route('seo.blogs.linkedin.callback');
+        $authUrl = $this->linkedInService->getAuthUrl($redirectUri);
+        
+        return response()->json([
+            'auth_url' => $authUrl
+        ]);
     }
 }
