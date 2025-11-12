@@ -14,6 +14,217 @@ use Illuminate\Support\Facades\Auth;
 class PageController extends Controller
 {
     /**
+     * Serve the React application for frontend pages.
+     */
+    public function reactApp(Request $request, $slug = null): View
+    {
+        // Get blog data for React components
+        $blogData = $this->getBlogData($request);
+        
+        // If it's a blog detail page, get the specific blog
+        $currentBlog = null;
+        if ($slug) {
+            $currentBlog = SeoBlog::with(['category', 'tags', 'creator', 'comments', 'likes'])
+                ->where('slug', $slug)
+                ->where('status', 'published')
+                ->where(function ($query) {
+                    $query->whereNull('publish_date')
+                          ->orWhere('publish_date', '<=', now());
+                })
+                ->first();
+                
+            if ($currentBlog) {
+                // Increment view count
+                $currentBlog->increment('views_count');
+                
+                // Format the blog data
+                $currentBlog = [
+                    'id' => $currentBlog->id,
+                    'title' => $currentBlog->title,
+                    'slug' => $currentBlog->slug,
+                    'excerpt' => $currentBlog->excerpt,
+                    'content' => $currentBlog->content,
+                    'featured_image' => $currentBlog->featured_image_url,
+                    'featured_image_alt' => $currentBlog->featured_image_alt,
+                    'category' => $currentBlog->category && is_object($currentBlog->category) ? $currentBlog->category->name : null,
+                    'category_slug' => $currentBlog->category && is_object($currentBlog->category) ? $currentBlog->category->slug : null,
+                    'tags' => $currentBlog->tags->map(function ($tag) {
+                        return [
+                            'id' => $tag->id,
+                            'name' => $tag->name,
+                            'slug' => $tag->slug,
+                        ];
+                    }),
+                    'author' => $currentBlog->creator ? $currentBlog->creator->name : 'Muhammad Nawaz',
+                    'publish_date' => $currentBlog->publish_date ? $currentBlog->publish_date->format('M d, Y') : $currentBlog->created_at->format('M d, Y'),
+                    'reading_time' => $currentBlog->reading_time_formatted,
+                    'views_count' => $currentBlog->views_count,
+                    'likes_count' => $currentBlog->likes()->count(),
+                    'comments_count' => $currentBlog->comments()->count(),
+                    'url' => $currentBlog->url,
+                    'meta_title' => $currentBlog->meta_title,
+                    'meta_description' => $currentBlog->meta_description,
+                    'meta_keywords' => $currentBlog->meta_keywords,
+                ];
+            }
+        }
+        
+        return view('layouts.react', compact('blogData', 'currentBlog'));
+    }
+
+    /**
+     * Get blog data for React components
+     */
+    private function getBlogData(Request $request = null)
+    {
+        // Get featured blogs
+        $featuredBlogs = SeoBlog::with(['category', 'tags', 'creator'])
+            ->where('status', 'published')
+            ->where('is_featured', true)
+            ->where(function ($query) {
+                $query->whereNull('publish_date')
+                      ->orWhere('publish_date', '<=', now());
+            })
+            ->latest('publish_date')
+            ->limit(4)
+            ->get()
+            ->map(function ($blog) {
+                return [
+                    'id' => $blog->id,
+                    'title' => $blog->title,
+                    'slug' => $blog->slug,
+                    'excerpt' => $blog->excerpt,
+                    'featured_image' => $blog->featured_image_url,
+                    'featured_image_alt' => $blog->featured_image_alt,
+                    'category' => $blog->category && is_object($blog->category) ? $blog->category->name : null,
+                    'category_slug' => $blog->category && is_object($blog->category) ? $blog->category->slug : null,
+                    'tags' => $blog->tags->map(function ($tag) {
+                        return [
+                            'id' => $tag->id,
+                            'name' => $tag->name,
+                            'slug' => $tag->slug,
+                        ];
+                    }),
+                    'author' => $blog->creator ? $blog->creator->name : 'Muhammad Nawaz',
+                    'publish_date' => $blog->publish_date ? $blog->publish_date->format('M d, Y') : $blog->created_at->format('M d, Y'),
+                    'reading_time' => $blog->reading_time_formatted,
+                    'views_count' => $blog->views_count,
+                    'likes_count' => $blog->likes()->count(),
+                    'comments_count' => $blog->comments()->count(),
+                    'url' => $blog->url,
+                ];
+            });
+
+        // Get latest blogs
+        $latestBlogs = SeoBlog::with(['category', 'tags', 'creator'])
+            ->where('status', 'published')
+            ->where(function ($query) {
+                $query->whereNull('publish_date')
+                      ->orWhere('publish_date', '<=', now());
+            })
+            ->latest('publish_date')
+            ->limit(6)
+            ->get()
+            ->map(function ($blog) {
+                return [
+                    'id' => $blog->id,
+                    'title' => $blog->title,
+                    'slug' => $blog->slug,
+                    'excerpt' => $blog->excerpt,
+                    'featured_image' => $blog->featured_image_url,
+                    'featured_image_alt' => $blog->featured_image_alt,
+                    'category' => $blog->category && is_object($blog->category) ? $blog->category->name : null,
+                    'category_slug' => $blog->category && is_object($blog->category) ? $blog->category->slug : null,
+                    'tags' => $blog->tags->map(function ($tag) {
+                        return [
+                            'id' => $tag->id,
+                            'name' => $tag->name,
+                            'slug' => $tag->slug,
+                        ];
+                    }),
+                    'author' => $blog->creator ? $blog->creator->name : 'Muhammad Nawaz',
+                    'publish_date' => $blog->publish_date ? $blog->publish_date->format('M d, Y') : $blog->created_at->format('M d, Y'),
+                    'reading_time' => $blog->reading_time_formatted,
+                    'views_count' => $blog->views_count,
+                    'likes_count' => $blog->likes()->count(),
+                    'comments_count' => $blog->comments()->count(),
+                    'url' => $blog->url,
+                ];
+            });
+
+        // Get all blogs for blog page
+        $allBlogs = SeoBlog::with(['category', 'tags', 'creator'])
+            ->where('status', 'published')
+            ->where(function ($query) {
+                $query->whereNull('publish_date')
+                      ->orWhere('publish_date', '<=', now());
+            })
+            ->latest('publish_date')
+            ->limit(12)
+            ->get()
+            ->map(function ($blog) {
+                return [
+                    'id' => $blog->id,
+                    'title' => $blog->title,
+                    'slug' => $blog->slug,
+                    'excerpt' => $blog->excerpt,
+                    'featured_image' => $blog->featured_image_url,
+                    'featured_image_alt' => $blog->featured_image_alt,
+                    'category' => $blog->category && is_object($blog->category) ? $blog->category->name : null,
+                    'category_slug' => $blog->category && is_object($blog->category) ? $blog->category->slug : null,
+                    'tags' => $blog->tags->map(function ($tag) {
+                        return [
+                            'id' => $tag->id,
+                            'name' => $tag->name,
+                            'slug' => $tag->slug,
+                        ];
+                    }),
+                    'author' => $blog->creator ? $blog->creator->name : 'Muhammad Nawaz',
+                    'publish_date' => $blog->publish_date ? $blog->publish_date->format('M d, Y') : $blog->created_at->format('M d, Y'),
+                    'reading_time' => $blog->reading_time_formatted,
+                    'views_count' => $blog->views_count,
+                    'likes_count' => $blog->likes()->count(),
+                    'comments_count' => $blog->comments()->count(),
+                    'url' => $blog->url,
+                ];
+            });
+
+        // Get categories
+        $categories = Category::whereHas('seoBlogs', function ($query) {
+            $query->where('status', 'published')
+                  ->where(function ($q) {
+                      $q->whereNull('publish_date')
+                        ->orWhere('publish_date', '<=', now());
+                  });
+        })
+        ->withCount(['seoBlogs' => function ($query) {
+            $query->where('status', 'published')
+                  ->where(function ($q) {
+                      $q->whereNull('publish_date')
+                        ->orWhere('publish_date', '<=', now());
+                  });
+        }])
+        ->orderBy('name')
+        ->get()
+        ->map(function ($category) {
+            return [
+                'id' => $category->id,
+                'name' => $category->name,
+                'slug' => $category->slug,
+                'description' => $category->description,
+                'blogs_count' => $category->seo_blogs_count,
+            ];
+        });
+
+        return [
+            'featured' => $featuredBlogs,
+            'latest' => $latestBlogs,
+            'all' => $allBlogs,
+            'categories' => $categories,
+        ];
+    }
+
+    /**
      * Display the home page.
      */
     public function home(): View

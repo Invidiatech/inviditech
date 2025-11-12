@@ -24,7 +24,7 @@
                 </div>
                 <div class="col-lg-7 animate">
                     <div class="founder-badge mb-3">
-                        <span>Founder & Knowledge Curator</span>
+                        <span>Technical Writer & Knowledge Curator</span>
                     </div>
                     <h2 class="fw-bold mb-3">Muhammad Nawaz</h2>
                     <h6 class="text-accent-custom fw-bold mb-4">Full Stack Developer & Tech Educator</h6>

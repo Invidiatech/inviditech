@@ -10,6 +10,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Category;
 use App\Models\Tag;
 use App\Models\User;
+use App\Models\Like;
+use App\Models\BookMark;
+use App\Models\Comment;
 
 class SeoBlog extends Model
 {
@@ -121,7 +124,7 @@ class SeoBlog extends Model
      */
     public function bookmarks(): HasMany
     {
-        return $this->hasMany(Bookmark::class, 'seo_blog_id');
+        return $this->hasMany(BookMark::class, 'seo_blog_id');
     }
 
     /**
