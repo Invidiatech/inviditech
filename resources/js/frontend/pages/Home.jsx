@@ -146,11 +146,7 @@ const Home = ({ isDarkMode, blogData }) => {
                                 </div>
 
                                 {/* Floating elements for visual interest */}
-                                <div className="absolute -top-4 -right-4 w-8 h-8 bg-indigo-500 rounded-full flex items-center justify-center animate-pulse">
-                                 </div>
-                                <div className="absolute -bottom-4 -left-4 w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center animate-bounce">
-                                     
-                                </div>
+                                
                             </div>
                         </div>
                     </div>
