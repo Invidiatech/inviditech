@@ -216,11 +216,83 @@ class PageController extends Controller
             ];
         });
 
+        // Get popular blogs (most viewed) for sidebar
+        $popularBlogs = SeoBlog::with(['category', 'tags', 'creator'])
+            ->where('status', 'published')
+            ->where(function ($query) {
+                $query->whereNull('publish_date')
+                      ->orWhere('publish_date', '<=', now());
+            })
+            ->orderBy('views_count', 'desc')
+            ->limit(5)
+            ->get()
+            ->map(function ($blog) {
+                return [
+                    'id' => $blog->id,
+                    'title' => $blog->title,
+                    'slug' => $blog->slug,
+                    'featured_image' => $blog->featured_image_url,
+                    'category' => $blog->category && is_object($blog->category) ? $blog->category->name : null,
+                    'publish_date' => $blog->publish_date ? $blog->publish_date->format('M d, Y') : $blog->created_at->format('M d, Y'),
+                    'views_count' => $blog->views_count,
+                ];
+            });
+
+        // Get recent blogs for sidebar
+        $recentBlogs = SeoBlog::with(['category', 'tags', 'creator'])
+            ->where('status', 'published')
+            ->where(function ($query) {
+                $query->whereNull('publish_date')
+                      ->orWhere('publish_date', '<=', now());
+            })
+            ->latest('publish_date')
+            ->limit(5)
+            ->get()
+            ->map(function ($blog) {
+                return [
+                    'id' => $blog->id,
+                    'title' => $blog->title,
+                    'slug' => $blog->slug,
+                    'category' => $blog->category && is_object($blog->category) ? $blog->category->name : null,
+                    'publish_date' => $blog->publish_date ? $blog->publish_date->format('M d, Y') : $blog->created_at->format('M d, Y'),
+                ];
+            });
+
+        // Get popular tags for sidebar
+        $popularTags = Tag::whereHas('articles', function ($query) {
+            $query->where('status', 'published')
+                  ->where(function ($q) {
+                      $q->whereNull('publish_date')
+                        ->orWhere('publish_date', '<=', now());
+                  });
+        })
+        ->withCount(['articles' => function ($query) {
+            $query->where('status', 'published')
+                  ->where(function ($q) {
+                      $q->whereNull('publish_date')
+                        ->orWhere('publish_date', '<=', now());
+                  });
+        }])
+        ->orderBy('articles_count', 'desc')
+        ->limit(15)
+        ->get()
+        ->map(function ($tag) {
+            return [
+                'id' => $tag->id,
+                'name' => $tag->name,
+                'slug' => $tag->slug,
+                'blogs_count' => $tag->articles_count,
+            ];
+        });
+
         return [
             'featured' => $featuredBlogs,
             'latest' => $latestBlogs,
             'all' => $allBlogs,
             'categories' => $categories,
+            'popular' => $popularBlogs,
+            'recent' => $recentBlogs,
+            'tags' => $popularTags,
         ];
     }
 

@@ -95,3 +95,13 @@ pre.ql-syntax {
 .copy-button:active {
     background-color: #6b7280;
 }
+
+/* Testimonial Carousel - Hide Scrollbar */
+.testimonial-carousel::-webkit-scrollbar {
+    display: none;
+}
+
+.testimonial-carousel {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
