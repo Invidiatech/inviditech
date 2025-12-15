@@ -1,5 +1,4 @@
 import React from 'react';
-
 const About = ({ isDarkMode }) => {
     const skills = [
         { name: "Laravel", icon: "fab fa-laravel", color: "text-red-500" },
