@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 const Contact = ({ isDarkMode }) => {
     const [formData, setFormData] = useState({
         name: '',
