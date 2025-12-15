@@ -422,7 +422,6 @@
 <body>
     <div class="container">
         <h1 style="text-align: center; margin-bottom: 30px; color: #1e293b;">Blog Featured Image Generator</h1>
-        
         <div class="controls">
             <div class="form-group">
                 <label for="blogTitle">Blog Post Title:</label>
