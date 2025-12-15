@@ -1,5 +1,4 @@
 /.phpunit.cache
-/node_modules
 /storage/*.key
 /storage/pail
 /vendor
