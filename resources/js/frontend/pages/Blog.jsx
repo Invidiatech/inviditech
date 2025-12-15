@@ -5,11 +5,9 @@ const Blog = ({ isDarkMode, blogData }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [blogs, setBlogs] = useState([]);
     const [categories, setCategories] = useState([]);
-
     // Calculate dynamic category counts from actual blog data
     const calculateCategoryCounts = (allBlogs) => {
         if (!allBlogs || allBlogs.length === 0) return {};
-        
         const counts = {};
         allBlogs.forEach(blog => {
             const categoryName = blog.category || 'Uncategorized';
