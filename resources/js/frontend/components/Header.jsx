@@ -104,7 +104,6 @@ const Header = ({ isDarkMode, onThemeToggle }) => {
                         </div>
                     </div>
                 </div>
-
                 {/* Mobile Navigation */}
                 {isMenuOpen && (
                     <div className="md:hidden">
