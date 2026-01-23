@@ -252,7 +252,7 @@
             <div class="user-box dropdown">
     <a class="d-flex align-items-center nav-link dropdown-toggle dropdown-toggle-nocaret" href="#"
         role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="{{ asset('assets/logo/lnvidiatech.png') }}" class="user-img" alt="user avatar">
+                                <img src="{{ asset('frontend/images/logo/invidiatech-software-engineer.png') }}" class="user-img" alt="InvidiaTech Logo - Professional Software Engineering & Development Services" title="InvidiaTech - Professional Software Engineering & Development Services">
         <div class="user-info ps-3">
             <p class="user-name mb-0">{{ Auth::guard('seo')->user()->name ?? 'seo' }}</p>
             <p class="designattion mb-0">{{ Auth::guard('seo')->user()->specialization ?? 'Specialist' }}</p>

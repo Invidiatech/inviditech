@@ -23,18 +23,18 @@ const Header = ({ isDarkMode, onThemeToggle }) => {
     }, []);
 
     return (
-        <header className={`${isDarkMode ? 'bg-gray-900' : 'bg-white'} sticky top-0 z-50 transition-all duration-300 ${isScrolled ? 'py-2 shadow-lg' : 'py-4 shadow-md'} ${isDarkMode ? 'border-b border-gray-700' : 'border-b border-gray-200'}`}>
-            <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between items-center">
+        <header className={`${isDarkMode ? 'bg-gray-900' : 'bg-white'} sticky top-0 z-50 transition-all duration-300 ${isScrolled ? 'py-1 shadow-lg' : 'py-1 shadow-md'} ${isDarkMode ? 'border-b border-gray-700' : 'border-b border-gray-200'} h-20 overflow-visible`}>
+            <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+                <div className="flex justify-between items-center h-full">
                     {/* Logo */}
-                    <div className="flex-shrink-0">
-                        <a href="/" className="flex items-center">
-                            <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-700 rounded-lg flex items-center justify-center mr-3">
-                                <span className="text-white font-bold text-lg">MN</span>
-                            </div>
-                            <div className="hidden sm:block">
-                                <span className={`${isDarkMode ? 'text-white' : 'text-gray-900'} text-lg font-semibold`}>InvidiaTech</span>
-                            </div>
+                    <div className="flex-shrink-0 h-full flex items-center overflow-visible">
+                        <a href="/" className="flex items-center h-full" title="InvidiaTech - Professional Software Engineering & Development Services">
+                            <img 
+                                src="/frontend/images/logo/invidiatech-software-engineer.png" 
+                                alt="InvidiaTech Logo - Professional Software Engineering & Development Services"
+                                title="InvidiaTech - Professional Software Engineering & Development Services"
+                                className="h-48 md:h-52 w-auto object-contain"
+                            />
                         </a>
                     </div>
 

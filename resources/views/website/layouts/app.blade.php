@@ -133,11 +133,11 @@
     @endif
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="{{ asset('assets/logo/invidia-fav-icon.png') }}">
-    <link rel="shortcut icon" type="image/png" href="{{ asset('assets/logo/invidia-fav-icon.png') }}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/logo/invidia-fav-icon.png') }}">
-    <link rel="icon" sizes="32x32" type="image/png" href="{{ asset('assets/logo/invidia-fav-icon.png') }}">
-    <link rel="icon" sizes="16x16" type="image/png" href="{{ asset('assets/logo/invidia-fav-icon.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('frontend/images/logo/invidiatehch-favicon.png') }}?v=2" title="InvidiaTech Favicon">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('frontend/images/logo/invidiatehch-favicon.png') }}?v=2" title="InvidiaTech Favicon">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('frontend/images/logo/invidiatehch-favicon.png') }}?v=2" title="InvidiaTech App Icon">
+    <link rel="icon" sizes="32x32" type="image/png" href="{{ asset('frontend/images/logo/invidiatehch-favicon.png') }}?v=2" title="InvidiaTech Favicon 32x32">
+    <link rel="icon" sizes="16x16" type="image/png" href="{{ asset('frontend/images/logo/invidiatehch-favicon.png') }}?v=2" title="InvidiaTech Favicon 16x16">
     <link rel="manifest" href="{{ asset('site.webmanifest') }}">
     
     <!-- CSS Files -->
@@ -159,7 +159,7 @@
     <!-- Additional SEO Meta Tags -->
     <meta name="theme-color" content="#3b82f6">
     <meta name="msapplication-TileColor" content="#3b82f6">
-    <meta name="msapplication-TileImage" content="{{ asset('assets/logo/invidia-fav-icon.png') }}">
+    <meta name="msapplication-TileImage" content="{{ asset('frontend/images/logo/invidiatehch-favicon.png') }}?v=2">
     <meta name="application-name" content="InvidiaTech">
     <meta name="apple-mobile-web-app-title" content="InvidiaTech">
     <meta name="apple-mobile-web-app-capable" content="yes">

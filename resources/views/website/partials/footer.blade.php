@@ -4,7 +4,11 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-4 mb-4">
-                    <h4 class="text-white mb-4">INVIDIA<span class="text-accent-custom">TECH</span></h4>
+                    <img src="{{ asset('frontend/images/logo/invidiatech-software-engineer.png') }}"
+                         alt="InvidiaTech Logo - Professional Software Engineering & Development Services"
+                         title="InvidiaTech - Professional Software Engineering & Development Services"
+                         class="mb-4"
+                         style="max-height: 80px; width: auto;">
                     <p>A hub for in-depth articles on various technologies with a focus on Laravel. Collaborating with leading IT companies to deliver cutting-edge solutions.</p>
                     <div class="d-flex social-icons mt-4">
                         <a href="#" class="social-icon me-2"><i class="fab fa-twitter"></i></a>

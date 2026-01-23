@@ -2,16 +2,13 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-lg" id="mainNavbar">
     <div class="container">
         <!-- Brand Logo -->
-        <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}">
-            <div class="d-flex align-items-center">
-                <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-700 rounded-lg d-flex align-items-center justify-content-center me-3">
-                    <span class="text-white fw-bold fs-5">A</span>
-                </div>
-                <div class="d-flex flex-column">
-                    <span class="text-white small fw-medium">CODE WITH</span>
-                    <span class="text-white fs-5 fw-bold">AHMED</span>
-                </div>
-            </div>
+        <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}" title="InvidiaTech - Professional Software Engineering & Development Services">
+            <img src="{{ asset('frontend/images/logo/invidiatech-software-engineer.png') }}" 
+                 alt="InvidiaTech Logo - Professional Software Engineering & Development Services" 
+                 title="InvidiaTech - Professional Software Engineering & Development Services"
+                 class="navbar-logo"
+                 height="200"
+                 width="auto">
         </a>
 
         <!-- Right side buttons -->
@@ -72,6 +69,16 @@
     background-color: #1f2937 !important;
     border-bottom: 1px solid #374151;
     z-index: 1050;
+    padding: 0.5rem 0 !important;
+    min-height: 80px !important;
+    max-height: 80px !important;
+    overflow: visible;
+}
+
+#mainNavbar .container {
+    display: flex;
+    align-items: center;
+    height: 100%;
 }
 
 #mainNavbar.scrolled {
@@ -87,6 +94,37 @@
 
 .navbar-brand:hover {
     transform: scale(1.05);
+}
+
+.navbar-logo {
+    max-height: 200px !important;
+    height: 200px !important;
+    width: auto;
+    object-fit: contain;
+    transition: opacity 0.3s ease;
+    display: block;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    overflow: visible;
+}
+
+@media (max-width: 768px) {
+    .navbar-logo {
+        max-height: 120px !important;
+        height: 120px !important;
+    }
+    #mainNavbar {
+        min-height: 80px !important;
+        max-height: 80px !important;
+    }
+}
+
+.navbar-brand:hover .navbar-logo {
+    opacity: 0.9;
 }
 
 /* Enhanced Navigation Links */
