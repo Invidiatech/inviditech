@@ -1,7 +1,7 @@
 <div class="sidebar-wrapper" data-simplebar="true">
     <div class="sidebar-header">
         <div>
-            <img src="{{ asset('assets/logo/lnvidiatech.png') }}" class="logo-icon" alt="logo icon">
+            <img src="{{ asset('frontend/images/logo/invidiatech-software-engineer.png') }}" class="logo-icon" alt="InvidiaTech Logo - Professional Software Engineering & Development Services" title="InvidiaTech - Professional Software Engineering & Development Services">
         </div>
         @auth('seo')
         <div>

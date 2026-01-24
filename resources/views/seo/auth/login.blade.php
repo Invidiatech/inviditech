@@ -13,29 +13,47 @@
     <link href="{{ asset('assets/css/auth/login.css') }}" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #044168;
+            --primary-color: #3b82f6;
+            --primary-dark: #2563eb;
+            --primary-light: #60a5fa;
+            --secondary-color: #8b5cf6;
+            --accent-color: #a855f7;
         }
         .left-panel {
-            background-color: var(--primary-color);
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
         }
         .login-btn {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
         }
         .login-btn:hover {
-            background-color: #033454;
-            border-color: #033454;
+            background: linear-gradient(135deg, var(--primary-dark), var(--accent-color));
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
         }
         .forgot-link {
             color: var(--primary-color);
         }
         .forgot-link:hover {
-            color: #033454;
+            color: var(--primary-dark);
         }
         .alert-info-custom {
-            background-color: rgba(4, 65, 104, 0.1);
+            background-color: rgba(59, 130, 246, 0.1);
             border-color: var(--primary-color);
             color: var(--primary-color);
+        }
+        .brand-logo {
+            max-width: 250px;
+            width: 100%;
+            height: auto;
+            margin-bottom: 30px;
+        }
+        .login-header h2 {
+            color: var(--primary-color);
+        }
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
         }
     </style>
     <title>InvidiaTech Login</title>
@@ -46,7 +64,7 @@
         <!-- Left panel - Branding -->
         <div class="left-panel">
             <div class="left-content">
-                <img src="{{ asset('assets/logo/lnvidiatech.png') }}" alt="InvidiaTech Logo" class="brand-logo">
+                <img src="{{ asset('frontend/images/logo/invidiatech-software-engineer.png') }}" alt="InvidiaTech Logo - Professional Software Engineering & Development Services" title="InvidiaTech - Professional Software Engineering & Development Services" class="brand-logo">
                 <h1>Welcome to InvidiaTech!</h1>
                 <p>Log in to access your dashboard and manage your patients. We're committed to providing you with the best tools for patient care.</p>
             </div>

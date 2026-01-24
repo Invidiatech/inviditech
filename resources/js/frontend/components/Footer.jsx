@@ -10,13 +10,12 @@ const Footer = ({ isDarkMode = false }) => {
                     {/* Personal Info */}
                     <div className="col-span-1 md:col-span-2">
                         <div className="flex items-center mb-4">
-                            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-lg flex items-center justify-center mr-3">
-                                <span className="text-white font-bold text-lg">M</span>
-                            </div>
-                            <div className="flex flex-col">
-                                <span className={`${isDarkMode ? 'text-white' : 'text-gray-900'} text-sm font-medium`}>Invidia</span>
-                                <span className={`${isDarkMode ? 'text-white' : 'text-gray-900'} text-xl font-bold`}>Tech</span>
-                            </div>
+                            <img
+                                src="/frontend/images/logo/invidiatech-software-engineer.png"
+                                alt="InvidiaTech Logo - Professional Software Engineering & Development Services"
+                                title="InvidiaTech - Professional Software Engineering & Development Services"
+                                className="h-48 md:h-52 w-auto object-contain"
+                            />
                         </div>
                         <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-4 max-w-md`}>
                             Full-Stack Software Engineer & Technical Writer building modern, intelligent, and scalable digital experiences.

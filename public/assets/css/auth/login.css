@@ -1,7 +1,9 @@
  :root {
-    --primary-color: hsla(185, 53%, 56%, 1);    ;
-    --secondary-color: rgb(42, 133, 141);    ;
-    --accent-color: #4895ef;
+    --primary-color: #3b82f6;
+    --primary-dark: #2563eb;
+    --primary-light: #60a5fa;
+    --secondary-color: #8b5cf6;
+    --accent-color: #a855f7;
     --text-color: #333333;
     --light-text: #6c757d;
     --light-bg: #f8f9fa;
@@ -91,8 +93,11 @@ body {
 }
 
 .brand-logo {
-    width: 150px;
+    max-width: 250px;
+    width: 100%;
+    height: auto;
     margin-bottom: 30px;
+    filter: brightness(0) invert(1);
 }
 
 .right-panel {
@@ -113,6 +118,10 @@ body {
     font-weight: 600;
     color: var(--primary-color);
     margin-bottom: 10px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .login-header p {
@@ -144,7 +153,7 @@ body {
 
 .form-control:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
     background-color: white;
 }
 
@@ -210,9 +219,9 @@ body {
 }
 
 .login-btn:hover {
-    background: var(--secondary-color);
+    background: linear-gradient(135deg, var(--primary-dark), var(--accent-color));
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(67, 97, 238, 0.2);
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
 }
 
 .social-divider {

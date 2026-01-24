@@ -49,7 +49,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex flex-column align-items-center text-center">
-                                <img src="{{ asset('assets/logo/lnvidiatech.png') }}" alt="seo" class="rounded-circle p-1 bg-primary" width="110">
+                                <img src="{{ asset('frontend/images/logo/invidiatech-software-engineer.png') }}" alt="InvidiaTech Logo - Professional Software Engineering & Development Services" title="InvidiaTech - Professional Software Engineering & Development Services" class="rounded-circle p-1 bg-primary" width="110">
 
                             </div>
                             <hr class="my-4" />

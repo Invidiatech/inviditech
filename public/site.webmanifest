@@ -8,14 +8,16 @@
     "theme_color": "#3b82f6",
     "icons": [
         {
-            "src": "/assets/logo/invidia-fav-icon.png",
+            "src": "/frontend/images/logo/invidiatehch-favicon.png",
             "sizes": "192x192",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "any maskable"
         },
         {
-            "src": "/assets/logo/invidia-fav-icon.png",
+            "src": "/frontend/images/logo/invidiatehch-favicon.png",
             "sizes": "512x512",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "any maskable"
         }
     ]
 }
