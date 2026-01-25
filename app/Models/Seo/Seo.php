@@ -15,6 +15,7 @@ class Seo extends Authenticatable
 
     protected $fillable = [
         'name',
+        'username',
         'email',
         'password',
         'profile_image',

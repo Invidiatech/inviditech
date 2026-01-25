@@ -23,6 +23,13 @@ class SeoProfileUpdateRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
+            'username' => [
+                'nullable',
+                'string',
+                'max:255',
+                'alpha_dash',
+                Rule::unique('seos', 'username')->ignore($this->user('seo')->id),
+            ],
             'email' => [
                 'required',
                 'string',
@@ -41,6 +48,8 @@ class SeoProfileUpdateRequest extends FormRequest
     {
         return [
             'name.required' => 'Name is required.',
+            'username.alpha_dash' => 'Username may only contain letters, numbers, dashes, and underscores.',
+            'username.unique' => 'This username is already taken.',
             'email.required' => 'Email is required.',
             'email.email' => 'Please enter a valid email address.',
             'email.unique' => 'This email is already taken.',

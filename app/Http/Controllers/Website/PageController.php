@@ -55,7 +55,7 @@ class PageController extends Controller
                             'slug' => $tag->slug,
                         ];
                     }),
-                    'author' => $currentBlog->creator ? $currentBlog->creator->name : 'Muhammad Nawaz',
+                    'author' => $this->getAuthorDisplayName($currentBlog->creator),
                     'publish_date' => $currentBlog->publish_date ? $currentBlog->publish_date->format('M d, Y') : $currentBlog->created_at->format('M d, Y'),
                     'reading_time' => $currentBlog->reading_time_formatted,
                     'views_count' => $currentBlog->views_count,
@@ -105,7 +105,7 @@ class PageController extends Controller
                             'slug' => $tag->slug,
                         ];
                     }),
-                    'author' => $blog->creator ? $blog->creator->name : 'Muhammad Nawaz',
+                    'author' => $this->getAuthorDisplayName($blog->creator),
                     'publish_date' => $blog->publish_date ? $blog->publish_date->format('M d, Y') : $blog->created_at->format('M d, Y'),
                     'reading_time' => $blog->reading_time_formatted,
                     'views_count' => $blog->views_count,
@@ -142,7 +142,7 @@ class PageController extends Controller
                             'slug' => $tag->slug,
                         ];
                     }),
-                    'author' => $blog->creator ? $blog->creator->name : 'Muhammad Nawaz',
+                    'author' => $this->getAuthorDisplayName($blog->creator),
                     'publish_date' => $blog->publish_date ? $blog->publish_date->format('M d, Y') : $blog->created_at->format('M d, Y'),
                     'reading_time' => $blog->reading_time_formatted,
                     'views_count' => $blog->views_count,
@@ -179,7 +179,7 @@ class PageController extends Controller
                             'slug' => $tag->slug,
                         ];
                     }),
-                    'author' => $blog->creator ? $blog->creator->name : 'Muhammad Nawaz',
+                    'author' => $this->getAuthorDisplayName($blog->creator),
                     'publish_date' => $blog->publish_date ? $blog->publish_date->format('M d, Y') : $blog->created_at->format('M d, Y'),
                     'reading_time' => $blog->reading_time_formatted,
                     'views_count' => $blog->views_count,
@@ -294,6 +294,23 @@ class PageController extends Controller
             'recent' => $recentBlogs,
             'tags' => $popularTags,
         ];
+    }
+
+    private function getAuthorDisplayName($user): string
+    {
+        if (!$user) {
+            return 'Muhammad Nawaz';
+        }
+
+        $name = trim((string) $user->name);
+        $role = $user->role ? strtolower((string) $user->role) : null;
+        $nameLower = strtolower($name);
+
+        if ($name === '' || ($role && ($nameLower === $role || $nameLower === ($role . ' user')))) {
+            return $user->username ?: 'Muhammad Nawaz';
+        }
+
+        return $name;
     }
 
     /**

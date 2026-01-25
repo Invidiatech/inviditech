@@ -95,6 +95,7 @@ class SeoSeeder extends Seeder
             ['email' => 'sardarnawaz122@gmail.com'],
             [
                 'name' => 'SEO Head',
+                'username' => 'seo-head',
                 'password' => Hash::make('seohead1234'),
                 'email_verified_at' => now(),
             ]
