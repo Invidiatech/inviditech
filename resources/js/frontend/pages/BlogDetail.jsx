@@ -7,6 +7,7 @@ const BlogDetail = ({ isDarkMode, currentBlog }) => {
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
     const [comments, setComments] = useState([]);
+    const [newCommentAuthor, setNewCommentAuthor] = useState('');
     const [newComment, setNewComment] = useState('');
     const [showShareMenu, setShowShareMenu] = useState(false);
 
@@ -14,35 +15,29 @@ const BlogDetail = ({ isDarkMode, currentBlog }) => {
     useEffect(() => {
         if (currentBlog) {
             setLikeCount(currentBlog.likes_count || 0);
-            // You can load comments from API here if needed
-            setComments([
-                {
-                    id: 1,
-                    author: "Sarah Johnson",
-                    avatar: "SJ",
-                    time: "2 hours ago",
-                    text: "Great article! The performance optimization techniques you shared are really helpful. I've already implemented some of them in my project.",
-                    likes: 5
-                },
-                {
-                    id: 2,
-                    author: "Mike Chen",
-                    avatar: "MC",
-                    time: "5 hours ago",
-                    text: "Excellent breakdown of the architecture patterns. Could you write more about microservices communication patterns?",
-                    likes: 3
-                },
-                {
-                    id: 3,
-                    author: "Emily Davis",
-                    avatar: "ED",
-                    time: "1 day ago",
-                    text: "This is exactly what I was looking for! The code examples are clean and well-explained. Thank you for sharing.",
-                    likes: 8
+
+            const storageKey = `blog-comments-${currentBlog.id || 'default'}`;
+            const storedComments = localStorage.getItem(storageKey);
+
+            if (storedComments) {
+                try {
+                    setComments(JSON.parse(storedComments));
+                } catch (error) {
+                    console.error('Failed to parse stored comments:', error);
+                    setComments([]);
                 }
-            ]);
+            } else {
+                setComments([]);
+            }
         }
     }, [currentBlog]);
+
+    useEffect(() => {
+        if (currentBlog) {
+            const storageKey = `blog-comments-${currentBlog.id || 'default'}`;
+            localStorage.setItem(storageKey, JSON.stringify(comments));
+        }
+    }, [comments, currentBlog]);
 
     // Add copy functionality to code blocks
     useEffect(() => {
@@ -132,16 +127,25 @@ const BlogDetail = ({ isDarkMode, currentBlog }) => {
 
     const handleCommentSubmit = (e) => {
         e.preventDefault();
-        if (newComment.trim()) {
+        if (newComment.trim() && newCommentAuthor.trim()) {
+            const displayName = newCommentAuthor.trim();
+            const initials = displayName
+                .split(' ')
+                .filter(Boolean)
+                .slice(0, 2)
+                .map((part) => part[0]?.toUpperCase())
+                .join('') || 'U';
+
             const comment = {
-                id: comments.length + 1,
-                author: "You",
-                avatar: "Y",
-                time: "now",
+                id: Date.now(),
+                author: displayName,
+                avatar: initials,
+                time: "just now",
                 text: newComment,
                 likes: 0
             };
             setComments([comment, ...comments]);
+            setNewCommentAuthor('');
             setNewComment('');
         }
     };
@@ -171,8 +175,8 @@ const BlogDetail = ({ isDarkMode, currentBlog }) => {
     return (
         <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
             {/* Hero Section */}
-            <section className={`py-16 px-4 sm:px-6 lg:px-8 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
-                <div className="max-w-4xl mx-auto">
+            <section className={`pt-10 pb-6 px-4 sm:px-8 lg:px-12 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+                <div className="w-full">
                     {/* Breadcrumb */}
                     <nav className="mb-8">
                         <ol className="flex items-center space-x-2 text-sm">
@@ -185,37 +189,31 @@ const BlogDetail = ({ isDarkMode, currentBlog }) => {
                     </nav>
 
                     {/* Article Header */}
-                    <div className="mb-8">
-                            <div className={`inline-block px-3 py-1 rounded-full text-sm font-medium mb-4 ${
-                                isDarkMode ? 'bg-indigo-900 text-indigo-300' : 'bg-indigo-100 text-indigo-800'
-                            }`}>
-                                {currentBlog.category}
-                            </div>
-                            <h1 className={`text-4xl md:text-5xl font-bold mb-6 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                                {currentBlog.title}
-                            </h1>
-                            <p className={`text-xl mb-8 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                                {currentBlog.excerpt}
-                            </p>
-                        
+                    <div className="mb-2">
+                        <div className={`inline-block px-3 py-1 rounded-full text-sm font-medium mb-4 ${
+                            isDarkMode ? 'bg-indigo-900 text-indigo-300' : 'bg-indigo-100 text-indigo-800'
+                        }`}>
+                            {currentBlog.category}
+                        </div>
+
                         {/* Article Meta */}
-                        <div className="flex flex-wrap items-center gap-6 mb-8">
+                        <div className="flex flex-wrap items-center justify-between gap-6 mb-3">
                             <div className="flex items-center">
                                 <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg mr-3">
                                     MN
                                 </div>
-                                <div>
-                                        <div className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                                            {currentBlog.author}
-                                        </div>
-                                        <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                                            {currentBlog.publish_date} • {currentBlog.reading_time}
-                                        </div>
+                                <div className="leading-snug">
+                                    <div className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                                        {currentBlog.author}
+                                    </div>
+                                    <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                                        {currentBlog.publish_date} • {currentBlog.reading_time}
+                                    </div>
                                 </div>
                             </div>
                             
                             {/* Action Buttons */}
-                            <div className="flex items-center space-x-4">
+                            <div className="flex items-center space-x-3">
                                 <button
                                     onClick={handleLike}
                                     className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 ${
@@ -292,28 +290,35 @@ const BlogDetail = ({ isDarkMode, currentBlog }) => {
                                 </div>
                             </div>
                         </div>
+
+                        <h1 className={`text-4xl md:text-5xl lg:text-6xl font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                            {currentBlog.title}
+                        </h1>
+                        <p className={`text-xl md:text-2xl leading-snug mb-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                            {currentBlog.excerpt}
+                        </p>
                         
-                            {/* Tags */}
-                            <div className="flex flex-wrap gap-2">
-                                {currentBlog.tags.map((tag, index) => (
-                                    <span 
-                                        key={index}
-                                        className={`px-3 py-1 rounded-full text-sm font-medium ${
-                                            isDarkMode 
-                                                ? 'bg-gray-700 text-gray-300' 
-                                                : 'bg-gray-100 text-gray-600'
-                                        }`}
-                                    >
-                                        #{tag.name}
-                                    </span>
-                                ))}
-                            </div>
+                        {/* Tags */}
+                        <div className="flex flex-wrap gap-2 mt-1">
+                            {currentBlog.tags.map((tag, index) => (
+                                <span 
+                                    key={index}
+                                    className={`px-3 py-1 rounded-full text-sm font-medium ${
+                                        isDarkMode 
+                                            ? 'bg-gray-700 text-gray-300' 
+                                            : 'bg-gray-100 text-gray-600'
+                                    }`}
+                                >
+                                    #{tag.name}
+                                </span>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </section>
 
             {/* Voice Player Section */}
-            <section className={`py-8 px-4 sm:px-6 lg:px-8 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+           {/*} <section className={`px-4 sm:px-6 lg:px-8 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
                 <div className="max-w-4xl mx-auto">
                     <div className={`${isDarkMode ? 'bg-gray-700' : 'bg-gray-50'} rounded-2xl p-6`}>
                         <div className="flex items-center justify-between mb-4">
@@ -371,14 +376,14 @@ const BlogDetail = ({ isDarkMode, currentBlog }) => {
                         />
                     </div>
                 </div>
-            </section>
+            </section> */}
 
             {/* Article Content */}
-            <section className={`py-16 px-4 sm:px-6 lg:px-8 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
-                <div className="max-w-4xl mx-auto">
-                    <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-2xl p-8 shadow-lg`}>
+            <section className={`pt-2 pb-16 px-4 sm:px-8 lg:px-12 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+                <div className="w-full">
+                    <div className={`${isDarkMode ? 'bg-gray-800/80 border border-gray-700' : 'bg-white border border-gray-100'} rounded-2xl p-8 shadow-sm`}>
                             <div 
-                                className={`prose prose-lg max-w-none ${
+                                className={`blog-reading prose prose-lg max-w-none ${
                                     isDarkMode 
                                         ? 'prose-invert prose-headings:text-white prose-p:text-gray-300 prose-strong:text-white prose-code:text-indigo-400 prose-pre:bg-gray-900' 
                                         : 'prose-headings:text-gray-900 prose-p:text-gray-600 prose-strong:text-gray-900 prose-code:text-indigo-600 prose-pre:bg-gray-100'
@@ -390,8 +395,8 @@ const BlogDetail = ({ isDarkMode, currentBlog }) => {
             </section>
 
             {/* Comments Section */}
-            <section className={`py-16 px-4 sm:px-6 lg:px-8 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
-                <div className="max-w-4xl mx-auto">
+            <section className={`py-16 px-4 sm:px-8 lg:px-12 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+                <div className="w-full">
                     <h2 className={`text-3xl font-bold mb-8 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                         Comments ({comments.length})
                     </h2>
@@ -401,9 +406,20 @@ const BlogDetail = ({ isDarkMode, currentBlog }) => {
                         <div className={`${isDarkMode ? 'bg-gray-700' : 'bg-gray-50'} rounded-2xl p-6`}>
                             <div className="flex items-start space-x-4">
                                 <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                                    Y
+                                    {newCommentAuthor.trim() ? newCommentAuthor.trim().slice(0, 2).toUpperCase() : 'Y'}
                                 </div>
                                 <div className="flex-1">
+                                    <input
+                                        type="text"
+                                        value={newCommentAuthor}
+                                        onChange={(e) => setNewCommentAuthor(e.target.value)}
+                                        placeholder="Your name"
+                                        className={`w-full mb-3 p-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-200 ${
+                                            isDarkMode 
+                                                ? 'bg-gray-600 border-gray-500 text-white placeholder-gray-400' 
+                                                : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                                        }`}
+                                    />
                                     <textarea
                                         value={newComment}
                                         onChange={(e) => setNewComment(e.target.value)}
@@ -418,9 +434,9 @@ const BlogDetail = ({ isDarkMode, currentBlog }) => {
                                     <div className="flex justify-end mt-4">
                                         <button
                                             type="submit"
-                                            disabled={!newComment.trim()}
+                                            disabled={!newComment.trim() || !newCommentAuthor.trim()}
                                             className={`px-6 py-2 rounded-lg font-semibold transition-all duration-200 ${
-                                                newComment.trim()
+                                                newComment.trim() && newCommentAuthor.trim()
                                                     ? 'bg-indigo-600 text-white hover:bg-indigo-700'
                                                     : isDarkMode
                                                         ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
