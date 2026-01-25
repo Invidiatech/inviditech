@@ -287,6 +287,26 @@
                                 @enderror
                             </div>
 
+                            <!-- Update External Platforms -->
+                            <div class="mb-3">
+                                <label class="form-label">Update External Platforms</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="update_devto" name="update_devto" value="1"
+                                           {{ old('update_devto', !empty($blog->devto_id)) ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="update_devto">
+                                        Update on Dev.to
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="update_linkedin" name="update_linkedin" value="1"
+                                           {{ old('update_linkedin', !empty($blog->linkedin_id)) ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="update_linkedin">
+                                        Update on LinkedIn
+                                    </label>
+                                </div>
+                                <div class="form-text">Only updates when the blog is published.</div>
+                            </div>
+
                             <!-- Featured Post -->
                             <div class="mb-3">
                                 <div class="form-check">
