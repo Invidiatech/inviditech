@@ -2,6 +2,9 @@
 @extends('website.layouts.app')
 
 @section('title', 'Blog - InvidiaTech')
+@section('meta_title', 'InvidiaTech Blog - Web Development Insights')
+@section('meta_description', 'Read the latest InvidiaTech blog posts on Laravel, PHP, JavaScript, and modern web development best practices.')
+@section('meta_keywords', 'Tech Blog, Laravel Articles, PHP Tutorials, Web Development, InvidiaTech')
 
 @section('content')
     @include('website.partials.hero', [

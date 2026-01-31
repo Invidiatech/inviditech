@@ -1,5 +1,8 @@
 @extends('website.layouts.app')
 @section('title', 'InvidiaTech - Technology Knowledge & Learning Platform')
+@section('meta_title', 'InvidiaTech - Technology Knowledge & Learning Platform')
+@section('meta_description', 'InvidiaTech shares practical tutorials, technical insights, and modern web development knowledge for Laravel, PHP, and JavaScript developers.')
+@section('meta_keywords', 'InvidiaTech, Laravel, PHP, Web Development, Technical Articles, Tutorials, JavaScript')
 
 @section('content')
 @include('website.partials.hero')

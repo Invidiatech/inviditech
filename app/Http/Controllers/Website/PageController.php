@@ -626,4 +626,44 @@ class PageController extends Controller
             'relatedArticles' => $relatedArticles,
         ]);
     }
+
+    public function softwareEngineer(): View
+    {
+        return view('website.pages.software-engineer');
+    }
+
+    public function caseStudies(): View
+    {
+        return view('website.pages.case-studies');
+    }
+
+    public function projects(): View
+    {
+        return view('website.pages.projects');
+    }
+
+    public function resume(): View
+    {
+        return view('website.pages.resume');
+    }
+
+    public function faq(): View
+    {
+        return view('website.pages.faq');
+    }
+
+    public function serviceLaravel(): View
+    {
+        return view('website.pages.services-laravel-development');
+    }
+
+    public function serviceApi(): View
+    {
+        return view('website.pages.services-api-development');
+    }
+
+    public function servicePerformance(): View
+    {
+        return view('website.pages.services-performance-optimization');
+    }
 }

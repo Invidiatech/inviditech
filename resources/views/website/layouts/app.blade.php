@@ -8,6 +8,8 @@
     <title>
         @if(isset($article))
             {{ $article->meta_title ?: $article->title }} - InvidiaTech
+        @elseif(View::hasSection('meta_title'))
+            @yield('meta_title') - InvidiaTech
         @elseif(View::hasSection('title'))
             @yield('title') - InvidiaTech
         @else
@@ -27,6 +29,8 @@
     <!-- Meta Keywords -->
     @if(isset($article) && $article->focus_keyword)
         <meta name="keywords" content="{{ $article->focus_keyword }}, Laravel, PHP, Web Development, Technical Solutions">
+    @elseif(View::hasSection('meta_keywords'))
+        <meta name="keywords" content="@yield('meta_keywords')">
     @else
         <meta name="keywords" content="Web Development, Laravel, PHP, Technical Solutions, Software Development">
     @endif
@@ -46,8 +50,8 @@
     @endif
     
     <!-- Open Graph Tags -->
-    <meta property="og:title" content="@if(isset($article)){{ $article->og_title ?: ($article->meta_title ?: $article->title) }}@else{{ 'InvidiaTech - Professional Technical Solutions' }}@endif">
-    <meta property="og:description" content="@if(isset($article)){{ $article->og_description ?: ($article->meta_description ?: ($article->excerpt ?: Str::limit(strip_tags($article->content), 160))) }}@else{{ 'Professional technical solutions and development services' }}@endif">
+    <meta property="og:title" content="@if(isset($article)){{ $article->og_title ?: ($article->meta_title ?: $article->title) }}@elseif(View::hasSection('meta_title'))@yield('meta_title')@elseif(View::hasSection('title'))@yield('title')@else{{ 'InvidiaTech - Professional Technical Solutions' }}@endif">
+    <meta property="og:description" content="@if(isset($article)){{ $article->og_description ?: ($article->meta_description ?: ($article->excerpt ?: Str::limit(strip_tags($article->content), 160))) }}@elseif(View::hasSection('meta_description'))@yield('meta_description')@else{{ 'Professional technical solutions and development services' }}@endif">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:type" content="@if(isset($article))article@else website @endif">
     @if(isset($article) && $article->featured_image)
@@ -61,8 +65,8 @@
     
     <!-- Twitter Card Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="@if(isset($article)){{ $article->twitter_title ?: ($article->meta_title ?: $article->title) }}@else{{ 'InvidiaTech - Professional Technical Solutions' }}@endif">
-    <meta name="twitter:description" content="@if(isset($article)){{ $article->twitter_description ?: ($article->meta_description ?: ($article->excerpt ?: Str::limit(strip_tags($article->content), 160))) }}@else{{ 'Professional technical solutions and development services' }}@endif">
+    <meta name="twitter:title" content="@if(isset($article)){{ $article->twitter_title ?: ($article->meta_title ?: $article->title) }}@elseif(View::hasSection('meta_title'))@yield('meta_title')@elseif(View::hasSection('title'))@yield('title')@else{{ 'InvidiaTech - Professional Technical Solutions' }}@endif">
+    <meta name="twitter:description" content="@if(isset($article)){{ $article->twitter_description ?: ($article->meta_description ?: ($article->excerpt ?: Str::limit(strip_tags($article->content), 160))) }}@elseif(View::hasSection('meta_description'))@yield('meta_description')@else{{ 'Professional technical solutions and development services' }}@endif">
     @if(isset($article) && $article->featured_image)
         <meta name="twitter:image" content="{{ asset('storage/' . $article->featured_image) }}">
     @elseif(isset($article) && $article->twitter_image)
@@ -103,6 +107,12 @@
         <!-- Website Schema -->
         <script type="application/ld+json">
         {!! App\Helpers\SeoHelper::generateWebsiteSchema() !!}
+        </script>
+    @endif
+
+    @if(View::hasSection('schema_markup'))
+        <script type="application/ld+json">
+        @yield('schema_markup')
         </script>
     @endif
     

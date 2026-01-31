@@ -5,6 +5,7 @@ const Blog = ({ isDarkMode, blogData }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [blogs, setBlogs] = useState([]);
     const [categories, setCategories] = useState([]);
+    const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
     // Calculate dynamic category counts from actual blog data
     const calculateCategoryCounts = (allBlogs) => {
         if (!allBlogs || allBlogs.length === 0) return {};
@@ -159,9 +160,50 @@ const Blog = ({ isDarkMode, blogData }) => {
                             />
                         </div>
 
-                        {/* Results Count */}
-                        <div className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                            <span className="font-bold text-indigo-600">{blogs.length}</span> {blogs.length === 1 ? 'article' : 'articles'} found
+                        {/* View Mode Toggle & Results Count */}
+                        <div className="flex items-center gap-3">
+                            {/* View Mode Toggle */}
+                            <div className={`flex rounded-lg overflow-hidden border ${isDarkMode ? 'border-gray-600' : 'border-gray-300'}`}>
+                                <button
+                                    onClick={() => setViewMode('grid')}
+                                    className={`px-4 py-2.5 transition-colors ${
+                                        viewMode === 'grid'
+                                            ? isDarkMode
+                                                ? 'bg-indigo-600 text-white'
+                                                : 'bg-indigo-600 text-white'
+                                            : isDarkMode
+                                                ? 'bg-gray-700 text-gray-400 hover:bg-gray-600'
+                                                : 'bg-white text-gray-600 hover:bg-gray-50'
+                                    }`}
+                                    title="Grid View"
+                                >
+                                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM13 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2h-2z" />
+                                    </svg>
+                                </button>
+                                <button
+                                    onClick={() => setViewMode('list')}
+                                    className={`px-4 py-2.5 transition-colors ${
+                                        viewMode === 'list'
+                                            ? isDarkMode
+                                                ? 'bg-indigo-600 text-white'
+                                                : 'bg-indigo-600 text-white'
+                                            : isDarkMode
+                                                ? 'bg-gray-700 text-gray-400 hover:bg-gray-600'
+                                                : 'bg-white text-gray-600 hover:bg-gray-50'
+                                    }`}
+                                    title="List View"
+                                >
+                                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            {/* Results Count */}
+                            <div className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                                <span className="font-bold text-indigo-600">{blogs.length}</span> {blogs.length === 1 ? 'article' : 'articles'} found
+                            </div>
                         </div>
                     </div>
 
@@ -243,17 +285,17 @@ const Blog = ({ isDarkMode, blogData }) => {
                                     )}
                                 </div>
                             ) : (
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                <div className={viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6' : 'space-y-6'}>
                                     {blogs.map((blog, index) => (
                                         <article 
                                             key={blog.id} 
-                                            className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden group cursor-pointer border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} hover:scale-[1.02] flex flex-col`}
+                                            className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden group cursor-pointer border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} hover:scale-[1.02] ${viewMode === 'list' ? 'flex flex-row' : 'flex flex-col'}`}
                                             style={{
                                                 animationDelay: `${index * 100}ms`,
                                                 animation: 'fadeInUp 0.6s ease-out forwards'
                                             }}
                                         >
-                                            <div className={`h-48 bg-gradient-to-br ${getCategoryColor(blog.category)} relative overflow-hidden`}>
+                                            <div className={`bg-gradient-to-br ${getCategoryColor(blog.category)} relative overflow-hidden ${viewMode === 'list' ? 'w-64 flex-shrink-0' : 'h-48'}`}>
                                                 {blog.featured_image && (
                                                     <img 
                                                         src={blog.featured_image} 
@@ -282,17 +324,17 @@ const Blog = ({ isDarkMode, blogData }) => {
                                                     <span className="mx-1">•</span>
                                                     <span>{blog.reading_time}</span>
                                                 </div>
-                                                <h3 className={`text-base font-bold transition-all duration-300 mb-2 group-hover:text-indigo-500 line-clamp-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                                                <h3 className={`${viewMode === 'list' ? 'text-xl' : 'text-base'} font-bold transition-all duration-300 mb-2 group-hover:text-indigo-500 line-clamp-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                                                     {blog.title}
                                                 </h3>
-                                                <p className={`mb-3 leading-relaxed text-xs line-clamp-3 flex-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                                                <p className={`mb-3 leading-relaxed ${viewMode === 'list' ? 'text-sm' : 'text-xs'} ${viewMode === 'list' ? 'line-clamp-2' : 'line-clamp-3'} flex-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
                                                     {blog.excerpt}
                                                 </p>
                                                 
                                                 {/* Tags */}
                                                 {blog.tags && blog.tags.length > 0 && (
                                                     <div className="flex flex-wrap gap-1.5 mb-3">
-                                                        {blog.tags.slice(0, 2).map((tag, tagIndex) => (
+                                                        {blog.tags.slice(0, viewMode === 'list' ? 3 : 2).map((tag, tagIndex) => (
                                                             <span 
                                                                 key={tagIndex}
                                                                 className={`px-1.5 py-0.5 rounded-full text-xs font-medium ${

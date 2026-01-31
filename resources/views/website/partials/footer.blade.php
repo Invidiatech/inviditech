@@ -11,30 +11,35 @@
                          style="max-height: 80px; width: auto;">
                     <p>A hub for in-depth articles on various technologies with a focus on Laravel. Collaborating with leading IT companies to deliver cutting-edge solutions.</p>
                     <div class="d-flex social-icons mt-4">
-                        <a href="#" class="social-icon me-2"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="social-icon me-2"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="social-icon me-2"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#" class="social-icon me-2"><i class="fab fa-github"></i></a>
+                        <a href="https://www.facebook.com/Muhammad.Nawaz.Dev/" class="social-icon me-2" target="_blank" rel="noopener">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/muhammad-nawaz-43a354201/" class="social-icon me-2" target="_blank" rel="noopener">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="https://github.com/nawazfdev" class="social-icon me-2" target="_blank" rel="noopener">
+                            <i class="fab fa-github"></i>
+                        </a>
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-4 mb-4">
                     <h6 class="text-white mb-4">Company</h6>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">About Us</a></li>
-                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Services</a></li>
-                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Portfolio</a></li>
-                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Careers</a></li>
-                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Contact</a></li>
+                        <li class="mb-2"><a href="{{ route('about') }}" class="text-white-50 text-decoration-none">About</a></li>
+                        <li class="mb-2"><a href="{{ route('services') }}" class="text-white-50 text-decoration-none">Services</a></li>
+                        <li class="mb-2"><a href="{{ route('projects') }}" class="text-white-50 text-decoration-none">Projects</a></li>
+                        <li class="mb-2"><a href="{{ route('case-studies') }}" class="text-white-50 text-decoration-none">Case Studies</a></li>
+                        <li class="mb-2"><a href="{{ route('contact') }}" class="text-white-50 text-decoration-none">Contact</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-2 col-md-4 mb-4">
                     <h6 class="text-white mb-4">Services</h6>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Laravel Development</a></li>
-                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Full Stack Solutions</a></li>
-                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">API Development</a></li>
-                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">DevOps Services</a></li>
-                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Code Review</a></li>
+                        <li class="mb-2"><a href="{{ route('services.laravel') }}" class="text-white-50 text-decoration-none">Laravel Development</a></li>
+                        <li class="mb-2"><a href="{{ route('services.api') }}" class="text-white-50 text-decoration-none">API Development</a></li>
+                        <li class="mb-2"><a href="{{ route('services.performance') }}" class="text-white-50 text-decoration-none">Performance Optimization</a></li>
+                        <li class="mb-2"><a href="{{ route('software-engineer') }}" class="text-white-50 text-decoration-none">Software Engineer</a></li>
+                        <li class="mb-2"><a href="{{ route('resume') }}" class="text-white-50 text-decoration-none">Resume</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-4 col-md-4 mb-4">
@@ -52,7 +57,7 @@
                     <small>&copy; 2025 Invidiatech.com. All rights reserved.</small>
                 </div>
                 <div class="col-md-6 text-md-end text-center text-white-50">
-                    <small><a href="#" class="text-white-50 text-decoration-none">Privacy Policy</a> | <a href="#" class="text-white-50 text-decoration-none">Terms of Service</a></small>
+                    <small><a href="{{ route('faq') }}" class="text-white-50 text-decoration-none">FAQ</a></small>
                 </div>
             </div>
         </div>

@@ -18,14 +18,14 @@ use App\Http\Controllers\Seo\SuggestionController;
 use App\Http\Controllers\Seo\MerchantController;
 use App\Http\Controllers\Seo\TeamController;
 
-Route::prefix('admin')->name('seo.')->group(function () {
+Route::prefix('admin')->name('seo.')->middleware('noindex')->group(function () {
     Route::middleware('seo.guest')->group(function () {
         Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
         Route::post('login', [AuthenticatedSessionController::class, 'store']);
     });
 });
 
-Route::prefix('seo')->name('seo.')->group(function () {
+Route::prefix('seo')->name('seo.')->middleware('noindex')->group(function () {
 
     Route::middleware('auth:seo')->group(function () {
         // Dashboard
