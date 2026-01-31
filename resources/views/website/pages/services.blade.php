@@ -1,6 +1,9 @@
  
 @extends('website.layouts.app')
 @section('title', 'Services - InvidiaTech')
+@section('meta_title', 'Services - Laravel & Web Development')
+@section('meta_description', 'Explore InvidiaTech services including Laravel development, API engineering, performance optimization, and scalable web solutions.')
+@section('meta_keywords', 'Laravel Development, Web Applications, API Development, Technical Consulting, InvidiaTech')
 @section('content')
      <!-- Page Header -->
      <section class="page-header">

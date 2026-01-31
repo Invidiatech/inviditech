@@ -1,4 +1,8 @@
 @extends('website.layouts.app')
+@section('title', 'Tutorials - InvidiaTech')
+@section('meta_title', 'Tutorials - InvidiaTech')
+@section('meta_description', 'Step-by-step tutorials on Laravel, PHP, JavaScript, and practical web development workflows.')
+@section('meta_keywords', 'Tutorials, Laravel, PHP, JavaScript, Web Development, InvidiaTech')
 @section('content')
 <style>
         :root {

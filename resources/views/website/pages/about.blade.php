@@ -1,5 +1,8 @@
 @extends('website.layouts.app')
 @section('title', 'About - InvidiaTech Knowledge Platform')
+@section('meta_title', 'About InvidiaTech - Knowledge Sharing Platform')
+@section('meta_description', 'Learn about InvidiaTech, a developer-focused knowledge platform founded by Muhammad Nawaz to share practical web development insights.')
+@section('meta_keywords', 'About InvidiaTech, Muhammad Nawaz, Full Stack Developer, Laravel, PHP, Web Development')
 @section('content')   
     <!-- Page Header -->
     <section class="page-header" style="background: linear-gradient(135deg, #0441688c, #00A9FF8c), url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMiIgZmlsbD0iIzAwQTlGRiIgZmlsbC1vcGFjaXR5PSIwLjEiLz4KPC9zdmc+'); padding: 120px 0 80px; position: relative; color: white; overflow: hidden;">

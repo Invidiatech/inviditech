@@ -48,9 +48,44 @@
                         <span>Blog</span>
                     </a>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {{ request()->routeIs('services') || request()->routeIs('services.*') ? 'active' : '' }}" href="{{ route('services') }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span>Services</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{{ route('services') }}">All Services</a></li>
+                        <li><a class="dropdown-item" href="{{ route('services.laravel') }}">Laravel Development</a></li>
+                        <li><a class="dropdown-item" href="{{ route('services.api') }}">API Development</a></li>
+                        <li><a class="dropdown-item" href="{{ route('services.performance') }}">Performance Optimization</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {{ request()->routeIs('case-studies') || request()->routeIs('projects') ? 'active' : '' }}" href="{{ route('case-studies') }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span>Portfolio</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{{ route('case-studies') }}">Case Studies</a></li>
+                        <li><a class="dropdown-item" href="{{ route('projects') }}">Projects</a></li>
+                    </ul>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">
                         <span>About</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('software-engineer') ? 'active' : '' }}" href="{{ route('software-engineer') }}">
+                        <span>Software Engineer</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('faq') ? 'active' : '' }}" href="{{ route('faq') }}">
+                        <span>FAQ</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">
+                        <span>Contact</span>
                     </a>
                 </li>
             </ul>

@@ -1,5 +1,8 @@
 @extends('website.layouts.app')
 @section('title', 'Connect With Me - InvidiaTech Knowledge Platform')
+@section('meta_title', 'Contact InvidiaTech')
+@section('meta_description', 'Get in touch with InvidiaTech to discuss web development, Laravel projects, or collaboration opportunities.')
+@section('meta_keywords', 'Contact InvidiaTech, Hire Laravel Developer, Web Development, Collaboration')
 @section('content')   
     <!-- Page Header -->
     <section class="page-header" style="background: linear-gradient(135deg, #0441688c, #00A9FF8c), url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMiIgZmlsbD0iIzAwQTlGRiIgZmlsbC1vcGFjaXR5PSIwLjEiLz4KPC9zdmc+'); padding: 120px 0 80px; position: relative; color: white; overflow: hidden;">

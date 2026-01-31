@@ -1,2 +1,37 @@
 User-agent: *
-Disallow:
+Allow: /
+
+# Block admin and backend areas
+Disallow: /seo/
+Disallow: /admin/
+Disallow: /storage/
+
+# Block authentication pages
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /verify-email
+Disallow: /confirm-password
+Disallow: /logout
+Disallow: /password
+
+# Block system and utility pages
+Disallow: /optimize-clear
+Disallow: /storage-link
+Disallow: /run-migrate
+Disallow: /coalationtech-task
+Disallow: /fetch
+Disallow: /store
+Disallow: /update
+Disallow: /blog-post-image-generator
+
+# Block API endpoints and JSON files
+Disallow: /*.json$
+Disallow: /api/
+
+# Block URL parameters (avoid duplicate content)
+Disallow: /*?*
+
+Sitemap: https://invidiatech.com/sitemap.xml
+

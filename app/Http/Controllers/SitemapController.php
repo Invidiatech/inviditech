@@ -28,10 +28,24 @@ class SitemapController extends Controller
             ['url' => route('home'), 'lastmod' => now(), 'changefreq' => 'weekly', 'priority' => '1.0'],
             ['url' => route('about'), 'lastmod' => now(), 'changefreq' => 'monthly', 'priority' => '0.8'],
             ['url' => route('services'), 'lastmod' => now(), 'changefreq' => 'monthly', 'priority' => '0.8'],
+            ['url' => route('services.laravel'), 'lastmod' => now(), 'changefreq' => 'monthly', 'priority' => '0.7'],
+            ['url' => route('services.api'), 'lastmod' => now(), 'changefreq' => 'monthly', 'priority' => '0.7'],
+            ['url' => route('services.performance'), 'lastmod' => now(), 'changefreq' => 'monthly', 'priority' => '0.7'],
             ['url' => route('tutorials'), 'lastmod' => now(), 'changefreq' => 'weekly', 'priority' => '0.7'],
             ['url' => route('articles'), 'lastmod' => now(), 'changefreq' => 'daily', 'priority' => '0.9'],
             ['url' => route('contact'), 'lastmod' => now(), 'changefreq' => 'monthly', 'priority' => '0.6'],
             ['url' => route('hire-us'), 'lastmod' => now(), 'changefreq' => 'monthly', 'priority' => '0.7'],
+            ['url' => route('software-engineer'), 'lastmod' => now(), 'changefreq' => 'monthly', 'priority' => '0.9'],
+            ['url' => route('case-studies'), 'lastmod' => now(), 'changefreq' => 'monthly', 'priority' => '0.8'],
+            ['url' => route('projects'), 'lastmod' => now(), 'changefreq' => 'monthly', 'priority' => '0.8'],
+            ['url' => route('resume'), 'lastmod' => now(), 'changefreq' => 'monthly', 'priority' => '0.7'],
+            ['url' => route('faq'), 'lastmod' => now(), 'changefreq' => 'monthly', 'priority' => '0.6'],
+            // Developer Tools (High Priority for SEO)
+            ['url' => route('tools.json-formatter'), 'lastmod' => now(), 'changefreq' => 'monthly', 'priority' => '0.9'],
+            ['url' => route('tools.base64-tool'), 'lastmod' => now(), 'changefreq' => 'monthly', 'priority' => '0.9'],
+            ['url' => route('tools.hash-generator'), 'lastmod' => now(), 'changefreq' => 'monthly', 'priority' => '0.9'],
+            ['url' => route('tools.url-encoder-decoder'), 'lastmod' => now(), 'changefreq' => 'monthly', 'priority' => '0.9'],
+            ['url' => route('tools.timestamp-converter'), 'lastmod' => now(), 'changefreq' => 'monthly', 'priority' => '0.9'],
         ];
 
         return response()->view('sitemap.pages', compact('pages'))
@@ -81,10 +95,37 @@ class SitemapController extends Controller
     {
         $robotsTxt = "User-agent: *\n";
         $robotsTxt .= "Allow: /\n";
+        $robotsTxt .= "\n";
+        $robotsTxt .= "# Block admin and backend areas\n";
         $robotsTxt .= "Disallow: /seo/\n";
         $robotsTxt .= "Disallow: /admin/\n";
         $robotsTxt .= "Disallow: /storage/\n";
+        $robotsTxt .= "\n";
+        $robotsTxt .= "# Block authentication pages\n";
+        $robotsTxt .= "Disallow: /login\n";
+        $robotsTxt .= "Disallow: /register\n";
+        $robotsTxt .= "Disallow: /forgot-password\n";
+        $robotsTxt .= "Disallow: /reset-password\n";
+        $robotsTxt .= "Disallow: /verify-email\n";
+        $robotsTxt .= "Disallow: /confirm-password\n";
+        $robotsTxt .= "Disallow: /logout\n";
+        $robotsTxt .= "Disallow: /password\n";
+        $robotsTxt .= "\n";
+        $robotsTxt .= "# Block system and utility pages\n";
+        $robotsTxt .= "Disallow: /optimize-clear\n";
+        $robotsTxt .= "Disallow: /storage-link\n";
+        $robotsTxt .= "Disallow: /run-migrate\n";
+        $robotsTxt .= "Disallow: /coalationtech-task\n";
+        $robotsTxt .= "Disallow: /fetch\n";
+        $robotsTxt .= "Disallow: /store\n";
+        $robotsTxt .= "Disallow: /update\n";
+        $robotsTxt .= "Disallow: /blog-post-image-generator\n";
+        $robotsTxt .= "\n";
+        $robotsTxt .= "# Block API endpoints and JSON files\n";
         $robotsTxt .= "Disallow: /*.json$\n";
+        $robotsTxt .= "Disallow: /api/\n";
+        $robotsTxt .= "\n";
+        $robotsTxt .= "# Block URL parameters (avoid duplicate content)\n";
         $robotsTxt .= "Disallow: /*?*\n";
         $robotsTxt .= "\n";
         $robotsTxt .= "Sitemap: " . route('sitemap.index') . "\n";

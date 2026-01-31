@@ -17,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'seo.guest' => \App\Http\Middleware\RedirectIfSeoAuthenticated::class,
             'track.analytics' => \App\Http\Middleware\TrackAnalytics::class,
+            'noindex' => \App\Http\Middleware\NoIndexMiddleware::class,
         ]);
         
         // Add analytics tracking to web routes

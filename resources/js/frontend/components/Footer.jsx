@@ -6,7 +6,7 @@ const Footer = ({ isDarkMode = false }) => {
     return (
         <footer className={`${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'} ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
             <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
                     {/* Personal Info */}
                     <div className="col-span-1 md:col-span-2">
                         <div className="flex items-center mb-4">
@@ -49,23 +49,28 @@ const Footer = ({ isDarkMode = false }) => {
                         </h3>
                         <ul className="space-y-2">
                             <li>
-                                <a href="#about" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>
+                                <a href="/about" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>
                                     About
                                 </a>
                             </li>
                             <li>
-                                <a href="#projects" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>
+                                <a href="/projects" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>
                                     Projects
                                 </a>
                             </li>
                             <li>
-                                <a href="#blog" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>
+                                <a href="/blog" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>
                                     Blog
                                 </a>
                             </li>
                             <li>
-                                <a href="#contact" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>
+                                <a href="/contact" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>
                                     Contact
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/faq" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>
+                                    FAQ
                                 </a>
                             </li>
                         </ul>
@@ -78,23 +83,67 @@ const Footer = ({ isDarkMode = false }) => {
                         </h3>
                         <ul className="space-y-2">
                             <li>
-                                <a href="#services" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>
-                                    Web Applications
+                                <a href="/services/laravel-development" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>
+                                    Laravel Development
                                 </a>
                             </li>
                             <li>
-                                <a href="#services" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>
-                                    AI-Driven Tools
+                                <a href="/services/api-development" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>
+                                    API Development
                                 </a>
                             </li>
                             <li>
-                                <a href="#services" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>
-                                    E-Commerce Solutions
+                                <a href="/services/performance-optimization" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>
+                                    Performance Optimization
                                 </a>
                             </li>
                             <li>
-                                <a href="#contact" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>
-                                    Hire Me
+                                <a href="/software-engineer" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>
+                                    Software Engineer
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/resume" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>
+                                    Resume
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {/* Developer Tools */}
+                    <div>
+                        <h3 className={`text-sm font-semibold ${isDarkMode ? 'text-gray-400' : 'text-gray-500'} tracking-wider uppercase mb-4`}>
+                            Developer Tools
+                        </h3>
+                        <ul className="space-y-2">
+                            <li>
+                                <a href="/tools/json-formatter" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors flex items-center gap-1`}>
+                                    <i className="fas fa-code text-xs"></i>
+                                    JSON Formatter
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/tools/base64-encoder-decoder" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors flex items-center gap-1`}>
+                                    <i className="fas fa-lock text-xs"></i>
+                                    Base64 Tool
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/tools/hash-generator" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors flex items-center gap-1`}>
+                                    <i className="fas fa-hashtag text-xs"></i>
+                                    Hash Generator
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/tools/url-encoder-decoder" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors flex items-center gap-1`}>
+                                    <i className="fas fa-link text-xs"></i>
+                                    URL Encoder
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/tools/timestamp-converter" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors flex items-center gap-1`}>
+                                    <i className="fas fa-clock text-xs"></i>
+                                    Timestamp Tool
                                 </a>
                             </li>
                         </ul>
